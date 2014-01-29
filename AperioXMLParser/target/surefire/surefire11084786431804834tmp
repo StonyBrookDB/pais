@@ -1,0 +1,5 @@
+#surefire
+#Wed Jan 30 18:08:47 EST 2013
+user.dir=/home/db2inst1/workspace/AperioXMLParser
+localRepository=/home/db2inst1/.m2/repository
+basedir=/home/db2inst1/workspace/AperioXMLParser
