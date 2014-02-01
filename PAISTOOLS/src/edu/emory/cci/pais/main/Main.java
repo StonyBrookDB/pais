@@ -40,7 +40,7 @@ public static void  main(String[] args){
        {
    		Option help = new Option("h", "help", false, "display this help and exit.");
    		help.setRequired(false);
-   		Option worktype = new Option("w", "worktype", true, "which function do you want? ");
+   		Option worktype = new Option("w", "worktype", true, "which function do you want? uploader/converter");
    		worktype.setRequired(true);
    		worktype.setArgName("worktype");
 
