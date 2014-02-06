@@ -22,13 +22,14 @@ int getThumbnailWSI(int arg,char ** args) {
 	int32_t layer_count;
 	int64_t width, height, i, size, temp;
 	uint32_t *dest, val;
-	char cmd[60], ppmheader[50];
+        int width32,height32;
+	char cmd[60], tmpfile[256];
 	FILE *f1;
 	const char *filename1 = args[1];
-    const char *filename2 = args[2];
-    int length = atoi(args[3]);
+        const char *filename2 = args[2];
+        int length = atoi(args[3]);
 
-
+        sprintf(tmpfile,"%s.ppm",filename2);
 	if (!openslide_can_open(filename1))
 	{
 		printf("can't open image %s\n", filename1);
@@ -41,14 +42,14 @@ int getThumbnailWSI(int arg,char ** args) {
 		exit(1);
 	}
 	layer_count = openslide_get_layer_count(osr);
-	openslide_get_layer_dimensions(osr, layer_count-1, &width, &height);
+	openslide_get_layer_dimensions(osr, 1, &width, &height);
 	size=width*height*4;
 	dest = (uint32_t *) malloc(size);
 
 	/* dest should be holding the ARGB data of the smallest layer */
-	openslide_read_region(osr, dest, 0, 0, layer_count-1, width, height);
+	openslide_read_region(osr, dest, 0, 0, 1, width, height);
 	openslide_close(osr);
-	if((f1 = fopen("testimg.ppm", "wb+"))==NULL) {
+	if((f1 = fopen(tmpfile, "wb+"))==NULL) {
 		free(dest);
 		perror("open file failure");
 		exit(1);
@@ -71,10 +72,13 @@ int getThumbnailWSI(int arg,char ** args) {
 	temp /= length;
 	width /= temp;
 	height /= temp;
-	printf("The generating thumbnail for %s is %ldx%ld pixels\n", filename1, width, height);
-	sprintf(cmd, "convert testimg.ppm -resize %ldx%ld %s", width, height,filename2);
+        width32=width;
+        height32=height;
+	printf("The generating thumbnail for %s is %dx%d pixels\n", filename1, width32, height32);
+
+	sprintf(cmd, "convert %s -resize %dx%d %s", tmpfile, width32, height32,filename2);
 	system(cmd);
-	remove("testimg.ppm");
+	remove(tmpfile);
 	return 1;
 }
 
@@ -84,7 +88,7 @@ int getThumbnailTiled(int arg,char ** args) {
 	int32_t layer_count;
 	int64_t width, height, i, size, temp,bwidth,bheight;
 	uint32_t *dest, val; 
-	char cmd[60], ppmheader[50],tmpfile[250];
+	char cmd[60], tmpfile[250];
 	FILE *f1;
 	const char *filename1 = args[1];
         const char *filename2 = args[2];
@@ -331,7 +335,8 @@ int getRegionImage(int arg,char ** args)
 			fprintf(f1, "P6\n%" PRId64 " %" PRId64 "\n255\n", width, height);
 			
 			// write binary RGB info
-			for (int64_t i = 0; i< width * height; i++) {
+                        int64_t i=0;
+			for (i = 0; i< width * height; i++) {
 				uint32_t val = buf[i];
 				putc((val >> 16) & 0xFF, f1);
 				putc((val >> 8) & 0xFF, f1);
@@ -343,6 +348,8 @@ int getRegionImage(int arg,char ** args)
 			// compare file format and execute system commands
 			
 			char cmd2[500];
+                        sprintf(cmd2, "convert %s  %s", sfname, tfname);
+/*
 			init = 1;
 			result = init;
 			
@@ -373,6 +380,7 @@ int getRegionImage(int arg,char ** args)
 				sprintf(cmd2, "ppmquant 256 %s | ppmtogif > %s", sfname, tfname);
 			
 			}
+*/
 			system(cmd2);
 			
 		}// end of second else

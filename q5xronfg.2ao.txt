@@ -1,0 +1,34 @@
+﻿
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch is ahead of 'pais/master' by 1 commit.
+#   (use "git push" to publish your local commits)
+#
+# Changes to be committed:
+#   (use "git reset HEAD <file>..." to unstage)
+#
+#	deleted:    AperioXMLParser/target/classes/.gitignore
+#	new file:   AperioXMLParser/target/classes/edu/emory/cci/pais/converter/AperioXMLParser$OnlyExt.class
+#	new file:   AperioXMLParser/target/classes/edu/emory/cci/pais/converter/AperioXMLParser.class
+#	new file:   AperioXMLParser/target/classes/edu/emory/cci/pais/converter/StAXUtils.class
+#	deleted:    PAISBoundary2PAIS/bin/.gitignore
+#	new file:   PAISBoundary2PAIS/bin/.project
+#	new file:   PAISBoundaryValidator/.gitignore
+#	modified:   PAISBoundaryValidator/target/classes/META-INF/maven/PAIS/PAISBoundaryValidator/pom.properties
+#	new file:   PAISDataLoadingManager/src/main/java/edu/emory/cci/pais/dataloader/dataloadingmanager/Consumer.java
+#	modified:   PAISDataLoadingManager/src/main/java/edu/emory/cci/pais/dataloader/dataloadingmanager/DataLoadingManager.java
+#	deleted:    PAISDataLoadingManager/src/main/java/edu/emory/cci/pais/dataloader/dataloadingmanager/MasterThread.java
+#	new file:   PAISDataLoadingManager/src/main/java/edu/emory/cci/pais/dataloader/dataloadingmanager/Producer.java
+#	modified:   PAISTOOLS/src/edu/emory/cci/pais/main/Main.java
+#	modified:   tcga/build/classes/.gitignore
+#	new file:   tcga/build/classes/edu_emory_cci_imagedb_FileDataCollector_OpenSlideTools.h
+#	modified:   tcga/getRegion.c
+#	modified:   tcga/openslidetools.c
+#	deleted:    tcga/region
+#	new file:   tcga/src/Copy of connection.properties
+#	modified:   tcga/src/connection.properties
+#	modified:   tcga/src/edu/emory/cci/pais/api/Queries.java
+#	modified:   tcga/src/edu/emory/cci/pais/api/WebAPI.java
+#
+

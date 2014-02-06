@@ -19,11 +19,20 @@
     <script type="text/javascript">
         var viewer;
         var img = getarg('img');
+        var fullscreen = getarg('fullscreen'); 
+        $(document).ready(function(){
+        	init();
+        	if(fullscreen=='true')
+        	{
+        		console.log('terry is good');
+        		viewer.setFullPage('fullPage');
+        	}
+        });//end ready
         function init() {
             viewer = new Seadragon.Viewer("container");
-            viewer.openDzi("/DZImage/GeneratedImages/image.xml");
-        }
-        Seadragon.Utils.addEvent(window, "load", init);
+            viewer.openDzi("/DZImage/"+img+"/image.xml");
+        }        
+        
     </script>
 </head>
 

@@ -77,6 +77,52 @@ var numentry;
 var perpage=30;
 var cpage=1;
 var tpage;
+var patient_feature_primary_db = new Array("BCR_PATIENT_BARCODE","GENDER","AGE_AT_INITIAL_PATHOLOGIC_DIAGNOSIS","ANATOMIC_ORGAN_SUBDIVISION","VITAL_STATUS","DAYS_TO_DEATH");
+var patient_feature_primary_show = new Array("patient_id","gender","age*","organ","vital status","days of survival**");
+var patient_feature_detail_db = new Array(
+		"CHEMO_THERAPY","HORMONAL_THERAPY","IMMUNO_THERAPY","RADIATION_THERAPY","TARGETED_MOLECULAR_THERAPY",
+		"HISTOLOGICAL_TYPE","INITIAL_PATHOLOGIC_DIAGNOSIS_METHOD","PERSON_NEOPLASM_CANCER_STATUS",
+		"PRETREATMENT_HISTORY","PRIOR_GLIOMA","TUMOR_TISSUE_SITE");
+var patient_feature_detail_show = new Array(
+		"chemo therapy","hormonal threapy","immuno therapy","radiation therapy","targeted molecular therapy",
+		"histological type","diagnosis method","neoplasm cancer status",
+		"pretreatment history","prior glioma","tumor tissue site");
+var primary_patient_length = patient_feature_primary_db.length;
+var detail_patient_length = patient_feature_detail_db.length;
+
+/*
+ * 
+ BCR_PATIENT_BARCODE
+ ADDITIONAL_CHEMO_THERAPY
+ ADDITIONAL_DRUG_THERAPY
+ ADDITIONAL_HORMONE_THERAPY
+ ADDITIONAL_IMMUNO_THERAPY
+ ADDITIONAL_RADIATION_THERAPY
+ AGE_AT_INITIAL_PATHOLOGIC_DIAGNOSIS
+ ANATOMIC_ORGAN_SUBDIVISION
+ CHEMO_THERAPY
+ DAYS_TO_BIRTH
+ DAYS_TO_DEATH
+ DAYS_TO_INITIAL_PATHOLOGIC_DIAGNOSIS
+ DAYS_TO_LAST_FOLLOWUP
+ DAYS_TO_TUMOR_PROGRESSION
+ DAYS_TO_TUMOR_RECURRENCE
+ GENDER
+ HISTOLOGICAL_TYPE
+ HORMONAL_THERAPY
+ IMMUNO_THERAPY
+ INFORMED_CONSENT_VERIFIED
+ INITIAL_PATHOLOGIC_DIAGNOSIS_METHOD
+ PERSON_NEOPLASM_CANCER_STATUS
+ PRETREATMENT_HISTORY
+ PRIOR_GLIOMA
+ RADIATION_THERAPY
+ TARGETED_MOLECULAR_THERAPY
+ TUMOR_TISSUE_SITE
+ VITAL_STATUS
+ CPATIENTID
+ 
+ */
 function initiate()
 { 				
 	    var url='/tcga/patient/features';
@@ -121,55 +167,60 @@ function changePage(page)
 	}
 	var html='';
 	html+='<tr>';
-	html+='<th>Patient ID</th>';
-	html+='<th>Sub-type</th>';
-	html+='<th>Gender</th>';
-	html+='<th>Vital Status</th>';
-	html+='<th>Age*</th>';
-	html+='<th>Length of Survival**</th>';
+	
+	for(var i=0;i<primary_patient_length;i++)
+	{
+	   html+='<th>'+patient_feature_primary_show[i]+'</th>';
+	}
+
 	html+='<th></th>';
 	html+='</tr>';
 	var length=page*perpage<=patients.length?page*perpage:patients.length;
     for(var i=perpage*(cpage-1);i<length;i++)
     {
-    html+='<tr class="oddrow">';	
-    html+='<td>'+patients[i].getAttribute("BCRPATIENTBARCODE")+'</td>';
-    html+='<td>'+patients[i].getAttribute("SUBTYPE")+'</td>';
-    html+='<td>'+patients[i].getAttribute("GENDER")+'</td>';
-    html+='<td>'+patients[i].getAttribute("VITALSTATUS")+'</td>';
-    html+='<td>'+patients[i].getAttribute("AGEATFIRSTDIAGNOSIS")+'</td>';
-    html+='<td>'+patients[i].getAttribute("SURVIVAL_DAYS")+'</td>';
-    html+='<td><div class="arrow"></div></td>';
-    html+='</tr>';
+      html+='<tr class="oddrow">';	
+      for(var j=0;j<primary_patient_length;j++)
+      {
+      html+='<td>'+patients[i].getAttribute(patient_feature_primary_db[j])+'</td>';
+      }
+
+      html+='<td><div class="arrow"></div></td>';
+      html+='</tr>';
     
-    html+='<tr class="evenrow">';
-	html+='<td colspan="7" style="padding-left:250px">';
-	html+='<table id="details" width="500px" height="100px">';
-	html+='<tr>';
-	html+='<td colspan="2"><a href=# onclick=\'window.open("imagebrowser.jsp?patientid='+patients[i].getAttribute("PATIENT_ID")+'")\'>View Images</a></td>';
-	html+='<td style="text-indent:5em">Tumor Site: </td><td>'+patients[i].getAttribute("TUMOR_TISSUE_SITE")+'</td>';
-	html+='</tr>';
-	html+='<tr>';
-	html+='<td>Karn Score: </td><td>'+patients[i].getAttribute("KARNSCORE")+'</td>';
-	html+='<td style="text-indent:5em">Chemo Therapy: </td><td>'+patients[i].getAttribute("CHEMO_THERAPY")+'</td>';
-	html+='</tr>';
-	html+='<tr>';
-	html+='<td>Methylation Status: </td><td>'+patients[i].getAttribute("MGMT_METHYLATED")+'</td>';
-	html+='<td style="text-indent:5em">Radiation Therapy: </td><td>'+patients[i].getAttribute("ADDITIONAL_RADIATION_THERAPY")+'</td>';
-	html+='</tr>';
-	html+='<tr>';
-	html+='<td>Tumor Nuclei Percent: </td><td>'+patients[i].getAttribute("TUMOR_NUCLEI_PERCENT")+'</td>';
-	html+='<td style="text-indent:5em"> Drug Therapy: </td><td>'+patients[i].getAttribute("ADDITIONAL_DRUG_THERAPY")+'</td>';
-	html+='</tr>';
-    html+='</table>';
-    html+='</td>'; 
-    html+='</tr>';
+      html+='<tr class="evenrow">';
+	  html+='<td colspan="7" style="padding-left:100px">';
+	  html+='<table id="details" width="750px" height="100px">';
+	  html+='<tr>';
+	  html+='<td colspan="2"><a href=# onclick=\'window.open("imagebrowser.jsp?patientid='+patients[i].getAttribute("BCR_PATIENT_BARCODE")+'")\'>View Images</a></td>';
+	  html+='<td/><td/>';
+	  html+='</tr>';
+	
+	  for(var j=0;j<detail_patient_length;j++)
+	  {
+	    if(j%2==0)
+	    {
+		 html+='<tr>';
+		 html+='<td>'+patient_feature_detail_show[j]+': </td><td>'+patients[i].getAttribute(patient_feature_detail_db[j])+'</td>';
+		 if(j==detail_patient_length-1)
+		   html+='<td/><td/></tr>';
+	    }
+	    else if(j%2==1)
+	    {
+		 html+='<td style="text-indent:5em">'+patient_feature_detail_show[j]+': </td><td>'+patients[i].getAttribute(patient_feature_detail_db[j])+'</td>';
+		 html+='</tr>';
+	    }
+	    
+
+	  }
+      html+='</table>';
+      html+='</td>'; 
+      html+='</tr>';
     }
     $('#box-table-a').html(html);	
     $(".oddrow").addClass("odd");
     $(".evenrow").hide();
     $(".oddrow").click(function(){
-  	   $(this).next('.evenrow').slideToggle(500);
+  	   $(this).next('.evenrow').slideToggle(300);
         $(this).find(".arrow").toggleClass("up");
      });
     $(".pagination li a").click(function(){

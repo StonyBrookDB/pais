@@ -54,6 +54,7 @@ var numentry;
 var perpage=50;
 var cpage;
 var tpage;
+
 function initiate()
 { 		
 	    var url;
@@ -119,12 +120,12 @@ function changePage(page)
       }	
       var imagename = uid.substring(0,uid.lastIndexOf("_"));
       var resolution = uid.substring(uid.lastIndexOf("_")+1,uid.length);
-      var filename = "../Thumbs/"+images[i].getAttribute("NAME")+".svs.dzi.tif.thumb.jpg";
-    
+      //var filename = "/tmp/Thumbs/"+images[i].getAttribute("NAME")+".svs.dzi.tif.thumb.jpg";
+      var filename = "/tcga/images/thumbnail/wsi;imageuid="+images[i].getAttribute("IMAGEREFERENCE_UID")+";format=jpg;length=200";
       html+='<tr>';	
       html+='<td>'+imagename+'</td>';
       //html+="<td class='inlinelink' ><a href='http://cancer.digitalslidearchive.net/index_mskcc.php?slide_name="+imagename+"'><img src=\""+filename+"\" width=60px height=40px class=\"thumbnail\"/></a></td>\n";		
-      html+="<td class='inlinelink' ><a href='imageviewer.jsp?img="+imagename+"'><img src=\""+filename+"\" width=60px height=40px class=\"thumbnail\"/></a></td>\n";		
+      html+="<td class='inlinelink' ><a href='imageviewer.jsp?img="+imagename+"'><img src=\""+filename+"\" width=60px height=40px class=\"thumbnail\" title='thumbnail'/></a></td>\n";		
       html+='<td>'+resolution+'</td>';
       html+='<td>'+patienttmp+'</td>';
       html+="<td><a href=/tcga/images/image/wsi;imageuid="+uid+" class='viewdetails'>Download Image</a></td>\n";
@@ -182,7 +183,7 @@ function changePage(page)
     			  var url=$(this).attr('href');
     			  var html = '<div id="pagectl"><a onclick="goback()" href=#><img src="include/img/back.png" width=40px height=40px>Back to Image List</a>';
     			  html+='&nbsp&nbsp&nbsp&nbsp&nbsp';
-    			  html+='<a onclick="fullscreen(\''+url+'\')" href=#><img src="include/img/full_screen.png" width=50px height=50px>Open in new Window</a>';
+    			  html+='<a onclick="fullscreen(\''+url+';fullscreen=true\')" href=#><img src="include/img/full_screen.png" width=50px height=50px>Open in new Window</a>';
     			  html+='</div><br>';
     			  html+="<div ><iframe height=1100px width=1000px frameborder='0' scrolling='no' src='"+url+"'></iframe></div>";
 

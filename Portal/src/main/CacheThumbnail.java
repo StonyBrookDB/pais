@@ -9,6 +9,7 @@ import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -113,12 +114,20 @@ public class CacheThumbnail {
 	public static void main(String[] args) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException
 	{
 		Class.forName("com.ibm.db2.jcc.DB2Driver").newInstance();
-		String url = "jdbc:db2://europa.cci.emory.edu:50001/tcga";
-		String username = "tcgauser";
-		String passwd = "userdb4321";
+		String url = "jdbc:db2://localhost:50000/pais";
+		String username = "db2inst1";
+		String passwd = "terry";
 		Connection con1 = DriverManager.getConnection(url, username, passwd);
 		System.out.println("connected successfully!");
-		CacheThumbnail.generate(con1);
+		ResultSet rs = con1.prepareStatement("select * from pais.patient_characteristic").executeQuery();
+
+		ResultSetMetaData rsmd = rs.getMetaData();
+		int numberOfColumns = rsmd.getColumnCount();
+		int i=0;
+		for (i = 0 ; i < numberOfColumns; i++){
+		    	System.out.println(rsmd.getColumnName(i+1));		    	 
+		}
+		//System.out.println("\n"+i);
 	}
 	
 }

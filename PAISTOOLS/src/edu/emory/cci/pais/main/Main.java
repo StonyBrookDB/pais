@@ -38,30 +38,18 @@ public static void  main(String[] args){
        }
        else// command line
        {
-   		Option help = new Option("h", "help", false, "display this help and exit.");
-   		help.setRequired(false);
-   		Option worktype = new Option("w", "worktype", true, "which function do you want? uploader/converter");
-   		worktype.setRequired(true);
-   		worktype.setArgName("worktype");
-
-   		Options options = new Options();
-   		options.addOption(help);
-   		options.addOption(worktype);
+    	String work = args[0];
+    	String otherargs[] = new String[args.length-1];
+    	for(int i=0;i<otherargs.length;i++)
+    	{
+    		otherargs[i]=args[i+1];
+    	}
+   		Option help;
+   		Options options;
+   		CommandLineParser CLIparser;
+   		HelpFormatter formatter=new HelpFormatter();
+   		CommandLine line ;
    		
-   		CommandLineParser CLIparser = new GnuParser();
-   		HelpFormatter formatter = new HelpFormatter();
-   		CommandLine line = null;
-   		try {
-   			line = CLIparser.parse(options, args);
-   			if(line.hasOption("h")) {
-   				formatter.printHelp("PAIS tools", options, true);
-   				System.exit(0);
-   			}
-   		} catch(org.apache.commons.cli.ParseException e) {
-   			formatter.printHelp("PAIS tools", options, true);
-   			System.exit(1);
-   		}
-   		String work = line.getOptionValue("worktype");
    		
    		if(work.equalsIgnoreCase("converter"))
    		{
@@ -96,7 +84,6 @@ public static void  main(String[] args){
    			options.addOption(config);
 
    			CLIparser = new GnuParser();
-   	   		formatter = new HelpFormatter();
    	   	    line = null;
    	   		try {
    	   			line = CLIparser.parse(options, args);
@@ -155,7 +142,6 @@ public static void  main(String[] args){
    			options.addOption(dbConfigFile);
    			
    			CLIparser = new GnuParser();
-   			formatter = new HelpFormatter();
    			line = null;
    			try {
    				line = CLIparser.parse(options, args);
@@ -164,6 +150,7 @@ public static void  main(String[] args){
    					System.exit(0);
    				}
    			} catch(org.apache.commons.cli.ParseException e) {
+   				e.printStackTrace();
    				formatter.printHelp("uploader", options, true);
    				System.exit(1);
    			}	
@@ -196,7 +183,8 @@ public static void  main(String[] args){
    		}
    		else
    		{
-   			formatter.printHelp("PAIS tools", options, true);
+   		
+   			System.out.println("the first argument must be the work type\n e.g. java -jar paistools.jar uploader/converter <otherargs>");
 			System.exit(0);
    			
    		}

@@ -54,6 +54,10 @@ features[9]="Energy";
 var paisuid;
 var barcode;
 var featurevalue = [];
+var patient_feature_primary_db = new Array("BCR_PATIENT_BARCODE","GENDER","AGE_AT_INITIAL_PATHOLOGIC_DIAGNOSIS","ANATOMIC_ORGAN_SUBDIVISION","VITAL_STATUS","DAYS_TO_DEATH");
+var patient_feature_primary_show = new Array("patient_id","gender","age*","organ","vital status","days of survival**");
+var primary_patient_length = patient_feature_primary_db.length;
+
 $(document).ready(function() {
   
 	 paisuid=getarg('img');
@@ -141,30 +145,20 @@ function refreshPatientInfo()
 		var patientinfo=data.documentElement.getElementsByTagName("row")[0];
 		var html='';
 		html+='<tr>';
-		html+='<th scope="col">BAR Code</th>';
-		html+='<th scope="col">Sub-type</th>';
-		html+='<th scope="col">Gender</th>';
-		html+='<th scope="col">Vital Status</th>';
-		html+='<th scope="col">Kran Score</th>';
-		html+='<th scope="col">Age</th>';
-		html+='<th scope="col">Survival Days</th>';
-		html+='<th scope="col">Tumor Nuclei Percent</th>';
-		html+='<th scope="col">Methalation Status</th>';
+		for(var i=0;i<primary_patient_length;i++)
+		{
+		   html+='<th scope="col">'+patient_feature_primary_show[i]+'</th>';
+		}
 		html+='<th scope="col"></th>';
 		html+='</tr>';
 		
 		html+='<tr>';
-		html+='<td>'+patientinfo.getAttribute("BCRPATIENTBARCODE")+'</td>';
-		html+='<td>'+patientinfo.getAttribute("SUBTYPE")+'</td>';
-		html+='<td>'+patientinfo.getAttribute("GENDER")+'</td>';
-		html+='<td>'+patientinfo.getAttribute("VITALSTATUS")+'</td>';
-		html+='<td>'+patientinfo.getAttribute("KARNSCORE")+'</td>';
-		html+='<td>'+patientinfo.getAttribute("AGEATFIRSTDIAGNOSIS")+'</td>';
-		html+='<td>'+patientinfo.getAttribute("SURVIVAL_DAYS")+'</td>';
-		html+='<td>'+patientinfo.getAttribute("TUMOR_NUCLEI_PERCENT")+'</td>';
-		html+='<td>'+patientinfo.getAttribute("MGMT_METHYLATED")+'</td>';
+		for(var j=0;j<primary_patient_length;j++)
+	    {
+	      html+='<td>'+patientinfo.getAttribute(patient_feature_primary_db[j])+'</td>';
+	    }
 		
-		html+='<td><a onclick="window.open(\'imagebrowser.jsp?patientid='+patientinfo.getAttribute("PATIENT_ID")+'\')" href=#>View all images for this patient</a></td>';
+		html+='<td><a onclick="window.open(\'imagebrowser.jsp?patientid='+patientinfo.getAttribute("BCR_PATIENT_BARCODE")+'\')" href=#>View all images for this patient</a></td>';
 		html+='</tr>';
 		$('#box-table-a').html(html);
 	});

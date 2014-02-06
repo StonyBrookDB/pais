@@ -262,7 +262,7 @@ public class Queries {
 			"SELECT pais.plgn2str(m.polygon) AS boundary " +
 			"FROM   pais.markup_polygon m " +
 			"WHERE  m.pais_uid = ?  AND " +
-			"       DB2GSE.ST_Contains(DB2GSE.ST_Polygon( CAST (? AS VARCHAR(30000) ), 100), polygon ) =1";		
+			"       DB2GSE.ST_Contains(DB2GSE.ST_Polygon( CAST (? AS VARCHAR(400) ), 100), polygon ) =1";		
 		map.put(name, query);
 		
 		/**
@@ -474,7 +474,7 @@ public class Queries {
 		 * @param paisuid e.g.: 'TCGA-27-1836-01Z-DX2_20x_20x_NS-MORPH_1'
 		 */		
 		name = "getMeanFeatureVectorAsTableByPAISUID";
-		query = "SELECT *  from pais.feature_aggregate WHERE PAIS_UID = ? ORDER BY PAIS_UID";
+		query = "SELECT *  from pais.feature_aggregate WHERE PAIS_UID = ?";
 		map.put(name, query);			
 		
 		name = "getPreMeanFeatureVectorForImage";
@@ -509,9 +509,9 @@ public class Queries {
 		
 		name = "getFeatureMean";
 		query = 
-		" SELECT avg, stddev" + 
-		" FROM pais.feature_aggregate " + 
-		" WHERE  pais_uid = ? and feature = ? ";		
+		" SELECT *" + 
+		" FROM pais.MEAN_FEATURE_VECTOR " + 
+		" WHERE  pais_uid = ?";		
 		map.put(name,query);		
 		
 		/*******************************************************************************************/
@@ -756,13 +756,11 @@ public class Queries {
 		map.put(name, query);
 		
 		name="patientfeatures";
-	    query="select o.patient_id,BCRPATIENTBARCODE,SUBTYPE,o.GENDER,VITALSTATUS,AGEATFIRSTDIAGNOSIS,SURVIVAL_DAYS,TUMOR_TISSUE_SITE, KARNSCORE,CHEMO_THERAPY,MGMT_METHYLATED,ADDITIONAL_RADIATION_THERAPY,TUMOR_NUCLEI_PERCENT,ADDITIONAL_DRUG_THERAPY" +
-	    		" from tcga.patient_characteristic_old o, tcga.patient_characteristic c " +
-	    		" where c.bcr_patient_barcode=o.bcrpatientbarcode";
+	    query="select * from pais.patient_characteristic ";
 		map.put(name, query);
-		
-		name="patientfeatureBybarcodeOld";
-		query = "select * from tcga.patient_characteristic_old o where o.bcrpatientbarcode=?";
+		 
+		name="patientfeatureBybarcode";
+		query = "select * from pais.patient_characteristic where bcr_patient_barcode=?";
 		map.put(name, query);
 		
 		

@@ -83,7 +83,7 @@ public class WebAPI {
 	// e.g.: /pais/features/aggregation
 	String query_getMeanFeatureVectorByPAISUID = queries.getQuery("getMeanFeatureVectorByPAISUID");
 	String query_getMeanFeatureVectorForAllPAISUID = queries.getQuery("getMeanFeatureVectorForAllPAISUID");
-	String query_getMeanFeatureVectorAsTableByPAISUID = queries.getQuery("getMeanFeatureVectorAsTableByPAISUID");
+	//String query_getMeanFeatureVectorAsTableByPAISUID = queries.getQuery("getMeanFeatureVectorAsTableByPAISUID");
 	String query_getPreMeanFeatureVectorByPAISUID = queries.getQuery("getPreMeanFeatureVectorByPAISUID");
 	String query_getPreMeanFeatureVectorForImage = queries.getQuery("getPreMeanFeatureVectorForImage");
 	String query_getPreMeanFeatureVectorForPatient = queries.getQuery("getPreMeanFeatureVectorForPatient");
@@ -132,7 +132,7 @@ public class WebAPI {
 	String query_patientchar=queries.getQuery("getPatientChar");
 	String query_patientidfrompaisuid=queries.getQuery("patientidfrompaisuid");
 	String query_patientfeatures=queries.getQuery("patientfeatures");
-	String query_patientfeatureBybarcodeOld=queries.getQuery("patientfeatureBybarcodeOld");
+	String query_patientfeatureBybarcode=queries.getQuery("patientfeatureBybarcode");
 
 /*******************************************************************************************/
 /************************************PAIS list queries**************************************/
@@ -399,7 +399,7 @@ public class WebAPI {
 		props.put("1", paisuid);		
 		props.put("2", buf.toString() );
 		PreparedStatement pstmt = manager.setPreparedStatementAndParams("getBoundariesFromRectangleFromTile", query_getBoundariesFromRectangleFromTile, props);			
-
+        System.out.println(paisuid+" "+buf.toString());
 		ResultSet rs = APIHelper.getResultSetFromPreparedStatement(pstmt); 	
 		if ("svg".equalsIgnoreCase(format) )
 			return APIHelper.setSVGResponse(rs, Integer.parseInt(x), Integer.parseInt(y), samplingRate );		
@@ -895,12 +895,12 @@ public class WebAPI {
 		if(pais_uid == null){
 			rs = APIHelper.getResultSet(db, query_getMeanFeatureVectorForAllPAISUID );
 		}
-		else if (tableView != null ) {
+		/*else if (tableView != null ) {
 			props.put("1", pais_uid);
 			PreparedStatement pstmt = manager.setPreparedStatementAndParams("getMeanFeatureVectorAsTableByPAISUID", 
 					query_getMeanFeatureVectorAsTableByPAISUID, props);
 			rs = APIHelper.getResultSetFromPreparedStatement(pstmt);	
-		}
+		}*/
 		else {
 			props.put("1", pais_uid);
 			PreparedStatement pstmt = manager.setPreparedStatementAndParams("getPreMeanFeatureVectorByPAISUID", query_getPreMeanFeatureVectorByPAISUID, props);
@@ -912,7 +912,7 @@ public class WebAPI {
 	// e.g. : /pais/features/aggregation2/document
 	// e.g. : /pais/features/aggregation2/document;format=html
 	// e.g. : /pais/features/aggregation2/document;paisuid=TCGA-27-1836-01Z-DX2_20x_20x_NS-MORPH_1;format=html
-	@GET
+/*	@GET
 	@Path("/pais/features/aggregation2/document")
 	public Response getMeanFeatureVector2(
 			@MatrixParam("paisuid") String pais_uid,
@@ -933,13 +933,14 @@ public class WebAPI {
 			return APIHelper.setResponseByFormat(format, rs);
 		}
 		else {
+			
 			props.put("1", pais_uid);
 			PreparedStatement pstmt = manager.setPreparedStatementAndParams("getMeanFeatureVectorByPAISUID", query_getMeanFeatureVectorByPAISUID, props);
 			rs = APIHelper.getResultSetFromPreparedStatement(pstmt);
 			return APIHelper.setResponseByFormat(format, rs);
 		}
 	}	
-	
+	*/
 	// e.g. /pais/features/aggregation/image;imageuid=TCGA-06-0152-01Z-00-DX6_20x
 	@GET
 	@Path("/pais/features/aggregation/image")
@@ -1021,16 +1022,26 @@ public class WebAPI {
 			
 			Properties props2 = new Properties();
 			props2.put("1", pais_uid);	
-			props2.put("2", feature.toUpperCase());	
 			PreparedStatement pstmt2 = manager.setPreparedStatementAndParams("getFeatureMean", queries.getQuery("getFeatureMean"), props2);			
 			ResultSet rs2 = APIHelper.getResultSetFromPreparedStatement(pstmt2); 	
-			String[] rst = APIHelper.getSingleRecordFromResultSet(rs2);		
+			//String[] rst = APIHelper.getSingleRecordFromResultSet(rs2);		
 			//System.out.println(rst[1]);
-			DecimalFormat dFormat = new DecimalFormat("0.000");
-			if (Double.parseDouble(rst[1]) >= 1)
+
+			
+			DecimalFormat dFormat = new DecimalFormat("0.0000");
+			String subTitle = "";
+			try{
+			if(rs2.next())
+			{
+			if (rs2.getDouble("AVG_"+feature.toUpperCase()) >= 1)
 				dFormat = new DecimalFormat("0.00");
-			String subTitle = "mean=" + dFormat.format( Double.parseDouble(rst[0]) ) + "; stddev=" + dFormat.format( Double.parseDouble(rst[1]) );
-	    	
+			subTitle = "mean=" + dFormat.format(rs2.getDouble("AVG_"+feature.toUpperCase())) + "; stddev=" + dFormat.format(rs2.getDouble("STD_"+feature.toUpperCase()));
+			}
+			}catch(Exception e)
+			{
+				e.printStackTrace();
+				subTitle="cannot get mean and standard variance";
+			}
 	
 //			String subTitle ="test subtitle";
 			return APIHelper.setHistogramResponse(rs1, title, subTitle, width, height, format);
@@ -1353,10 +1364,10 @@ public class WebAPI {
 			String imageName = imageuid +"_"+lengthstr+"."+format;
 			File wsithumbdir = new File(thumbnailDir+"wsi");
 			if(wsithumbdir.exists()==false)
-				{
+			{
 				wsithumbdir.mkdirs();
 				System.out.println("mkdirs "+wsithumbdir.getAbsolutePath());
-				}
+			}
 			String tmpfilename = thumbnailDir+"wsi"+File.separator+imageName;
 			File tmpfile = new File(tmpfilename);
 			
@@ -1698,7 +1709,7 @@ public class WebAPI {
 				}
 				else{
 				props.put("1", barcode);
-				pstmt = manager.setPreparedStatementAndParams("patientfeatureBybarcodeOld", query_patientfeatureBybarcodeOld, props);
+				pstmt = manager.setPreparedStatementAndParams("patientfeatureBybarcode", query_patientfeatureBybarcode, props);
 				}
 				ResultSet rs = APIHelper.getResultSetFromPreparedStatement(pstmt);
 				return APIHelper.setResponseByFormat(format, rs);
