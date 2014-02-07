@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jul 6, 2011 7:35:37 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="edu.emory.cci.imagedb.ModelBeans.Tiledimage" table="TILEDIMAGE" schema="PI">
+        <id name="id" type="long">
+            <column name="ID" />
+            <generator class="native" />
+        </id>
+        <many-to-one name="tileset" class="edu.emory.cci.imagedb.ModelBeans.Tileset" fetch="select" lazy="false" cascade="none">
+            <column name="TILESET_ID" not-null="true" />
+        </many-to-one>
+        <property name="name" type="string" unique="true">
+            <column name="NAME" />
+        </property>
+        <property name="x" type="java.lang.Double">
+            <column name="X" precision="53" scale="0" />
+        </property>
+        <property name="y" type="java.lang.Double">
+            <column name="Y" precision="53" scale="0" />
+        </property>
+        <property name="height" type="java.lang.Double">
+            <column name="HEIGHT" precision="53" scale="0" />
+        </property>
+        <property name="filesize" type="java.lang.Long">
+            <column name="FILESIZE" />
+        </property>
+        <property name="width" type="java.lang.Double">
+            <column name="WIDTH" precision="53" scale="0" />
+        </property>
+        <property name="resolution" type="string">
+            <column name="RESOLUTION" length="64" />
+        </property>
+        <property name="tiledtime" type="timestamp">
+            <column name="TILEDTIME" length="26" />
+        </property>
+        <property name="format" type="java.lang.Long">
+            <column name="FORMAT" />
+        </property>
+        <property name="hierarchylevel" type="java.lang.Character">
+            <column name="HIERARCHYLEVEL" length="1" />
+        </property>
+        <property name="thumbnail" type="blob" >
+        	<column name="THUMBNAIL"  />
+        </property>
+        <property name="tilename" type="string" unique="true">
+            <column name="TILENAME" />
+        </property>
+    </class>
+</hibernate-mapping>

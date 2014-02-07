@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jul 6, 2011 7:35:37 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="edu.emory.cci.imagedb.ModelBeans.Server" table="SERVER" schema="PI">
+        <id name="id" type="long">
+            <column name="ID" />
+            <generator class="native" />
+        </id>
+        <property name="name" type="string">
+            <column name="NAME" />
+        </property>
+        <property name="capacity" type="string">
+            <column name="CAPACITY" length="64" />
+        </property>
+        <property name="hostname" type="string">
+            <column name="HOSTNAME" length="64" />
+        </property>
+        <property name="ipaddress" type="string">
+            <column name="IPADDRESS" length="64" />
+        </property>
+        <property name="port" type="java.lang.Integer">
+            <column name="PORT" />
+        </property>
+        <set name="locations" table="LOCATION" inverse="true" lazy="true" fetch="select" cascade="all,delete-orphan">
+            <key>
+                <column name="SERVER_ID" not-null="true" />
+            </key>
+            <one-to-many class="edu.emory.cci.imagedb.ModelBeans.Location" />
+        </set>
+    </class>
+</hibernate-mapping>

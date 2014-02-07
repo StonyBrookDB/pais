@@ -109,7 +109,134 @@ public static void initUidMap(PAISDBHelper db) {
 	 * */
 	
 	
-	public static void main(String[] args) throws SQLException {
+	public static void main(String[] args){
+		Option help = new Option("h", "help", false, "display this help and exit.");
+		help.setRequired(false);
+		Option loadingConfigFile = new Option("lc", "loadingConfigFile", true, "xml file with the data loading configuration.");
+		loadingConfigFile.setRequired(true);
+		loadingConfigFile.setArgName("loadingConfigFile");
+		Option dbConfigFile = new Option("dbc", "dbConfigFile", true, "xml file with the configuration of the database.");
+		dbConfigFile.setRequired(true);
+		dbConfigFile.setArgName("dbConfigFile");
+		Option numOfPartitionsOption = new Option("p", "numberOfPartitions", true, "the number of partitions, if using database partitioning. If the db is not partitioned, this option can be omitted or set to 0.");
+		numOfPartitionsOption.setRequired(false);
+		numOfPartitionsOption.setArgName("numberOfPartitions");
+		
+		//by Zhengwen to use Multi-Threading load
+		Option numOfThreadOption = new Option("t", "numberOfThreads", true, "number of threads");
+		numOfThreadOption.setRequired(false);
+		numOfThreadOption.setArgName("number of threads");
+		
+		//by Zhengwen to calculate the centroid of a polygon first.
+		// MARKUP_POLYGON table needs to append 2 attributes -- CENTROID_X, CENTROID_Y (Modified in the "create_tables_dpf_withCentroid.sql" SQL script).
+		
+		Option CentFlag = new Option("c", "CentroidCalculationFlag", true, "Flag to calculate Centroid");
+		CentFlag.setRequired(false);
+		CentFlag.setArgName("Flag to calculate Centroid");
+
+		
+		
+		Options options = new Options();
+		options.addOption(help);
+		options.addOption(loadingConfigFile);
+		options.addOption(dbConfigFile);
+		options.addOption(numOfPartitionsOption);	
+		//Zhengwen
+		options.addOption(numOfThreadOption);
+		options.addOption(CentFlag);
+		
+		CommandLineParser CLIparser = new GnuParser();
+		HelpFormatter formatter = new HelpFormatter();
+		CommandLine line = null;
+
+		int numOfPartitions = 0;
+		int CentroidFlag = 0;
+		
+		try {
+			line = CLIparser.parse(options, args);
+			if(line.hasOption("h")) {
+				formatter.printHelp("DataLoadingManager", options, true);
+				System.exit(0);
+			}
+			if(line.hasOption("p")) {
+				numOfPartitions = Integer.parseInt(line.getOptionValue("numberOfPartitions"));
+				System.out.println("The number of Partitions is : " + numOfPartitions);
+			} else {
+				numOfPartitions = 0;
+			}
+			if(line.hasOption("t")){
+				numOfThreads = Integer.parseInt(line.getOptionValue("numberOfThreads"));
+				System.out.println("The number of Threads is: " + numOfThreads);				
+			} else {
+				numOfThreads = 1;
+			}
+			if(line.hasOption("c")){
+				CentroidFlag = Integer.parseInt(line.getOptionValue("CentroidCalculationFlag"));
+				if (CentroidFlag == 1)
+					System.out.println("Calculation Centroids of polygons ... " );				
+			} else {
+				CentroidFlag = 0;
+			}
+			
+		} catch(NumberFormatException e) {
+			System.err.println("The partition number must be an integer number.\n");
+			formatter.printHelp("DataLoadingManager", options, true);
+			System.exit(1);
+		} catch(org.apache.commons.cli.ParseException e) {
+			formatter.printHelp("DataLoadingManager", options, true);
+			System.exit(1);
+		}	
+
+		long startTime = 0;
+		long endTime = 0;
+		int num = 0;
+		
+
+		DBConfig dbconfig =new DBConfig(line.getOptionValue("dbConfigFile"));
+		String loadingconfig = line.getOptionValue("loadingConfigFile");		
+		startTime = System.currentTimeMillis() ; 		
+		/*Start the Producer*/
+		PAISDBHelper db = new PAISDBHelper(dbconfig);
+		initUidMap(db);	
+		Producer producer = new Producer(db,0,loadingconfig);
+		producer.start();
+			
+		/*Start the slave threads of consumers*/
+		for(num=0;num<numOfThreads;num++)
+		{
+				PAISDBHelper consumerdb = new PAISDBHelper(dbconfig);
+				/*Check if need to calculate the centroid of polygon*/
+				if (CentroidFlag == 1)
+					consumerdb.setCentroidCalulationFlag();
+				
+				new Consumer(consumerdb, numOfPartitions, loadingconfig, num+1).start();
+		}
+		
+		while(true)
+		{
+			int threadnum = 0;
+			synchronized(numOfThreads)
+			{
+				threadnum = numOfThreads;
+			}
+			if(threadnum==0)
+				break;
+			else{
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		endTime = System.currentTimeMillis();
+		
+		System.out.println("Totally takes： " + (endTime - startTime)/1000.0 + " seconds." );
+
+	}
+	
+	public static void loadmanagermain(String[] args){
 		Option help = new Option("h", "help", false, "display this help and exit.");
 		help.setRequired(false);
 		Option loadingConfigFile = new Option("lc", "loadingConfigFile", true, "xml file with the data loading configuration.");

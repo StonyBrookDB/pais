@@ -120,6 +120,74 @@ public class DocumentUploader {
 			return name.endsWith(ext);
 		}
 	}
+	
+	public static void documentUploadermain(String[] args)
+	{
+		GnuParser CLIparser = new GnuParser();
+	    	HelpFormatter formatter = new HelpFormatter();
+	    	CommandLine line = null;
+	    	
+			Option help = new Option("h", "help", false, "display this help and exit.");
+			help.setRequired(false);
+			Option folderType = new Option("ft", "folderType", true, "the type of the Folder. It can be either 'slide' or 'collection'. " +
+					"If it is 'slide', all the zip files contained in the folder will be loaded. If it is 'collection', all the zip " +
+					"files contained in the immediate child subfolders will be uploaded, files contained directly in the folder will be ignored. " +
+					"Notice that both methods don't add zip files in subfolders recursively.");
+			folderType.setRequired(true);
+			folderType.setArgName("folderType");
+			Option folder = new Option("f", "folder", true, "in the case 'slide', folder containing the zipped documents. In the case of 'collection' " +
+					"it's the folder containing the subfolders with zipped documents.");
+			folder.setRequired(true);
+			folder.setArgName("folder");
+			Option dbConfigFile = new Option("dbc", "dbConfigFile", true, "xml file with the configuration of the database.");
+			dbConfigFile.setRequired(true);
+			dbConfigFile.setArgName("dbConfigFile");
+			
+			Options options = new Options();
+			options.addOption(help);
+			options.addOption(folderType);
+			options.addOption(folder);
+			options.addOption(dbConfigFile);
+			
+			CLIparser = new GnuParser();
+			line = null;
+			try {
+				line = CLIparser.parse(options, args);
+				if(line.hasOption("h")) {
+					formatter.printHelp("uploader", options, true);
+					System.exit(0);
+				}
+			} catch(org.apache.commons.cli.ParseException e) {
+				e.printStackTrace();
+				formatter.printHelp("uploader", options, true);
+				System.exit(1);
+			}	
+			
+			long startCurrentTime = 0;
+	        long endCurrentTime = 0;
+	        long totalTime = 0;
+	        startCurrentTime = System.currentTimeMillis();
+	        
+			PAISDBHelper db = new PAISDBHelper(new DBConfig(new File(line.getOptionValue("dbConfigFile"))));
+	        
+			DocumentUploader uploader = new DocumentUploader(db,"PP");
+
+			String folderString = line.getOptionValue("folder");
+			if (line.getOptionValue("folderType").trim().toLowerCase().equals("slide")){
+				uploader.batchDocUpload(folderString);
+			} 
+			else if(line.getOptionValue("folderType").trim().toLowerCase().equals("collection")){
+				uploader.uploadDataSet(folderString);				
+			}
+			else {
+				formatter.printHelp("PAISDocumentUploader", options, true);
+				System.exit(1);
+			}
+
+			endCurrentTime = System.currentTimeMillis();
+	        totalTime = endCurrentTime - startCurrentTime;
+	        System.out.println("Total time (seconds):" + totalTime/1000.0);	 
+	}
 
 }
 	

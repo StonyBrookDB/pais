@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jul 6, 2011 7:35:37 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="edu.emory.cci.imagedb.ModelBeans.Activitystatus" table="ACTIVITYSTATUS" schema="PI">
+        <id name="id" type="long">
+            <column name="ID" />
+            <generator class="native" />
+        </id>
+        <property name="status" type="string">
+            <column name="STATUS" length="64" />
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" />
+        </property>
+        <set name="images" table="ACTIVITYSTATUSIMAGE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ID" not-null="true" />
+            </key>
+            <many-to-many entity-name="edu.emory.cci.imagedb.ModelBeans.Image">
+                <column name="ID1" not-null="true" />
+            </many-to-many>
+        </set>
+    </class>
+</hibernate-mapping>

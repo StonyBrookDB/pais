@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jul 6, 2011 7:35:37 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="edu.emory.cci.imagedb.ModelBeans.Instrument" table="INSTRUMENT" schema="PI">
+        <id name="id" type="long">
+            <column name="ID" />
+            <generator class="native" />
+        </id>
+        <version name="version" type="java.lang.Integer">
+            <column name="VERSION" />
+        </version>
+        <property name="permissions" type="java.lang.Long">
+            <column name="PERMISSIONS" />
+        </property>
+        <property name="creationId" type="java.lang.Long">
+            <column name="CREATION_ID" />
+        </property>
+        <property name="externalId" type="java.lang.Long">
+            <column name="EXTERNAL_ID" />
+        </property>
+        <property name="groupId" type="java.lang.Long">
+            <column name="GROUP_ID" />
+        </property>
+        <property name="ownerId" type="java.lang.Long">
+            <column name="OWNER_ID" />
+        </property>
+        <property name="updateId" type="java.lang.Long">
+            <column name="UPDATE_ID" />
+        </property>
+        <property name="microscope" type="java.lang.Long">
+            <column name="MICROSCOPE" />
+        </property>
+        <property name="manufacturer" type="string">
+            <column name="MANUFACTURER" length="255" />
+        </property>
+        <property name="manufacturermodelname" type="string">
+            <column name="MANUFACTURERMODELNAME" length="255" />
+        </property>
+        <property name="softwareversion" type="string">
+            <column name="SOFTWAREVERSION" length="64" />
+        </property>
+        <set name="images" table="IMAGE" inverse="true" lazy="true" fetch="select" cascade="delete-orphan">
+            <key>
+                <column name="INSTRUMENT" />
+            </key>
+            <one-to-many class="edu.emory.cci.imagedb.ModelBeans.Image" />
+        </set>
+    </class>
+</hibernate-mapping>

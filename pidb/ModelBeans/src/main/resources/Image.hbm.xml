@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jul 6, 2011 7:35:37 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="edu.emory.cci.imagedb.ModelBeans.Image" table="IMAGE" schema="PI">
+        <id name="id" type="long">
+            <column name="ID" />
+            <generator class="native" />
+        </id>
+        <property name="version" type="java.lang.Integer" unique="true">
+            <column name="VERSION" />
+        </property>
+        <many-to-one name="instrument" class="edu.emory.cci.imagedb.ModelBeans.Instrument" fetch="select" lazy="false" cascade="all">
+            <column name="INSTRUMENT" />
+        </many-to-one>
+        <many-to-one name="location" class="edu.emory.cci.imagedb.ModelBeans.Location" fetch="select" lazy="false" cascade="all">
+            <column name="LOCATION_ID" />
+        </many-to-one>
+        <many-to-one name="dataset" class="edu.emory.cci.imagedb.ModelBeans.Dataset" fetch="select" lazy="false" cascade="all">
+            <column name="DATASET_ID" />
+        </many-to-one>
+        <many-to-one name="patient" class="edu.emory.cci.imagedb.ModelBeans.Patient" fetch="select" lazy="false" cascade="all">
+            <column name="PATIENT_ID" />
+        </many-to-one>
+        <many-to-one name="specimen" class="edu.emory.cci.imagedb.ModelBeans.Specimen" fetch="select" lazy="false" cascade="all">
+            <column name="SPECIMEN_ID" />
+        </many-to-one>
+        <property name="acquisitiondate" type="timestamp">
+            <column name="ACQUISITIONDATE" length="26" />
+        </property>
+        <property name="archived" type="java.lang.Character">
+            <column name="ARCHIVED" length="1" />
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" />
+        </property>
+        <property name="permissions" type="java.lang.Long">
+            <column name="PERMISSIONS" />
+        </property>
+        <property name="name" type="string" unique="true">
+            <column name="NAME" />
+        </property>
+        <property name="partial" type="java.lang.Character">
+            <column name="PARTIAL" length="1" />
+        </property>
+        <property name="experiment" type="java.lang.Long">
+            <column name="EXPERIMENT" />
+        </property>
+        <property name="format" type="java.lang.Long">
+            <column name="FORMAT" />
+        </property>
+        <property name="imagingenvironment" type="java.lang.Long">
+            <column name="IMAGINGENVIRONMENT" />
+        </property>
+        <property name="objectivesettings" type="java.lang.Long">
+            <column name="OBJECTIVESETTINGS" />
+        </property>
+        <property name="stagelebel" type="java.lang.Long">
+            <column name="STAGELEBEL" />
+        </property>
+        <property name="creationId" type="java.lang.Long">
+            <column name="CREATION_ID" />
+        </property>
+        <property name="externalId" type="java.lang.Long">
+            <column name="EXTERNAL_ID" />
+        </property>
+        <property name="groupId" type="java.lang.Long">
+            <column name="GROUP_ID" />
+        </property>
+        <property name="ownerId" type="java.lang.Long">
+            <column name="OWNER_ID" />
+        </property>
+        <property name="updateId" type="java.lang.Long">
+            <column name="UPDATE_ID" />
+        </property>
+        <property name="filesize" type="java.lang.Long">
+            <column name="FILESIZE" />
+        </property>
+        <property name="resolution" type="string">
+            <column name="RESOLUTION" length="64" />
+        </property>
+        <property name="imagereferenceUid" type="string">
+            <column name="IMAGEREFERENCE_UID" length="64" />
+        </property>
+        <property name="thumbnail" type="blob">
+            <column name="THUMBNAIL" />
+        </property>
+        <property name="bigThumbnail" type="blob">
+            <column name="BIG_THUMBNAIL" />
+        </property>
+        <property name="width" type="int">
+            <column name="width"/>
+        </property>
+        <property name="height" type="int">
+            <column name="height"/>
+        </property>
+        
+        <!--   <set name="activitystatuses" table="ACTIVITYSTATUSIMAGE" inverse="true" lazy="false" fetch="select"> -->
+        <set name="activitystatuses" table="ACTIVITYSTATUSIMAGE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ID1" not-null="true" />
+            </key>
+            <many-to-many entity-name="edu.emory.cci.imagedb.ModelBeans.Activitystatus">
+                <column name="ID" not-null="true" />
+            </many-to-many>
+        </set>
+        <set name="tileset" table="TILESET" inverse="true" lazy="false" fetch="select" cascade="delete-orphan">
+            <key>
+                <column name="IMAGE_ID" not-null="true" />
+            </key>
+            <one-to-many class="edu.emory.cci.imagedb.ModelBeans.Tileset" />
+        </set>
+    </class>
+</hibernate-mapping>

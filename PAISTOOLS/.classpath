@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="main/resources/conf/spring/" kind="src" path="src"/>
+	<classpathentry kind="src" path="src/main/resources/conf/spring"/>
 	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/paismodel1.0.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/PAISDB2Helper"/>
@@ -14,5 +15,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/DataLoader"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/PAISDataLoadingManager"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

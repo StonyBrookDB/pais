@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:tx="http://www.springframework.org/schema/tx"
+		
+		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+							http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+							"
+		default-lazy-init="true">
+	
+    <!--    
+    	In production systems set the "hibernate.show_sql" to false. 
+    -->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+    	<property name="hibernateProperties">
+    		<props>
+    			<prop key="hibernate.connection.driver_class">com.ibm.db2.jcc.DB2Driver</prop>
+    			<prop key="hibernate.connection.url">jdbc:db2://europa.cci.emory.edu:50000/imagedb</prop>
+    			<prop key="hibernate.connection.username">db2user</prop>
+    			<prop key="hibernate.connection.password">userdb1234</prop>
+    			<prop key="hibernate.connection.autocommit">true</prop>
+    			
+	        	<prop key="hibernate.dialect">org.hibernate.dialect.DB2Dialect</prop>
+	        	 
+	        	<prop key="hibernate.c3p0.min_size">3</prop>
+	        	<prop key="hibernate.c3p0.max_size">15</prop>
+	        	<prop key="hibernate.c3p0.timeout">100</prop>
+	        	<prop key="hibernate.c3p0.acquire_increment">1</prop>
+	        	<prop key="hibernate.c3p0.max_statements">0</prop>
+	        	 
+	        	<prop key="hibernate.show_sql">false</prop>
+	        	<prop key="hibernate.format_sql">true</prop>
+        	</props>
+    	</property>
+	</bean>
+</beans>

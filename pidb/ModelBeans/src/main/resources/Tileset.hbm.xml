@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jul 6, 2011 7:35:37 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="edu.emory.cci.imagedb.ModelBeans.Tileset" table="TILESET" schema="PI">
+        <id name="id" type="long">
+            <column name="ID" />
+            <generator class="native" />
+        </id>
+		<many-to-one name="image" class="edu.emory.cci.imagedb.ModelBeans.Image" fetch="select" cascade="none">
+            <column name="IMAGE_ID" not-null="true" />
+        </many-to-one>
+        <property name="name" type="string">
+            <column name="NAME" />
+        </property>
+        <property name="type" type="string">
+            <column name="TYPE" length="64" />
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" />
+        </property>
+        <set name="tiledimages" table="TILEDIMAGE" inverse="true" lazy="true" fetch="select" cascade="all,delete-orphan">
+            <key>
+                <column name="TILESET_ID" not-null="true" />
+            </key>
+            <one-to-many class="edu.emory.cci.imagedb.ModelBeans.Tiledimage" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jul 6, 2011 7:35:37 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="edu.emory.cci.imagedb.ModelBeans.Experimentalstudy" table="EXPERIMENTALSTUDY" schema="PI">
+        <id name="id" type="long">
+            <column name="ID" />
+            <generator class="native" />
+        </id>
+        <many-to-one name="project" class="edu.emory.cci.imagedb.ModelBeans.Project" fetch="select" cascade="all">
+            <column name="PROJECT_ID" />
+        </many-to-one>
+        <many-to-one name="dataset" class="edu.emory.cci.imagedb.ModelBeans.Dataset" fetch="select" cascade="all">
+            <column name="DATASET_ID" />
+        </many-to-one>
+        <many-to-one name="experimenter" class="edu.emory.cci.imagedb.ModelBeans.Experimenter" fetch="select" cascade="all">
+            <column name="EXPERIMENTER_ID" />
+        </many-to-one>
+        <property name="activedaterange" type="date">
+            <column name="ACTIVEDATERANGE" length="10" />
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" />
+        </property>
+        <property name="designtype" type="string">
+            <column name="DESIGNTYPE" />
+        </property>
+        <property name="name" type="string">
+            <column name="NAME" length="200" />
+        </property>
+        <property name="typecode" type="string">
+            <column name="TYPECODE" length="200" />
+        </property>
+        <set name="experiments" table="EXPERIMENT" inverse="true" lazy="true" fetch="select" cascade="all, delete-orphan">
+            <key>
+                <column name="ESTUDY_ID" />
+            </key>
+            <one-to-many class="edu.emory.cci.imagedb.ModelBeans.Experiment" />
+        </set>
+    </class>
+</hibernate-mapping>

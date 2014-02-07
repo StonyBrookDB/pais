@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jul 6, 2011 7:35:37 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="edu.emory.cci.imagedb.ModelBeans.Experiment" table="EXPERIMENT" schema="PI">
+        <id name="id" type="long">
+            <column name="ID" />
+            <generator class="native" />
+        </id>
+        <version name="version" type="java.lang.Integer">
+            <column name="VERSION" />
+        </version>
+        <many-to-one name="experimentalstudy" class="edu.emory.cci.imagedb.ModelBeans.Experimentalstudy" fetch="select">
+            <column name="ESTUDY_ID" />
+        </many-to-one>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" />
+        </property>
+        <property name="permissions" type="java.lang.Long">
+            <column name="PERMISSIONS" />
+        </property>
+        <property name="creationId" type="java.lang.Long">
+            <column name="CREATION_ID" />
+        </property>
+        <property name="externalId" type="java.lang.Long">
+            <column name="EXTERNAL_ID" />
+        </property>
+        <property name="groupId" type="java.lang.Long">
+            <column name="GROUP_ID" />
+        </property>
+        <property name="updateId" type="java.lang.Long">
+            <column name="UPDATE_ID" />
+        </property>
+        <property name="ownerId" type="java.lang.Long">
+            <column name="OWNER_ID" />
+        </property>
+        <property name="type" type="java.lang.Long">
+            <column name="TYPE" />
+        </property>
+    </class>
+</hibernate-mapping>

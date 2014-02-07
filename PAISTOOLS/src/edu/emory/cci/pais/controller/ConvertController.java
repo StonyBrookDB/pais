@@ -11,6 +11,12 @@ import java.util.regex.Pattern;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+
 import edu.emory.cci.pais.AperioXMLParser.AperioXMLParser;
 import edu.emory.cci.pais.PAISBoundary2PAIS.PAISBoundary2PAIS;
 import edu.emory.cci.pais.documentgenerator.PAISDocumentGenerator;
@@ -24,9 +30,74 @@ import edu.emory.cci.pais.util.TengUtils;
 public class ConvertController{
 	public static String tmpdir = System.getProperty("java.io.tmpdir");
 
-	//public static String slash="\\";
-	public ConvertController()
+    
+	public static void convertermain(String[] args)
 	{
+		Option help = new Option("h","help",false,"display this help and exit.");
+			help.setRequired(false);
+			Option inputtype = new Option("it","inputtype",false,"input file type, aperio/fixed/unfixed");
+			inputtype.setRequired(false);
+			inputtype.setArgName("inputtype");
+			
+			Option zip = new Option("z","zip",false,"zip the output file or not");
+			zip.setRequired(false);
+			zip.setArgName("outputtype");
+			
+			Option inputpath = new Option("i","inputpath",false,"input directory or file path");
+			inputpath.setRequired(true);
+			inputpath.setArgName("inputpath");
+			
+			Option outputpath = new Option("o","outputpath",false,"output directory or file path");
+			outputpath.setRequired(true);
+			outputpath.setArgName("outputpath");
+			
+			Option config = new Option("c","config",false,"configuration file path");
+			config.setRequired(true);
+			config.setArgName("config");
+			
+			Options options = new Options();
+			options.addOption(help);
+			options.addOption(inputtype);
+			options.addOption(zip);
+			options.addOption(inputpath);
+			options.addOption(outputpath);
+			options.addOption(config);
+
+			GnuParser CLIparser = new GnuParser();
+	    	HelpFormatter formatter = new HelpFormatter();
+	    	CommandLine line = null;
+	   	    
+	   		try {
+	   			line = CLIparser.parse(options, args);
+	   			if(line.hasOption("h")) {
+	   				formatter.printHelp("converter", options, true);
+	   				System.exit(0);
+	   			}
+	   		} catch(org.apache.commons.cli.ParseException e) {
+	   			formatter.printHelp("converter", options, true);
+	   			System.exit(1);
+	   		}
+	   		String input = line.getOptionValue("inputpath");
+        String output = line.getOptionValue("outputpath");
+        String intype = line.getOptionValue("inputtype");
+        String zipornot = line.getOptionValue("zip");
+        String configfile = line.getOptionValue("config");
+        
+        if(intype==null||intype.equalsIgnoreCase(""))
+        	intype = "aperio";
+        if(zipornot==null)
+        	zipornot = "unzipped";
+        else
+        	zipornot = "zipped";
+        
+        System.out.println("start convert files....");
+	    try {
+			new ConvertController().convert(intype,zipornot,input,output,configfile);
+			System.out.println("convert successfully!");
+		} catch (IOException | InterruptedException e) {
+			System.out.println("convert failed!");
+			e.printStackTrace();
+		}
 		
 	}
 	

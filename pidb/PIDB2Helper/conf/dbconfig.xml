@@ -1,0 +1,14 @@
+<dbconfig>
+  <db>
+        <host>europa.cci.emory.edu</host>
+        <port>50001</port>
+        <database>TCGA</database>
+        <username>tcgauser</username>
+        <passwd>userdb4321</passwd>
+        <autocommit>true</autocommit>
+  </db>
+    <markup>
+        <spatialtablename>PAIS.MARKUP_POLYGON</spatialtablename>
+        <largeboundary>false</largeboundary>
+    </markup>
+</dbconfig>

@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jul 6, 2011 7:35:37 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="edu.emory.cci.imagedb.ModelBeans.Experimenter" table="EXPERIMENTER" schema="PI">
+        <id name="id" type="long">
+            <column name="ID" />
+            <generator class="native" />
+        </id>
+        <version name="version" type="java.lang.Integer">
+            <column name="VERSION" />
+        </version>
+        <property name="permissions" type="java.lang.Long">
+            <column name="PERMISSIONS" />
+        </property>
+        <property name="email" type="string">
+            <column name="EMAIL" />
+        </property>
+        <property name="firstname" type="string">
+            <column name="FIRSTNAME" />
+        </property>
+        <property name="institution" type="string">
+            <column name="INSTITUTION" />
+        </property>
+        <property name="lastname" type="string">
+            <column name="LASTNAME" />
+        </property>
+        <property name="middlename" type="string">
+            <column name="MIDDLENAME" />
+        </property>
+        <property name="omename" type="string">
+            <column name="OMENAME" />
+        </property>
+        <property name="externalId" type="java.lang.Long">
+            <column name="EXTERNAL_ID" />
+        </property>
+        <property name="userUid" type="string">
+            <column name="USER_UID" length="64"/>
+        </property>
+        <property name="loginname" type="string">
+            <column name="LOGINNAME" length="64" />
+        </property>
+        <property name="name" type="string">
+            <column name="NAME" length="64" />
+        </property>
+        <set name="experimentergroups" table="EXPERIMENTERGROUPEXPERIMENTER" inverse="true" lazy="true" fetch="select" cascade="all, delete-orphan">
+            <key>
+                <column name="ID1" not-null="true" />
+            </key>
+            <many-to-many entity-name="edu.emory.cci.imagedb.ModelBeans.Experimentergroup">
+                <column name="ID" not-null="true" />
+            </many-to-many>
+        </set>
+        <set name="experimentalstudies" table="EXPERIMENTALSTUDY" inverse="true" lazy="true" fetch="select" cascade="all, delete-orphan">
+            <key>
+                <column name="EXPERIMENTER_ID" />
+            </key>
+            <one-to-many class="edu.emory.cci.imagedb.ModelBeans.Experimentalstudy" />
+        </set>
+    </class>
+</hibernate-mapping>

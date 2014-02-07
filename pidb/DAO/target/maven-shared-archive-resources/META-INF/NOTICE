@@ -1,0 +1,67 @@
+// ------------------------------------------------------------------
+// NOTICE file corresponding to the section 4d of The Apache License,                                                                                               
+// Version 2.0, in this case for imagedbDAO                                                                                  
+// ------------------------------------------------------------------
+
+imagedbDAO
+Copyright 2014 The Apache Software Foundation
+
+This product includes software developed at
+The Apache Software Foundation (http://www.apache.org/).
+
+This product includes software, AntLR, developed by                                                                                                   
+$project.organization.name ($project.organization.url).
+This product includes software, asm, developed by                                                                                                   
+ObjectWeb (http://www.objectweb.org/).
+This product includes software, c3p0:JDBC DataSources/Resource Pools, developed by                                                                                                   
+$project.organization.name ($project.organization.url).
+This product includes software, cglib, developed by                                                                                                   
+$project.organization.name ($project.organization.url).
+This product includes software, commons-collections, developed by                                                                                                   
+$project.organization.name ($project.organization.url).
+This product includes software, commons-dbcp, developed by                                                                                                   
+$project.organization.name ($project.organization.url).
+This product includes software, Commons Lang, developed by                                                                                                   
+The Apache Software Foundation (http://www.apache.org/).
+This product includes software, Logging, developed by                                                                                                   
+The Apache Software Foundation (http://jakarta.apache.org).
+This product includes software, commons-pool, developed by                                                                                                   
+$project.organization.name ($project.organization.url).
+This product includes software, db2jcc, developed by                                                                                                   
+$project.organization.name ($project.organization.url).
+This product includes software, db2jcc_license, developed by                                                                                                   
+$project.organization.name ($project.organization.url).
+This product includes software, dom4j, developed by                                                                                                   
+MetaStuff Ltd. (http://sourceforge.net/projects/dom4j).
+This product includes software, Ehcache, developed by                                                                                                   
+$project.organization.name ($project.organization.url).
+This product includes software, freemarker, developed by                                                                                                   
+$project.organization.name ($project.organization.url).
+This product includes software, Java Transaction API, developed by                                                                                                   
+$project.organization.name ($project.organization.url).
+This product includes software, JUnit, developed by                                                                                                   
+JUnit (http://www.junit.org).
+This product includes software, Apache Velocity, developed by                                                                                                   
+The Apache Software Foundation (http://www.apache.org/).
+This product includes software, BeanShell, developed by                                                                                                   
+http://www.beanshell.org/ ($project.organization.url).
+This product includes software, antlr, developed by                                                                                                   
+$project.organization.name ($project.organization.url).
+This product includes software, hibernate, developed by                                                                                                   
+$project.organization.name ($project.organization.url).
+This product includes software, Hibernate C3P0 ConnectionProvider, developed by                                                                                                   
+Hibernate.org (http://hibernate.org).
+This product includes software, Hibernate Commons Annotations, developed by                                                                                                   
+Hibernate.org (http://hibernate.org).
+This product includes software, Hibernate Core, developed by                                                                                                   
+Hibernate.org (http://hibernate.org).
+This product includes software, Hibernate Tools, developed by                                                                                                   
+$project.organization.name ($project.organization.url).
+This product includes software, JTidy, developed by                                                                                                   
+$project.organization.name ($project.organization.url).
+This product includes software, JPA 2.0 API, developed by                                                                                                   
+Hibernate.org (http://hibernate.org).
+This product includes software, SLF4J API Module, developed by                                                                                                   
+QOS.ch (http://www.qos.ch).
+This product includes software, Spring Framework, developed by                                                                                                   
+Spring Framework (http://www.springframework.org/).

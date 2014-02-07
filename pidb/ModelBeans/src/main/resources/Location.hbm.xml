@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jul 6, 2011 7:35:37 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="edu.emory.cci.imagedb.ModelBeans.Location" table="LOCATION" schema="PI">
+        <id name="id" type="long">
+            <column name="ID" />
+            <generator class="native" />
+        </id>
+        <many-to-one name="server" class="edu.emory.cci.imagedb.ModelBeans.Server" fetch="select" lazy="false" cascade="all">
+            <column name="SERVER_ID" not-null="true" />
+        </many-to-one>
+        <property name="folder" type="string">
+            <column name="FOLDER" />
+        </property>
+        <set name="images" table="IMAGE" inverse="true" lazy="true" fetch="select" cascade="all,delete-orphan">
+            <key>
+                <column name="LOCATION_ID" />
+            </key>
+            <one-to-many class="edu.emory.cci.imagedb.ModelBeans.Image" />
+        </set>
+    </class>
+</hibernate-mapping>

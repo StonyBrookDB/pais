@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jul 6, 2011 7:35:37 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="edu.emory.cci.imagedb.ModelBeans.Experimentergroup" table="EXPERIMENTERGROUP" schema="PI">
+        <id name="id" type="long">
+            <column name="ID" />
+            <generator class="native" />
+        </id>
+        <version name="version" type="java.lang.Integer">
+            <column name="VERSION" />
+        </version>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" />
+        </property>
+        <property name="permissions" type="string">
+            <column name="PERMISSIONS" />
+        </property>
+        <property name="name" type="string">
+            <column name="NAME" />
+        </property>
+        <property name="externalId" type="java.lang.Long">
+            <column name="EXTERNAL_ID" />
+        </property>
+        <property name="groupUid" type="string">
+            <column name="GROUP_UID" length="64" />
+        </property>
+        <property name="uri" type="string">
+            <column name="URI" length="64" />
+        </property>
+        <set name="experimenters" table="EXPERIMENTERGROUPEXPERIMENTER" inverse="true" lazy="true" fetch="select" cascade="all, delete-orphan">
+            <key>
+                <column name="ID" not-null="true" />
+            </key>
+            <many-to-many entity-name="edu.emory.cci.imagedb.ModelBeans.Experimenter">
+                <column name="ID1" not-null="true" />
+            </many-to-many>
+        </set>
+    </class>
+</hibernate-mapping>

@@ -118,7 +118,8 @@ public class Consumer extends Thread{
 				   xmlFile.delete();
 				File metaFilename = new File(result.getMetaFilename());
 				metaFilename.delete();
-		}					
+		}
+		if(failedCount!=0)
 		System.out.println("Thread " + thread_num + " has " + failedCount + " faults");
 		return failedCount;
 	}
@@ -268,7 +269,7 @@ public class Consumer extends Thread{
 				break;
 			}
 			else{
-				System.out.println("thread "+thread_num+ "is working on "+(String)data.get(0));
+				System.out.println("thread "+thread_num+ " is working on "+(String)data.get(0));
 				failedCount = this.batchLoad(data);
 				
 			}

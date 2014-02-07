@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:tx="http://www.springframework.org/schema/tx"
+		
+		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+							http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+							"
+		default-lazy-init="true">
+	
+	<!-- 
+		
+		For production systems, the hibernate.show_sql property of the sessionFactory bean
+		should be set to false. Also the database dialog must be set in the same bean.
+		
+	 -->
+	 
+	<bean id="europaImageDBDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName"><value>com.ibm.db2.jcc.DB2Driver</value></property>
+        <property name="url"><value>jdbc:db2://europa.cci.emory.edu:50000/imagedb</value></property>
+        <property name="username"><value>db2user</value></property>
+        <property name="password"><value>userdb1234</value></property>
+    </bean>
+    
+   
+    <!-- 
+		The database dialog must be set here.    
+    	In production systems set the "hibernate.show_sql" to false. 
+    -->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+    	<property name="dataSource" ref="europaImageDBDataSource"/>
+    	<property name="hibernateProperties">
+    		<props>
+	        	<prop key="hibernate.dialect">org.hibernate.dialect.DB2Dialect</prop>
+	        	
+	        	<prop key="hibernate.show_sql">true</prop>
+	        	<prop key="hibernate.format_sql">true</prop>
+        	</props>
+    	</property>
+	</bean>
+</beans>
