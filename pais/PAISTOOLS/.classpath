@@ -15,7 +15,8 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/DataLoader"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/PAISDataLoadingManager"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/PAISDocumentGenerator"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/PAISDocumentUploader"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

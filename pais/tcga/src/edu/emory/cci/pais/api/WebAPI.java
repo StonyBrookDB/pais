@@ -22,7 +22,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
-import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 import edu.emory.cci.imagedb.FileDataCollector.OpenSlideToolsBin;
@@ -1255,8 +1254,8 @@ public class WebAPI {
 		{
 			return getErrPath();
 		}
+		OpenSlideToolsBin.getRegionImage(filepath, tmpfilename, format, dx, dy, dw,dh);
 		//OpenSlideTools.getInstance().getRegionImage(filepath, tmpfilename, format, dx, dy, dw,dh);
-		new OpenSlideToolsBin().getRegionImage(filepath, tmpfilename, format, dx, dy, dw,dh);
 		Response rs;
 		if(attachment.equalsIgnoreCase("true"))
 		{
@@ -1265,7 +1264,7 @@ public class WebAPI {
 		else{
 			rs = APIHelper.getImageStreamResponse(tmpfilename, format);
 		}
-		File tmpfile = new File(tmpfilename);
+		//File tmpfile = new File(tmpfilename);
 		//if(tmpfile.exists())
 		  //tmpfile.delete();
 		
@@ -1386,8 +1385,8 @@ public class WebAPI {
 			}
 			if(filepath==null||new File(filepath).exists()==false)
 				return Response.ok(filepath+" is not found!").type(MediaType.TEXT_PLAIN).build();;	
+			OpenSlideToolsBin.getThumbnailWSI(filepath, tmpfilename, Integer.parseInt(lengthstr));
 			//OpenSlideTools.getInstance().getThumbnailWSI(filepath, tmpfilename, Integer.parseInt(lengthstr));
-			new OpenSlideToolsBin().getThumbnailWSI(filepath, tmpfilename, Integer.parseInt(lengthstr));
 			}
 			Response rs =  APIHelper.getImageStreamResponse(tmpfilename, format);
 			return rs;
@@ -1435,8 +1434,9 @@ public class WebAPI {
 					if(filepath==null||new File(filepath).exists()==false)
 						return Response.ok("file "+filepath+" dose not exist").type(MediaType.TEXT_PLAIN).build();	
 					
-					//OpenSlideTools.getInstance().getThumbnailWSI(filepath, tmpfilename, Integer.parseInt(lengthstr));
-					new OpenSlideToolsBin().getThumbnailTiled(filepath, tmpfilename, Integer.parseInt(lengthstr),Integer.parseInt(x),Integer.parseInt(y),Integer.parseInt(w),Integer.parseInt(h));
+					OpenSlideToolsBin.getThumbnailTiled(filepath, tmpfilename, Integer.parseInt(lengthstr),Integer.parseInt(x),Integer.parseInt(y),Integer.parseInt(w),Integer.parseInt(h));
+
+					//OpenSlideTools.getInstance().getThumbnailTiled(filepath, tmpfilename, Integer.parseInt(lengthstr),Integer.parseInt(x),Integer.parseInt(y),Integer.parseInt(w),Integer.parseInt(h));
 					}
 					Response rs =  APIHelper.getImageStreamResponse(tmpfilename, format);
 					return rs;

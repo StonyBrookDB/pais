@@ -8,15 +8,6 @@
 	</classpathentry>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jfreechart-1.0.14/lib/gnujaxp.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jfreechart-1.0.14/lib/iText-2.1.5.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jfreechart-1.0.14/lib/jcommon-1.0.17.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jfreechart-1.0.14/lib/jfreechart-1.0.14-experimental.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jfreechart-1.0.14/lib/jfreechart-1.0.14-swt.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jfreechart-1.0.14/lib/jfreechart-1.0.14.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jfreechart-1.0.14/lib/junit.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jfreechart-1.0.14/lib/servlet.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jfreechart-1.0.14/lib/swtgraphics2d.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jlibeps.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/PAISDB2Helper-1.0.0-SNAPSHOT-jar-with-dependencies.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/asm-3.1.jar"/>
@@ -39,6 +30,8 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jfreechart-1.0.14.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jsr311-api-1.1.1.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/swtgraphics2d.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/servlet.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/junit.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

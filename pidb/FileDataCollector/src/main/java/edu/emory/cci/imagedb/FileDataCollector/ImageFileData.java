@@ -126,7 +126,7 @@ public class ImageFileData {
 		String filePath = imageFile.getAbsolutePath();
 		
 		String tmpPath = System.getProperty("java.io.tmpdir")+File.separator+imageFile.getName();
-		OpenSlideTools.getInstance().getDimension(filePath, tmpPath);
+		OpenSlideToolsBin.getDimension(filePath, tmpPath);
 		File tmpfile = new File(tmpPath);
 		Dimension result = null;
 		if(tmpfile.exists()&&tmpfile.isFile())
@@ -277,7 +277,7 @@ public class ImageFileData {
 	public java.sql.Blob getThumbnail() throws IOException {
 		String tbFileName = System.getProperty("java.io.tmpdir")+File.separator+"tempimg.png";
 		//System.out.println("imageThumbnail: " +tbFileName);
-		OpenSlideTools.getInstance().getThumbnailWSI(imageFile.getAbsolutePath(), tbFileName, 200);
+		OpenSlideToolsBin.getThumbnailWSI(imageFile.getAbsolutePath(), tbFileName, 200);
 		File thumbnailfile = new File(tbFileName);
 		
 	    InputStream is = new FileInputStream(thumbnailfile);

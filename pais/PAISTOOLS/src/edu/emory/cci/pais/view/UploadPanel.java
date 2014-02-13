@@ -11,14 +11,12 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import edu.emory.cci.pais.controller.UploadController;
@@ -59,11 +57,7 @@ public class UploadPanel extends BasicPanel{
 
 	MainPanel mainPanel;
 
-	JRadioButton slideRB = new JRadioButton("Slides");
-	JRadioButton collectionRB = new JRadioButton("Collection");
-	ButtonGroup dirTypeBG = new ButtonGroup();
 	
-	JLabel fileTypeLabel = new JLabel("File Type");
 	JLabel dbcfileLabel  = new JLabel("  db config file:");
 	JLabel inputLabel    = new JLabel("          input file:");
 	JLabel lcLabel       = new JLabel("         template:");
@@ -121,13 +115,6 @@ public class UploadPanel extends BasicPanel{
 		lcPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		
-		dirTypeBG.add(slideRB);
-		dirTypeBG.add(collectionRB);
-		slideRB.setSelected(true);
-		
-		typeChoosePanel.add(fileTypeLabel);
-		typeChoosePanel.add(slideRB);
-		typeChoosePanel.add(collectionRB);
 		typeChoosePanel.add(uploadButton);
 		
 		
@@ -394,7 +381,7 @@ public class UploadPanel extends BasicPanel{
 		   //start upload
 		   try{
 		   UploadController controller = new UploadController();
-           controller.documentUploader(db,this.inputfileField.getText(),this.collectionRB.isSelected()?TengUtils.COLLECTION:TengUtils.SLIDE,lcField.getText());
+           controller.documentUploader(db,this.inputfileField.getText(),lcField.getText());
 		   }catch(Exception e)
 		   {
 			   JOptionPane.showMessageDialog(null, "upload failed !", "Error", JOptionPane.ERROR_MESSAGE);

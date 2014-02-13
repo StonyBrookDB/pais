@@ -33,5 +33,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/ModelBeans"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/OenSlideTools"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

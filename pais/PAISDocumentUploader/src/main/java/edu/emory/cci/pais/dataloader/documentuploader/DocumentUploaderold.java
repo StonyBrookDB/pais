@@ -2,11 +2,12 @@ package edu.emory.cci.pais.dataloader.documentuploader;
 
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
+import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.GnuParser;
@@ -27,46 +28,57 @@ import edu.emory.cci.pais.dataloader.db2helper.PAISDBHelper;
  */
 
 
-public class DocumentUploader {	
+public class DocumentUploaderold {	
 
 	private PAISDBHelper db = null;
 	private String loadingconfig;
-	public static int failedCount=0;
-	public static ArrayList<String> failedlist;
 	//GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1, NO CACHE), 
 	 
 	private static String preparedDocUploadSql =  "INSERT INTO PAIS.STAGINGDOC(BLOB, STATUS, INSERT_TIME, FILE_NAME,LOADINGCONFIG) VALUES (?, 'INCOMPLETE', CURRENT_TIMESTAMP, ?,?) " ;
 
-	public DocumentUploader(PAISDBHelper db,String loadingconfig) {
+	public DocumentUploaderold(PAISDBHelper db,String loadingconfig) {
 		this.db = db;
 		this.loadingconfig=loadingconfig;
-		failedlist = new ArrayList<String>();
 	}
 	
+	/** Upload all documents of a set, e.g., a validation set. Assume documents are stored in a root folder, which 
+	 * contains folders for multiple PAIS documents. e.g., root folder "/GBMvalidation/SR20_AR20_NS-MORPH_Sq01", with subfolders
+	 * astroII.1, ..., oligoIII.2.ndpi... */
+	public boolean uploadDataSet(String rootPath){
+		File rootDir = new File(rootPath);
+		FileFilter fileFilter = new FileFilter() { public boolean accept(File file) { return file.isDirectory(); } }; 
+		File[] childDirs = rootDir.listFiles(fileFilter); 
+		boolean success = true;
+		if (childDirs == null){
+			System.out.println("No folder to upload.");
+			return false;
+		}
+		for (int i = 0; i < childDirs.length; i++){
+			String file = childDirs[i].getAbsolutePath();
+			success = success && batchDocUpload(file);			
+		}
+		if (success == true) return true;
+		else {
+			System.out.println("Data set loaded with errors.");
+			return false;
+		}
+	}
 	
 	/** Batch upload zip files in a folder */
 	public boolean batchDocUpload(String rootPath){
 		File folderFile = new File(rootPath);
-		if(folderFile.isFile()&&folderFile.getName().toLowerCase().endsWith("zip"))
-		{
-		  boolean result = docUpload(folderFile.getAbsolutePath());
-		  if (result == false) 
-		  {
-			  failedCount++;
-			  failedlist.add(folderFile.getAbsolutePath());
-			  System.out.println("File " + folderFile.getName() + "  upload failed.");
-		  }
-		  else
-		     System.out.println("File " + folderFile.getName() + "  upload complete.");
+		FilenameFilter zipOnly = new OnlyExt("zip");
+		String files[] = folderFile.list(zipOnly);
+		int failedCount = 0;
+		for (int i = 0; i < files.length; i++){
+			String file = files[i];
+			String zipFilePath = rootPath + File.separatorChar + file;
+			boolean result = docUpload(zipFilePath);
+			if (result == false) failedCount++;
+			System.out.println("File " + file + "  upload complete.");
 		}
-		else if(folderFile.isDirectory())
-		{
-		  File files[] = folderFile.listFiles();
-		  for (File f:files){
-				batchDocUpload(f.getAbsolutePath());
-		  }
-		}
-		
+		if(failedCount!=0)
+			System.out.println("totally "+failedCount+" files upload failed!");
 		return true;	
 	}
 	
@@ -95,6 +107,17 @@ public class DocumentUploader {
 		}		
 		return true;	
 	}
+
+	class OnlyExt implements FilenameFilter{
+		String ext;
+		public OnlyExt(String ext){		  
+			this.ext="." + ext;
+		}
+
+		public boolean accept(File dir,String name){		  
+			return name.endsWith(ext);
+		}
+	}
 	
 	public static void main(String[] args) {
 		documentUploadermain(args);	
@@ -108,15 +131,27 @@ public class DocumentUploader {
 	    	
 			Option help = new Option("h", "help", false, "display this help and exit.");
 			help.setRequired(false);
-			Option folder = new Option("i", "input", true, "the path to the input folder or file, all zipped files under this path will be uploaded recursively");
+			
+			Option folderType = new Option("ft","folderType",false,"the type of the Folder. It can be "+
+                                      "either 'slide' or 'collection'. If it is 'slide', all the zip files "+
+                                      "contained in the folder will be loaded. If it is 'collection', all the zip "+
+                                      "files contained in the immediate child subfolders will be uploaded, files "+
+                                      "contained directly in the folder will be ignored. Notice that both methods "+
+                                      "don't add zip files in subfolders recursively. ");
+			folderType.setRequired(true);
+			folderType.setArgName("folderType");
+			
+			Option folder = new Option("f", "folder", true, "in the case 'slide', folder containing the zipped documents. In the case of 'collection' " +
+					"it's the folder containing the subfolders with zipped documents.");
 			folder.setRequired(true);
-			folder.setArgName("input");
+			folder.setArgName("folder");
 			Option dbConfigFile = new Option("dbc", "dbConfigFile", true, "xml file with the configuration of the database.");
 			dbConfigFile.setRequired(true);
 			dbConfigFile.setArgName("dbConfigFile");
 			
 			Options options = new Options();
 			options.addOption(help);
+			options.addOption(folderType);
 			options.addOption(folder);
 			options.addOption(dbConfigFile);
 			
@@ -141,23 +176,23 @@ public class DocumentUploader {
 	        
 			PAISDBHelper db = new PAISDBHelper(new DBConfig(new File(line.getOptionValue("dbConfigFile"))));
 	        
-			DocumentUploader uploader = new DocumentUploader(db,"cell");
+			DocumentUploaderold uploader = new DocumentUploaderold(db,"PP");
 
-			String folderString = line.getOptionValue("input");
-			uploader.batchDocUpload(folderString);	
+			String folderString = line.getOptionValue("folder");
+			if (line.getOptionValue("folderType").trim().toLowerCase().equals("slide")){
+				uploader.batchDocUpload(folderString);
+			} 
+			else if(line.getOptionValue("folderType").trim().toLowerCase().equals("collection")){
+				uploader.uploadDataSet(folderString);				
+			}
+			else {
+				formatter.printHelp("PAISDocumentUploader", options, true);
+				System.exit(1);
+			}
 
 			endCurrentTime = System.currentTimeMillis();
 	        totalTime = endCurrentTime - startCurrentTime;
-	        System.out.println("Total time (seconds):" + totalTime/1000.0);	
-
-			if(failedCount!=0)
-			{
-				System.out.println("totally "+failedCount+" files upload failed!");
-				for(String s:failedlist)
-				{
-					System.out.println(s+" failed");
-				}
-			}
+	        System.out.println("Total time (seconds):" + totalTime/1000.0);	 
 	}
 
 }

@@ -129,13 +129,7 @@ public class DocumentUploader {
 	    	
 			Option help = new Option("h", "help", false, "display this help and exit.");
 			help.setRequired(false);
-			Option folderType = new Option("ft", "folderType", true, "the type of the Folder. It can be either 'slide' or 'collection'. " +
-					"If it is 'slide', all the zip files contained in the folder will be loaded. If it is 'collection', all the zip " +
-					"files contained in the immediate child subfolders will be uploaded, files contained directly in the folder will be ignored. " +
-					"Notice that both methods don't add zip files in subfolders recursively.");
-			folderType.setRequired(true);
-			folderType.setArgName("folderType");
-			Option folder = new Option("f", "folder", true, "in the case 'slide', folder containing the zipped documents. In the case of 'collection' " +
+			Option folder = new Option("i", "input", true, "in the case 'slide', folder containing the zipped documents. In the case of 'collection' " +
 					"it's the folder containing the subfolders with zipped documents.");
 			folder.setRequired(true);
 			folder.setArgName("folder");
@@ -145,7 +139,6 @@ public class DocumentUploader {
 			
 			Options options = new Options();
 			options.addOption(help);
-			options.addOption(folderType);
 			options.addOption(folder);
 			options.addOption(dbConfigFile);
 			
