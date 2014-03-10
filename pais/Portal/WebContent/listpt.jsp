@@ -191,7 +191,7 @@ function changePage(page)
 	  html+='<td colspan="7" style="padding-left:100px">';
 	  html+='<table id="details" width="750px" height="100px">';
 	  html+='<tr>';
-	  html+='<td colspan="2"><a href=# onclick=\'window.open("imagebrowser.jsp?patientid='+patients[i].getAttribute("BCR_PATIENT_BARCODE")+'")\'>View Images</a></td>';
+	  html+='<td colspan="2"><a href=# onclick=\'window.open("imagebrowser.jsp?patientid='+patients[i].getAttribute("CPATIENTID")+'")\'>View Images</a></td>';
 	  html+='<td/><td/>';
 	  html+='</tr>';
 	

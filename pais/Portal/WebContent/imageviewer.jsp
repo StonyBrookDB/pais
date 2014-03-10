@@ -14,24 +14,27 @@
         }
     </style>
     <script src="include/js/jquery-1.10.2.min.js" type="text/javascript"></script>
-    <script src="include/seadragon-min/seadragon-min.js" type="text/javascript"></script>
+    <script src="include/openseadragon/openseadragon.min.js" type="text/javascript"></script>
     <script src="include/js/main.js" type="text/javascript"></script>
     <script type="text/javascript">
         var viewer;
         var img = getarg('img');
+        //var img = "TCGA-02-0001-01Z-00-DX3";
         var fullscreen = getarg('fullscreen'); 
+
         $(document).ready(function(){
-        	init();
+        	var viewer = OpenSeadragon({
+                //debugMode: true,
+                id: "container",
+                prefixUrl: "include/openseadragon/images/",
+                tileSources: "/DZImage/"+img+"/image.js",
+                showNavigator:true
+            });
         	if(fullscreen=='true')
         	{
-        		console.log('terry is good');
         		viewer.setFullPage('fullPage');
         	}
-        });//end ready
-        function init() {
-            viewer = new Seadragon.Viewer("container");
-            viewer.openDzi("/DZImage/"+img+"/image.xml");
-        }        
+        });//end ready      
         
     </script>
 </head>

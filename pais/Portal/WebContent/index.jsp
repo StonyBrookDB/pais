@@ -55,7 +55,7 @@ $(document).ready(function() {
 				<li><a href=listpt.jsp relid="#listpframe" title='View by Patient' class="nav">Patient</a></li>
 				<li><a href=tiledImage.jsp relid="#tiledImageframe" title='Tiling Image'class="nav">Tiling</a></li>
 				<li><a href=https://web.cci.emory.edu/confluence/display/PAIS class='jumppage'>PAIS Wiki</a></li>
-				<li><a href=http://userwww.service.emory.edu/~fwang22 class='jumppage'>Contact Us</a></li>
+				<li><a href=http://fushengwang.net class='jumppage'>Contact Us</a></li>
 			</ul>
         </div>
         <h2 id='subtitle'></h2>	

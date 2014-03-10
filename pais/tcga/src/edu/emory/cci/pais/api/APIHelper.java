@@ -141,6 +141,7 @@ public class APIHelper {
 		try {
 			rs.next();
 			blob = rs.getBlob(1);
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
@@ -175,7 +176,7 @@ public class APIHelper {
 			     rstStrBuf.append("</row>\n");
 		     }
 		     rstStrBuf.append("</result>\n");
-		     
+		     rs.close();
 		     
 			
 		} catch (SQLException e) {			
@@ -211,6 +212,7 @@ public class APIHelper {
 			     rstStrBuf.append(" />\n");
 		     }
 		     rstStrBuf.append("</result>\n");
+		     rs.close();
 		     
 			
 		} catch (SQLException e) {			
@@ -242,7 +244,7 @@ public class APIHelper {
 			     }			    
 		     }
 		     rstStrBuf.append("</svg>\n");
-		     
+		     rs.close();
 			
 		} catch (SQLException e) {			
 			e.printStackTrace();
@@ -269,6 +271,7 @@ public class APIHelper {
 				}	
 				list.add(row);
 			}
+			rs.close();
 		} catch (SQLException e) {			
 			e.printStackTrace();
 			return null;
@@ -287,7 +290,10 @@ public class APIHelper {
 	
 	public  static String resultSet2html(ResultSet rs){
 	     StringBuffer rstStrBuf = new StringBuffer();
-	     
+	     if (rs == null ) 
+	     {
+	    	 return "<html><body><tr><td>No result.</td></tr></body></html>";
+	     }
 		try {
 			ResultSetMetaData rsmd = rs.getMetaData();
 		     int numberOfColumns = rsmd.getColumnCount();
@@ -296,11 +302,9 @@ public class APIHelper {
 		     for (int i = 0 ; i < numberOfColumns; i++){
 		    	 colNames [i] = rsmd.getColumnName(i+1);		    	 
 		     }
-
+             
 		     rstStrBuf.append("<html><body><table border=\"1\" cellspacing=\"0\" cellpadding=\"5\">");
-		     if (rs == null ) 
-		    	 rstStrBuf.append("<html><body><tr><td>No result.</td></tr></body></html>");
-		     
+
 		     rstStrBuf.append("<tr style=\"background-color:#E2F5FE\"> ");
 		     for (int i = 0 ; i < numberOfColumns; i++){
 		    	 rstStrBuf.append("<th> " + colNames [i] + "</th>"); 		    	 
@@ -315,6 +319,7 @@ public class APIHelper {
 			     rstStrBuf.append("</tr>\n");
 		     }
 		     rstStrBuf.append("</table></body></html>");	
+		     rs.close();
 		} catch (SQLException e) {			
 			e.printStackTrace();
 			return null;
@@ -354,6 +359,7 @@ public class APIHelper {
 		    			 rstStrBuf.append( rs.getString(i+1) + ",");
 		    	 }			    
 		     }
+		     rs.close();
 
 		} catch (SQLException e) {			
 			e.printStackTrace();
@@ -430,7 +436,7 @@ public class APIHelper {
                  json.put(obj);
 
              }//end while
-
+             rs.close();
 
         } catch (SQLException e) {
             // TODO Auto-generated catch block
@@ -555,13 +561,13 @@ public class APIHelper {
 	
 	
 	
-	public static Response setHistogramResponse(ResultSet rs, String title, String subTitle, int width, int height, String format){
+	public static Response setHistogramResponse(ResultSet rs, String path,String title, String subTitle, int width, int height, String format){
 		double [][] histogramMatrix = resultSet2matrix(rs);
 		//System.out.println("Size: " + histogramMatrix.length );
-		
+		//System.out.println(path+"|"+title+"|"+subTitle+"|"+width+"|"+height+"+"+format);
 		if (format.equalsIgnoreCase("PNG") || format.equalsIgnoreCase("JPG") || format.equalsIgnoreCase("JPEG") || format.equalsIgnoreCase("SVG")
 				|| format.equalsIgnoreCase("EPS") || format.equalsIgnoreCase("PDF") ){
-			File file = FeatureBarChart.getFeatureBarChart(title, subTitle, width, height, histogramMatrix, format);
+			File file = FeatureBarChart.getFeatureBarChart(path, title, subTitle, width, height, histogramMatrix, format);
 			//System.out.println(file.getAbsolutePath());
 			FileInputStream in;
 			try {
@@ -701,11 +707,17 @@ public class APIHelper {
 		String content = null;
 		int width = 0, height = 0;
 		try {
-			if ( rs != null && rs.next() ){
+			if(rs!=null)
+			{
+				if( rs.next() ){
 					width = rs.getInt("width");
 					height = rs.getInt("height");
 					System.out.println("width = " + width);
+			    }
+				rs.close();
+				
 			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

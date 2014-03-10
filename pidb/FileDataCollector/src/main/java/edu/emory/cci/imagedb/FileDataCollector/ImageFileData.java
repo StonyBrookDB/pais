@@ -123,14 +123,22 @@ public class ImageFileData {
 	//
 	public Dimension getFileDimension(File imageFile)
 	{
+		if(!imageFile.exists())
+		{
+			System.out.println("image not exist!");
+			return null;
+		}
 		String filePath = imageFile.getAbsolutePath();
 		
 		String tmpPath = System.getProperty("java.io.tmpdir")+File.separator+imageFile.getName();
 		OpenSlideToolsBin.getDimension(filePath, tmpPath);
+		
+		
 		File tmpfile = new File(tmpPath);
 		Dimension result = null;
 		if(tmpfile.exists()&&tmpfile.isFile())
 		{ 
+		System.out.println(tmpPath+" generated successfully!");
         try {
         	InputStreamReader read = new InputStreamReader(new FileInputStream(tmpfile));
             BufferedReader bufferedReader = new BufferedReader(read); 
@@ -145,6 +153,11 @@ public class ImageFileData {
 			result = new Dimension(0,0);
 		} 
  		}
+		else
+		{
+			System.out.println("dimension file not generated successfully, please check the permission of the "+tmpPath+" or openslidetools!");
+			return null;
+		}
 		tmpfile.delete();
 		return result;
 		

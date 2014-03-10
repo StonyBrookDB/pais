@@ -158,7 +158,7 @@ function refreshPatientInfo()
 	      html+='<td>'+patientinfo.getAttribute(patient_feature_primary_db[j])+'</td>';
 	    }
 		
-		html+='<td><a onclick="window.open(\'imagebrowser.jsp?patientid='+patientinfo.getAttribute("BCR_PATIENT_BARCODE")+'\')" href=#>View all images for this patient</a></td>';
+		html+='<td><a onclick="window.open(\'imagebrowser.jsp?patientid='+patientinfo.getAttribute("CPATIENTID")+'\')" href=#>View all images for this patient</a></td>';
 		html+='</tr>';
 		$('#box-table-a').html(html);
 	});

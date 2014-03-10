@@ -1,6 +1,8 @@
 package edu.emory.cci.pais.api;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -198,15 +200,20 @@ public class WebAPI {
 			rs1 = con.createStatement().executeQuery(imageCountQuery);
 			rs1.next();
 			content.append("<row images=\"" + rs1.getString(1) + "\"/>"); 
+			rs1.close();
 			ResultSet rs2=con.createStatement().executeQuery(patientCountQuery);
 			rs2.next();
 			content.append("<row patients=\"" + rs2.getString(1) + "\"/>"); 
+			rs2.close();
 			ResultSet rs3=con.createStatement().executeQuery(algrithmdocumentCountQuery);
 			rs3.next();
 			content.append("<row algorithm=\"" + rs3.getString(1) + "\"/>"); 
+			rs3.close();
 			ResultSet rs4=con.createStatement().executeQuery(humandocumentCountQuery);
 			rs4.next();
 			content.append("<row human=\"" + rs4.getString(1) + "\"/>"); 
+			rs4.close();
+			
 			
 		} catch (SQLException e) {
 		}
@@ -1000,15 +1007,37 @@ public class WebAPI {
 	public Response getFeatureHistogram(
 			@MatrixParam("paisuid") String pais_uid,  
 			@MatrixParam("feature") String feature, 
-			//@MatrixParam("title") String title,
-			@MatrixParam("width") int width,
-			@MatrixParam("height") int height, 
-			@DefaultValue("PNG") @MatrixParam("format") String format){
+			@DefaultValue("500") @MatrixParam("width") int width,
+			@DefaultValue("300") @MatrixParam("height") int height, 
+			@DefaultValue("jpg") @MatrixParam("format") String format){
 		
 		    if (pais_uid==null || feature==null) {
 		    	String content = "paisuid and feature parameters are mandatory" +"\n" + "Ex, /pais/features/histogram;paisuid=TCGA-02-0001-01Z-00-DX1_20x_20x_NS-MORPH_1;feature=area;width=500;height=300;format=PNG";
 				return Response.ok(content).type(MediaType.TEXT_PLAIN).build();
 		    }
+		    String histogramDir = thumbnailDir+"Histogram/"+pais_uid;
+		    File histodir = new File(histogramDir);
+		    if(!histodir.exists())
+		    {
+		    	histodir.mkdirs();
+		    }
+		    String path = histogramDir+"/histogram_"+feature+"_"+width+"_"+height+"."+format;
+		    File tmpfile = new File(path);
+		    
+		    if(tmpfile.exists()&&tmpfile.isFile())
+		    {
+		    	FileInputStream in;
+				try {
+					in = new FileInputStream(tmpfile);
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+					in = null;
+				}
+				ResponseBuilder response = Response.ok( (Object) in);
+				response.header("Content-type", APIHelper.getContentType(format) );
+				//return response.build();
+		    }
+		    
 			String title = "Histogram of " + feature + " for document " + pais_uid; 
 
 			Properties props1 = new Properties();
@@ -1032,6 +1061,7 @@ public class WebAPI {
 			try{
 			if(rs2.next())
 			{
+			
 			if (rs2.getDouble("AVG_"+feature.toUpperCase()) >= 1)
 				dFormat = new DecimalFormat("0.00");
 			subTitle = "mean=" + dFormat.format(rs2.getDouble("AVG_"+feature.toUpperCase())) + "; stddev=" + dFormat.format(rs2.getDouble("STD_"+feature.toUpperCase()));
@@ -1042,8 +1072,7 @@ public class WebAPI {
 				subTitle="cannot get mean and standard variance";
 			}
 	
-//			String subTitle ="test subtitle";
-			return APIHelper.setHistogramResponse(rs1, title, subTitle, width, height, format);
+			return APIHelper.setHistogramResponse(rs1, path, title, subTitle, width, height, format);
 	}
 		
 	
