@@ -1133,16 +1133,16 @@ CMakeFiles/processMask.dir/BoundaryFixFunction.cpp.o
  /home/hoang/Downloads/boost_1_48_0/boost/utility/result_of.hpp
  /home/hoang/Downloads/boost_1_48_0/boost/utility/swap.hpp
  /home/hoang/Downloads/boost_1_48_0/boost/version.hpp
- /home/hoang/Projects/masktoboundary/BoundaryFix.h
- /home/hoang/Projects/masktoboundary/BoundaryFixFunction.cpp
- /home/hoang/Projects/masktoboundary/clipper.h
+ /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/BoundaryFix.h
+ /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/BoundaryFixFunction.cpp
+ /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/clipper.h
 CMakeFiles/processMask.dir/BoundaryFixFunction2.cpp.o
- /home/hoang/Projects/masktoboundary/BoundaryFix.h
- /home/hoang/Projects/masktoboundary/BoundaryFixFunction2.cpp
- /home/hoang/Projects/masktoboundary/clipper.h
+ /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/BoundaryFix.h
+ /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/BoundaryFixFunction2.cpp
+ /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/clipper.h
 CMakeFiles/processMask.dir/clipper.cpp.o
- /home/hoang/Projects/masktoboundary/clipper.cpp
- /home/hoang/Projects/masktoboundary/clipper.h
+ /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/clipper.cpp
+ /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/clipper.h
 CMakeFiles/processMask.dir/processMask.cpp.o
  /home/hoang/Downloads/boost_1_48_0/boost/config.hpp
  /home/hoang/Downloads/boost_1_48_0/boost/config/no_tr1/utility.hpp
@@ -1336,9 +1336,9 @@ CMakeFiles/processMask.dir/processMask.cpp.o
  /home/hoang/Downloads/boost_1_48_0/boost/type_traits/remove_cv.hpp
  /home/hoang/Downloads/boost_1_48_0/boost/type_traits/remove_pointer.hpp
  /home/hoang/Downloads/boost_1_48_0/boost/type_traits/remove_reference.hpp
- /home/hoang/Projects/masktoboundary/BoundaryFix.h
- /home/hoang/Projects/masktoboundary/clipper.h
- /home/hoang/Projects/masktoboundary/processMask.cpp
+ /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/BoundaryFix.h
+ /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/clipper.h
+ /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/processMask.cpp
  /usr/local/include/opencv/cv.h
  /usr/local/include/opencv/highgui.h
  /usr/local/include/opencv2/calib3d/calib3d.hpp

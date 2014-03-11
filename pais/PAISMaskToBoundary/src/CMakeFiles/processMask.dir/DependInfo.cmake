@@ -4,10 +4,10 @@ SET(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 SET(CMAKE_DEPENDS_CHECK_CXX
-  "/home/hoang/Projects/masktoboundary/BoundaryFixFunction.cpp" "/home/hoang/Projects/masktoboundary/CMakeFiles/processMask.dir/BoundaryFixFunction.cpp.o"
-  "/home/hoang/Projects/masktoboundary/BoundaryFixFunction2.cpp" "/home/hoang/Projects/masktoboundary/CMakeFiles/processMask.dir/BoundaryFixFunction2.cpp.o"
-  "/home/hoang/Projects/masktoboundary/clipper.cpp" "/home/hoang/Projects/masktoboundary/CMakeFiles/processMask.dir/clipper.cpp.o"
-  "/home/hoang/Projects/masktoboundary/processMask.cpp" "/home/hoang/Projects/masktoboundary/CMakeFiles/processMask.dir/processMask.cpp.o"
+  "/home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/BoundaryFixFunction.cpp" "/home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/CMakeFiles/processMask.dir/BoundaryFixFunction.cpp.o"
+  "/home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/BoundaryFixFunction2.cpp" "/home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/CMakeFiles/processMask.dir/BoundaryFixFunction2.cpp.o"
+  "/home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/clipper.cpp" "/home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/CMakeFiles/processMask.dir/clipper.cpp.o"
+  "/home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/processMask.cpp" "/home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/CMakeFiles/processMask.dir/processMask.cpp.o"
   )
 SET(CMAKE_CXX_COMPILER_ID "GNU")
 

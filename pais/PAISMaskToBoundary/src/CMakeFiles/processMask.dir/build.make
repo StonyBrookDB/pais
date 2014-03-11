@@ -32,10 +32,10 @@ CMAKE_COMMAND = /usr/bin/cmake
 RM = /usr/bin/cmake -E remove -f
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/hoang/Projects/masktoboundary
+CMAKE_SOURCE_DIR = /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/hoang/Projects/masktoboundary
+CMAKE_BINARY_DIR = /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src
 
 # Include any dependencies generated for this target.
 include CMakeFiles/processMask.dir/depend.make
@@ -48,17 +48,17 @@ include CMakeFiles/processMask.dir/flags.make
 
 CMakeFiles/processMask.dir/processMask.cpp.o: CMakeFiles/processMask.dir/flags.make
 CMakeFiles/processMask.dir/processMask.cpp.o: processMask.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/hoang/Projects/masktoboundary/CMakeFiles $(CMAKE_PROGRESS_1)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/CMakeFiles $(CMAKE_PROGRESS_1)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/processMask.dir/processMask.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/processMask.dir/processMask.cpp.o -c /home/hoang/Projects/masktoboundary/processMask.cpp
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/processMask.dir/processMask.cpp.o -c /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/processMask.cpp
 
 CMakeFiles/processMask.dir/processMask.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/processMask.dir/processMask.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/hoang/Projects/masktoboundary/processMask.cpp > CMakeFiles/processMask.dir/processMask.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/processMask.cpp > CMakeFiles/processMask.dir/processMask.cpp.i
 
 CMakeFiles/processMask.dir/processMask.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/processMask.dir/processMask.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/hoang/Projects/masktoboundary/processMask.cpp -o CMakeFiles/processMask.dir/processMask.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/processMask.cpp -o CMakeFiles/processMask.dir/processMask.cpp.s
 
 CMakeFiles/processMask.dir/processMask.cpp.o.requires:
 .PHONY : CMakeFiles/processMask.dir/processMask.cpp.o.requires
@@ -71,17 +71,17 @@ CMakeFiles/processMask.dir/processMask.cpp.o.provides.build: CMakeFiles/processM
 
 CMakeFiles/processMask.dir/BoundaryFixFunction.cpp.o: CMakeFiles/processMask.dir/flags.make
 CMakeFiles/processMask.dir/BoundaryFixFunction.cpp.o: BoundaryFixFunction.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/hoang/Projects/masktoboundary/CMakeFiles $(CMAKE_PROGRESS_2)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/CMakeFiles $(CMAKE_PROGRESS_2)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/processMask.dir/BoundaryFixFunction.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/processMask.dir/BoundaryFixFunction.cpp.o -c /home/hoang/Projects/masktoboundary/BoundaryFixFunction.cpp
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/processMask.dir/BoundaryFixFunction.cpp.o -c /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/BoundaryFixFunction.cpp
 
 CMakeFiles/processMask.dir/BoundaryFixFunction.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/processMask.dir/BoundaryFixFunction.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/hoang/Projects/masktoboundary/BoundaryFixFunction.cpp > CMakeFiles/processMask.dir/BoundaryFixFunction.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/BoundaryFixFunction.cpp > CMakeFiles/processMask.dir/BoundaryFixFunction.cpp.i
 
 CMakeFiles/processMask.dir/BoundaryFixFunction.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/processMask.dir/BoundaryFixFunction.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/hoang/Projects/masktoboundary/BoundaryFixFunction.cpp -o CMakeFiles/processMask.dir/BoundaryFixFunction.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/BoundaryFixFunction.cpp -o CMakeFiles/processMask.dir/BoundaryFixFunction.cpp.s
 
 CMakeFiles/processMask.dir/BoundaryFixFunction.cpp.o.requires:
 .PHONY : CMakeFiles/processMask.dir/BoundaryFixFunction.cpp.o.requires
@@ -94,17 +94,17 @@ CMakeFiles/processMask.dir/BoundaryFixFunction.cpp.o.provides.build: CMakeFiles/
 
 CMakeFiles/processMask.dir/BoundaryFixFunction2.cpp.o: CMakeFiles/processMask.dir/flags.make
 CMakeFiles/processMask.dir/BoundaryFixFunction2.cpp.o: BoundaryFixFunction2.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/hoang/Projects/masktoboundary/CMakeFiles $(CMAKE_PROGRESS_3)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/CMakeFiles $(CMAKE_PROGRESS_3)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/processMask.dir/BoundaryFixFunction2.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/processMask.dir/BoundaryFixFunction2.cpp.o -c /home/hoang/Projects/masktoboundary/BoundaryFixFunction2.cpp
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/processMask.dir/BoundaryFixFunction2.cpp.o -c /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/BoundaryFixFunction2.cpp
 
 CMakeFiles/processMask.dir/BoundaryFixFunction2.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/processMask.dir/BoundaryFixFunction2.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/hoang/Projects/masktoboundary/BoundaryFixFunction2.cpp > CMakeFiles/processMask.dir/BoundaryFixFunction2.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/BoundaryFixFunction2.cpp > CMakeFiles/processMask.dir/BoundaryFixFunction2.cpp.i
 
 CMakeFiles/processMask.dir/BoundaryFixFunction2.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/processMask.dir/BoundaryFixFunction2.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/hoang/Projects/masktoboundary/BoundaryFixFunction2.cpp -o CMakeFiles/processMask.dir/BoundaryFixFunction2.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/BoundaryFixFunction2.cpp -o CMakeFiles/processMask.dir/BoundaryFixFunction2.cpp.s
 
 CMakeFiles/processMask.dir/BoundaryFixFunction2.cpp.o.requires:
 .PHONY : CMakeFiles/processMask.dir/BoundaryFixFunction2.cpp.o.requires
@@ -117,17 +117,17 @@ CMakeFiles/processMask.dir/BoundaryFixFunction2.cpp.o.provides.build: CMakeFiles
 
 CMakeFiles/processMask.dir/clipper.cpp.o: CMakeFiles/processMask.dir/flags.make
 CMakeFiles/processMask.dir/clipper.cpp.o: clipper.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/hoang/Projects/masktoboundary/CMakeFiles $(CMAKE_PROGRESS_4)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/CMakeFiles $(CMAKE_PROGRESS_4)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/processMask.dir/clipper.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/processMask.dir/clipper.cpp.o -c /home/hoang/Projects/masktoboundary/clipper.cpp
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/processMask.dir/clipper.cpp.o -c /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/clipper.cpp
 
 CMakeFiles/processMask.dir/clipper.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/processMask.dir/clipper.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/hoang/Projects/masktoboundary/clipper.cpp > CMakeFiles/processMask.dir/clipper.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/clipper.cpp > CMakeFiles/processMask.dir/clipper.cpp.i
 
 CMakeFiles/processMask.dir/clipper.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/processMask.dir/clipper.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/hoang/Projects/masktoboundary/clipper.cpp -o CMakeFiles/processMask.dir/clipper.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/clipper.cpp -o CMakeFiles/processMask.dir/clipper.cpp.s
 
 CMakeFiles/processMask.dir/clipper.cpp.o.requires:
 .PHONY : CMakeFiles/processMask.dir/clipper.cpp.o.requires
@@ -190,6 +190,6 @@ CMakeFiles/processMask.dir/clean:
 .PHONY : CMakeFiles/processMask.dir/clean
 
 CMakeFiles/processMask.dir/depend:
-	cd /home/hoang/Projects/masktoboundary && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/hoang/Projects/masktoboundary /home/hoang/Projects/masktoboundary /home/hoang/Projects/masktoboundary /home/hoang/Projects/masktoboundary /home/hoang/Projects/masktoboundary/CMakeFiles/processMask.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src /home/hoang/Projects/pais/pais/PAISMaskToBoundary/src/CMakeFiles/processMask.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/processMask.dir/depend
 

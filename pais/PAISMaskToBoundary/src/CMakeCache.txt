@@ -18,7 +18,10 @@
 Boost_DIR:PATH=Boost_DIR-NOTFOUND
 
 //Path to a file.
-Boost_INCLUDE_DIR:PATH=Boost_INCLUDE_DIR-NOTFOUND
+Boost_INCLUDE_DIR:PATH=/home/hoang/Downloads/boost_1_48_0
+
+//Boost library directory
+Boost_LIBRARY_DIRS:FILEPATH=/home/hoang/Downloads/boost_1_48_0/stage/lib
 
 //Path to a program.
 CMAKE_AR:FILEPATH=/usr/bin/ar
@@ -187,6 +190,12 @@ testcv_SOURCE_DIR:STATIC=/home/hoang/Projects/pais/pais/PAISMaskToBoundary/src
 
 //ADVANCED property for variable: Boost_INCLUDE_DIR
 Boost_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: Boost_LIBRARY_DIRS
+Boost_LIBRARY_DIRS-ADVANCED:INTERNAL=1
+//The library version string for boost libraries
+Boost_LIB_VERSION:INTERNAL=1_48
+//The version number for boost libraries
+Boost_VERSION:INTERNAL=104800
 //ADVANCED property for variable: CMAKE_AR
 CMAKE_AR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_BUILD_TOOL

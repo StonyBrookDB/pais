@@ -4,7 +4,7 @@ find_package( OpenCV REQUIRED )
 find_package( Boost REQUIRED )
 
 include_directories(common ~/Downloads/boost_1_48_0)
-include_directories(${Boost_INCLUDE_DIR})
+#include_directories(${Boost_INCLUDE_DIR})
 
 add_executable( processMask
 	processMask.cpp
