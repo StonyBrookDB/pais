@@ -17,7 +17,10 @@ do
 	read usrid < tmpFile
 	rm tmpFile
 
+	echo $file | cut -d'/' -f3 > tmpFile
+	read algoname < tmpFile
+	rm tmpFile
 #	mkdir -p output/${directory_name}
-	./processMask ${file} 2 | sed '/^$/d' > outputAll/${usrid}_${image_name}.txt
+	./processMask ${file} 2 | sed '/^$/d' > outputAll/${usrid}_${algoname}_${image_name}.txt
 
 done
