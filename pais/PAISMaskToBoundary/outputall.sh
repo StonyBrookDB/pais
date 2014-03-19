@@ -9,18 +9,18 @@ mkdir -p outputAll
 for file in data/*/algo*/*;
 do
 	echo "Processing "${file}
-	image_name=`basename "$file" .tiff`
+	file_name=`basename "$file" .tiff`
 	directory_name=${file%/*}
 	#echo $image_name
 	#echo $directory_name
-	echo $file | cut -d'/' -f2 > tmpFile
-	read usrid < tmpFile
-	rm tmpFile
+	read usrid < <(echo $file | cut -d'/' -f2)
 
-	echo $file | cut -d'/' -f3 > tmpFile
-	read algoname < tmpFile
-	rm tmpFile
-#	mkdir -p output/${directory_name}
-	./processMask ${file} 2 | sed '/^$/d' > outputAll/${usrid}_${algoname}_${image_name}.txt
+	read algoname < <(echo $file | cut -d'/' -f3 )
+	
+	read image_name < <( echo ${file_name} | cut -d'_' -f1 )
+	read sequence < <( echo ${file_name} | tr '.' '_' | cut -d'_' -f2 )
+	mkdir -p outputAll/${usrid}/${algoname}/${sequence}/
+	
+	./processMask ${file} 3 | sed '/^$/d' > outputAll/${usrid}/${algoname}/${sequence}/${image_name}.txt
 
 done
