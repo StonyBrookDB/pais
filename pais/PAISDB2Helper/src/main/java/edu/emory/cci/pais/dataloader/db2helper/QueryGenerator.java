@@ -204,8 +204,6 @@ public class QueryGenerator {
 						}
 						
 					}
-					
-					
 					pstmt.setString(i+1, polygonValue );
 				}
 				else if(key.contains("partitionKey")) {
@@ -214,6 +212,7 @@ public class QueryGenerator {
 				}
 				else 
 					pstmt.setString(i+1, value);
+				System.out.println(key+"|||| "+value);
 			} catch (SQLException e) {
 				e.printStackTrace();
 				return false;

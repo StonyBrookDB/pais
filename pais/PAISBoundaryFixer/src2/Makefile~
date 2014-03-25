@@ -1,6 +1,6 @@
 CC = g++
-CPPFLAGS = -I/usr/local/include 
-LDFLAGS = -L/usr/local/lib
+CPPFLAGS = -I/opt/local/include 
+LDFLAGS = -L/opt/local/lib
 
 OBJS = BoundaryFix2.o
 

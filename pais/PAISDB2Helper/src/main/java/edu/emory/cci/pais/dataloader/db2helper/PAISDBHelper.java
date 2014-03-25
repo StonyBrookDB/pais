@@ -250,6 +250,7 @@ public class PAISDBHelper {
 		
 		
 		String markupSQL = queryGenerator.generatePreparedMarkupSQL();
+		System.out.println(markupSQL);
 		String regionSQL = queryGenerator.generatePreparedRegionSQL();
 		String ordinalObsSQL = queryGenerator.generatePareparedObservationSQL("Ordinal");
 		String nominalObsSQL = queryGenerator.generatePareparedObservationSQL("Nominal");
@@ -296,6 +297,7 @@ public class PAISDBHelper {
 			Iterator<String> it = keys.iterator();
 			while (it.hasNext()) {
 				String key =  it.next();
+				System.out.println(key);
 				pstmt = pstmtMap.get(key);
 				if (pstmt != null)
 					try {

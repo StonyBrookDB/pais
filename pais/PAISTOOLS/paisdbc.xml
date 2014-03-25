@@ -1,0 +1,14 @@
+<dbconfig>
+  <db>
+        <host>192.168.1.103</host>
+        <port>50000</port>
+        <database>pais</database>
+        <username>db2inst1</username>
+        <passwd>terry</passwd>
+        <autocommit>true</autocommit>
+  </db>
+    <markup>
+        <spatialtablename>PAIS.MARKUP_POLYGON</spatialtablename>
+        <largeboundary>false</largeboundary>
+    </markup>
+</dbconfig>

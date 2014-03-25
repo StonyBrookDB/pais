@@ -60,6 +60,7 @@ public class WebAPI {
 	String query_getBoundariesFromTile = queries.getQuery("getBoundariesFromTile");
 	String query_getBoundariesFromRectangleFromTile = queries.getQuery("getBoundariesFromRectangleFromTile");
 	String query_getBoundariesFromPolygon = queries.getQuery("getBoundariesFromPolygon");
+	String query_getBoundariesFromImage = queries.getQuery("getBoundariesFromImage");
 	String query_getBoundariesOfPointFromTile = queries.getQuery("getBoundariesOfPointFromTile");
 	String query_getIntersectionRatio = queries.getQuery("getIntersectionRatio");
 	
@@ -411,49 +412,30 @@ public class WebAPI {
 			return APIHelper.setSVGResponse(rs, Integer.parseInt(x), Integer.parseInt(y), samplingRate );		
 		else return APIHelper.setResponseByFormat(format, rs);			
 	}	
-	
-	// e.g.: /pais/markups/boundaries/polygon;paisuid=TCGA-27-1836-01Z-DX2_20x_20x_NS-MORPH_1;tilename=TCGA-27-1836-01Z-DX2-0000004096-0000016384;polygon="4096 16384,4496 16384,4496 20384,4096 20384,4096 16384";samplingrate=1;format=html
+	/////////////////////////////////////////////////
+	// e.g.: /pais/markups/boundaries/image;paisuid=TCGA-27-1836-01Z-DX2_20x_20x_NS-MORPH;samplingrate=1;format=html
 	@GET
-	@Path("/pais/markups/boundaries/polygon")
-	public Response getBoundariesFromPolygonFromTile(
-			@MatrixParam("paisuid") String pais_uid, @MatrixParam("tilename") String tilename,
-			@MatrixParam("polygon") String polygon, 
-			@DefaultValue("1") @QueryParam("samplingrate") int samplingRate, @DefaultValue("html") @MatrixParam("format") String format){
+	@Path("/pais/markups/boundaries/image")
+	public Response getBoundariesFromImage(
+			@MatrixParam("paisuid") String paisuid,
+			@DefaultValue("1") @QueryParam("samplingrate") int samplingRate, 
+			@DefaultValue("html") @MatrixParam("format") String format){
 
-		if(pais_uid == null || tilename==null || polygon==null)
-		{
-			String content = "paisuid, tilename and polygon parameters are mandatory" +"\n" + "Ex, /pais/markups/boundaries/polygon;paisuid=TCGA-27-1836-01Z-DX2_20x_20x_NS-MORPH_1;tilename=TCGA-27-1836-01Z-DX2-0000004096-0000016384;polygon=\"4096 16384,4496 16384,4496 20384,4096 20384,4096 16384\"";
-			return Response.ok(content).type(MediaType.TEXT_PLAIN).build();
-		}
-			// update polygon format to match query expression 
-			String updatePolygon = polygon.replace('"', ' ');
-			String updatePolygon1 = "polygon" + "((" + updatePolygon + "))";
-			// System.out.println("updated polygon: " + updatePolygon); 
-	        // polygon((4096 16384,4496 16384,4496 20384,4096 20384,4096 16384))
+		    if(paisuid == null)
+		   {
+			  String content = "paisuid without sequence number parameters are mandatory" +"\n" + "Ex, /pais/markups/boundaries/image;paisuid=TCGA-27-1836-01Z-DX2_20x_20x_NS-MORPH;";
+			  return Response.ok(content).type(MediaType.TEXT_PLAIN).build();
+		   }
+		   
 			Properties props = new Properties();
-			props.put("1", pais_uid);	
-			props.put("2", tilename);	
-			props.put("3", updatePolygon1);	
+			props.put("1", paisuid);	
 			// System.out.println(pais_uid + ", " +  tilename);
 			PreparedStatement pstmt = manager.setPreparedStatementAndParams("getBoundariesFromPolygon", query_getBoundariesFromPolygon, props);			
 			ResultSet rs = APIHelper.getResultSetFromPreparedStatement(pstmt);  
-			StringTokenizer st = new StringTokenizer(updatePolygon,",");
-			StringTokenizer st1 = new StringTokenizer(st.nextToken()," ");
-			String x = st1.nextToken();
-			String y = st1.nextToken();
-			while (st.hasMoreTokens()) {
-				st1 = new StringTokenizer(st.nextToken()," ");
-				String x1 = st1.nextToken();
-				String y1 = st1.nextToken();
-				if (Integer.parseInt(x) > Integer.parseInt(x1))
-					x = x1;
-				if (Integer.parseInt(y) > Integer.parseInt(y1))
-					y = y1;	
-			}
 				
 			
 			if ("svg".equalsIgnoreCase(format) )
-				return APIHelper.setSVGResponse(rs, Integer.parseInt(x), Integer.parseInt(y), samplingRate );	
+				return APIHelper.setSVGResponse(rs, 0, 0, samplingRate );	
 	    	return APIHelper.setResponseByFormat(format, rs);
 	}
 	
@@ -1528,13 +1510,44 @@ public class WebAPI {
 		"<div style=\"background:url(../.." + imgpath  + "); width:"+ width +"px; height:"+ height +"px; position:absolute; left:0px; top:0px;\">" +
 		"<object height=\"100%\" width=\"100%\" type=\"image/svg+xml\" data=\"" + "../.." + svgpath +  "\" style=\"position:absolute; left:0px; top:0px;\" >" + 
 		"</div> </body> </html>";
-		
 /*		"<div style=\"background:url(../.." + imgpath  + "); width:"+ width +"px; height:"+ height +"px; position:absolute; left:0px; top:0px;\">" +
 		"<object type=\"image/svg+xml\" data=\"" + "../.." + svgpath +  "\" style=\"overflow=hidden;position:absolute; left:0px; top:0px; width:"+ width +"px; height:"+ height +"px;\" >" + 
 		"</div> </body> </html>";		
 */		
 		return html;	 
 	}	
+	////////////////////////////////////
+	// /images/overlay/image;imageid=TCGA-27-1836-01Z-DX2;algorithm=NS-MORPH;samplingrate=3;
+		@GET
+		@Path("/images/overlay/image")
+		@Produces(MediaType.TEXT_HTML)
+		public String getOverlayImage(
+				@MatrixParam("imageid") String imageid,
+				@MatrixParam("userid")  String userid,
+				@MatrixParam("algorithm") String algorithm, 
+				@DefaultValue("1") @MatrixParam("samplingrate") int samplingRate, 
+				@DefaultValue("JPG") @MatrixParam("format") String format) {
+				
+			if (imageid==null||userid==null||algorithm==null)
+			{
+				String content = "<html><body>"+"<p>imageid, userid and algorithm parameters are mandatory" +"</p>" + "<p>Ex, /images/overlay/image;image=mask2;userid=user0002;algorithm=algorithm1;</p>" + "</body></html>";
+				return content;
+			}
+			String paisuid = imageid+"_20x_20x_"+userid+"-"+algorithm;
+			String imgpath = "/images/image/smallimage;imageid=" + imageid  + ";";  
+            String svgpath = "/pais/markups/boundaries/image;paisuid=" + paisuid  + ";samplingrate=" + samplingRate  + ";format=svg"; 
+
+			String html = "<html><body> " + 
+			"<div style=\"background:url(../.." + imgpath  + "); width:\"100%\"; height:\"100%\"; position:absolute; left:0px; top:0px;\">" +
+			"<object height=\"100%\" width=\"100%\" type=\"image/svg+xml\" data=\"" + "../.." + svgpath +  "\" style=\"position:absolute; left:0px; top:0px;\" >" + 
+			"</div> </body> </html>";
+			
+	/*		"<div style=\"background:url(../.." + imgpath  + "); width:"+ width +"px; height:"+ height +"px; position:absolute; left:0px; top:0px;\">" +
+			"<object type=\"image/svg+xml\" data=\"" + "../.." + svgpath +  "\" style=\"overflow=hidden;position:absolute; left:0px; top:0px; width:"+ width +"px; height:"+ height +"px;\" >" + 
+			"</div> </body> </html>";		
+	*/		
+			return html;	 
+		}	
 	
 	
 

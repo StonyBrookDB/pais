@@ -29,36 +29,36 @@ import edu.emory.cci.pais.util.TengUtils;
  */
 public class ConvertController{
 	public static String tmpdir = System.getProperty("java.io.tmpdir");
-
+   PAISBoundary2PAIS fixer = new PAISBoundary2PAIS();
     
 	public static void convertermain(String[] args)
 	{
 		Option help = new Option("h","help",false,"display this help and exit.");
 			help.setRequired(false);
-			Option inputtype = new Option("it","inputtype",false,"input file type, aperio/fixed/unfixed");
+			Option inputtype = new Option("it","inputtype",true,"input file type, aperio/fixed/unfixed");
 			inputtype.setRequired(false);
 			inputtype.setArgName("inputtype");
 			
-			Option zip = new Option("z","zip",false,"zip the output file or not");
-			zip.setRequired(false);
-			zip.setArgName("outputtype");
+			Option nozip = new Option("uz","nozip",false,"do not zip the output file or not");
+			nozip.setRequired(false);
+			nozip.setArgName("outputtype");
 			
-			Option inputpath = new Option("i","inputpath",false,"input directory or file path");
+			Option inputpath = new Option("i","inputpath",true,"input directory or file path");
 			inputpath.setRequired(true);
 			inputpath.setArgName("inputpath");
 			
-			Option outputpath = new Option("o","outputpath",false,"output directory or file path");
+			Option outputpath = new Option("o","outputpath",true,"output directory or file path");
 			outputpath.setRequired(true);
 			outputpath.setArgName("outputpath");
 			
-			Option config = new Option("c","config",false,"configuration file path");
+			Option config = new Option("c","config",true,"configuration file path");
 			config.setRequired(true);
 			config.setArgName("config");
 			
 			Options options = new Options();
 			options.addOption(help);
 			options.addOption(inputtype);
-			options.addOption(zip);
+			options.addOption(nozip);
 			options.addOption(inputpath);
 			options.addOption(outputpath);
 			options.addOption(config);
@@ -84,11 +84,11 @@ public class ConvertController{
         String configfile = line.getOptionValue("config");
         
         if(intype==null||intype.equalsIgnoreCase(""))
-        	intype = "aperio";
+        	intype = "unfixed";
         if(zipornot==null)
-        	zipornot = "unzipped";
-        else
         	zipornot = "zipped";
+        else
+        	zipornot = "unzipped";
         
         System.out.println("start convert files....");
 	    try {
@@ -113,19 +113,19 @@ public class ConvertController{
 		if(inputType.equalsIgnoreCase("Aperio XML File")||inputType.equalsIgnoreCase("aperio"))
 		{
 		aperioXmlParser(inputPath,aperioOutput,null,"");
-		paisBoundary2PAIS(aperioOutput,fixerOutput);
+		fixer.fixAndPrefix(aperioOutput,fixerOutput);
 		paisDocumentGenerator(fixerOutput,outputPath, configFilePath,zipornot);
 		}
 		else if(inputType.equalsIgnoreCase("unfixed points")||inputType.equalsIgnoreCase("unfixed"))
 		{
-			paisBoundary2PAIS(inputPath,fixerOutput);
+			fixer.fixAndPrefix(inputPath,fixerOutput);
 			paisDocumentGenerator(fixerOutput,outputPath, configFilePath,zipornot);	
 		}
 		else if(inputType.equalsIgnoreCase("fixed points")||inputType.equalsIgnoreCase("fixed"))
 		{
 
-			System.out.println(inputPath);
-			paisDocumentGenerator(inputPath,outputPath, configFilePath,zipornot);	
+			fixer.prefixOnly(inputPath, fixerOutput);
+			paisDocumentGenerator(fixerOutput,outputPath, configFilePath,zipornot);	
 			
 		}
 		TengUtils.deleteDir(new File(aperioOutput));
@@ -172,10 +172,6 @@ public class ConvertController{
         System.out.println("Total time (seconds):" + totalTime/1000.0);	 	
 	}
 	
-	public void paisBoundary2PAIS(String inpath,String outpath) throws IOException, InterruptedException
-	{
-			new PAISBoundary2PAIS(inpath,outpath);
-	}
 	
 	public void paisDocumentGenerator(String inputFilePath,String outputFilePath, String configFilePath,boolean dontzipresults) {
 		

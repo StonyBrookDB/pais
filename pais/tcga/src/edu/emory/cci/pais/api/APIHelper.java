@@ -39,7 +39,9 @@ public class APIHelper {
 	
 	
 	
-	static String SVG_STYLE ="stroke:lime;stroke-width:1";
+	//static String SVG_STYLE ="stroke:lime;stroke-width:1";
+	static String SVG_STYLE ="fill:rgb(0,0,255); stroke:rgb(0,0,0);stroke-width:1";
+	static String SVG_STYLES[] = {"fill:rgba(0,0,255,0.4); stroke:rgb(0,0,0);stroke-width:1","fill:rgba(0,255,0,0.4); stroke:rgb(0,0,0);stroke-width:1"};
 	
 /*	public APIHelper() {
 		if (db == null ) 
@@ -223,6 +225,50 @@ public class APIHelper {
 		
 	}	
 	
+	public  static String resultSet2svg(ResultSet rs, int x0, int y0, int samplingRate, String style[]){
+	     StringBuffer rstStrBuf = new StringBuffer();
+	     
+		try {
+			ResultSetMetaData rsmd = rs.getMetaData();
+		     int numberOfColumns = rsmd.getColumnCount();
+		     String[] colNames = new String [numberOfColumns];
+		     
+		     for (int i = 0 ; i < numberOfColumns; i++){
+		    	 colNames [i] = rsmd.getColumnName(i+1);		    	 
+		     }
+		     
+		     rstStrBuf.append("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">\n");
+             String paisuid = null;
+             String polygonstr = null;
+             int seqnum = 0;
+             int i = 0;
+		     while (rs.next() ){
+			         paisuid = rs.getString(1);
+			         
+			         try{
+			        	 seqnum = Integer.parseInt(paisuid.substring(paisuid.lastIndexOf("_")+1,paisuid.length()));	 
+			         }
+			         catch(Exception e)
+			         {
+			        	 seqnum = 0;
+			         }
+			         
+			    	 polygonstr = DataHelper.normalizeCoords(rs.getString(2), x0, y0, samplingRate, "svg");
+			    	 rstStrBuf.append( DataHelper.str2svgpolygon(polygonstr, style[seqnum] ) ); 	
+			         
+			 }
+		     rstStrBuf.append("</svg>\n");
+		     rs.close();
+			
+		} catch (SQLException e) {			
+			e.printStackTrace();
+			return null;
+		}
+		
+		return rstStrBuf.toString();
+		
+	}	
+	/*	
 	public  static String resultSet2svg(ResultSet rs, int x0, int y0, int samplingRate, String style){
 	     StringBuffer rstStrBuf = new StringBuffer();
 	     
@@ -254,8 +300,7 @@ public class APIHelper {
 		return rstStrBuf.toString();
 		
 	}	
-		
-	
+	*/
 	public  static double [][] resultSet2matrix(ResultSet rs){
 		ArrayList<double[]> list = new ArrayList<double[]>();
 		int numberOfColumns = 0; 
@@ -553,7 +598,7 @@ public class APIHelper {
 	}
 		
 	public static Response setSVGResponse(ResultSet rs, int x, int y, int samplingRate){
-		String content = resultSet2svg(rs, x, y, samplingRate, SVG_STYLE);
+		String content = resultSet2svg(rs, x, y, samplingRate, SVG_STYLES);
 		ResponseBuilder response = Response.ok(content);
 		response.header("Content-type", getContentType("svg") );
 		return response.build();

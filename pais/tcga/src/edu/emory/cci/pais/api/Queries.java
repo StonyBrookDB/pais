@@ -259,10 +259,17 @@ public class Queries {
 
 		name ="getBoundariesFromRectangleFromTile";
 		query = 
-			"SELECT pais.plgn2str(m.polygon) AS boundary " +
+			"SELECT pais_uid, pais.plgn2str(m.polygon) AS boundary " +
 			"FROM   pais.markup_polygon m " +
 			"WHERE  m.pais_uid = ?  AND " +
 			"       DB2GSE.ST_Contains(DB2GSE.ST_Polygon( CAST (? AS VARCHAR(400) ), 100), polygon ) =1";		
+		map.put(name, query);
+		
+		name ="getBoundariesFromImage";
+		query = 
+			"SELECT pais_uid, pais.plgn2str(m.polygon) AS boundary " +
+			"FROM   pais.markup_polygon m " +
+			"WHERE  m.pais_uid like ?";		
 		map.put(name, query);
 		
 		/**

@@ -388,8 +388,7 @@ function changeImage(){
 			$('#maxY').attr('value',maxy);
 			});
 	 var thumbimg=new Image();
-	 thumbimg.src = '/tcga/images/thumbnail/wsi;imageuid='+ImageUID+';length=500';
-	 //thumbimg.src = 'http://europa.cci.emory.edu/tcga/images/thumbnail/wsi;imageuid='+ImageUID+';length=500';
+	 thumbimg.src = '/tcga/images/thumbnail/wsi;imageuid='+ImageUID+';length=500;format=jpg';
 	 thumbimg.onload = function (){
 		 canvas.width = thumbimg.width; 
 		 canvas.height = thumbimg.height; 

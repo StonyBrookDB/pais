@@ -105,11 +105,14 @@ public class PAISBoundary2PAIS {
 	+ "Nuclei Score, grade, Ordinal, Integer" + "\n"
 	+ "#Markups format=db2";
 	
-	public PAISBoundary2PAIS(String inpath, String outpath) throws IOException, InterruptedException
+	
+	public void fixAndPrefix(String inpath, String outpath) throws IOException, InterruptedException
 	{
+		
 		this.inpath=inpath;
 		this.outpath=outpath;
 		this.tmpdir=System.getProperty("java.io.tmpdir");
+		
 		File B2Ptmpdir=new File(this.tmpdir+"/B2Ptmpdir");
 		B2Ptmpdir.mkdirs();
 		//make tempt directories for fix tools
@@ -126,7 +129,40 @@ public class PAISBoundary2PAIS {
 		TengUtils.deleteDir(B2Poutput2);
 		TengUtils.deleteDir(B2Poutput1);
 		TengUtils.deleteDir(B2Ptmpdir);
+		
 	}
+	
+	public void fixOnly(String inpath, String outpath) throws IOException, InterruptedException
+	{
+		this.inpath=inpath;
+		this.outpath=outpath;
+		this.tmpdir=System.getProperty("java.io.tmpdir");
+		
+		File B2Ptmpdir=new File(this.tmpdir+"/B2Ptmpdir");
+		B2Ptmpdir.mkdirs();
+		//make tempt directories for fix tools
+		File B2Poutput1 = new File(B2Ptmpdir.getAbsolutePath()+"/output1");
+		File B2Poutput2 = new File(outpath);
+		B2Poutput1.mkdirs();
+		B2Poutput2.mkdirs();
+		//use fix tools BoundaryFix1 and BoundaryFix2 fix input file
+		boundaryFix(B2Poutput1.getAbsolutePath(),B2Poutput2.getAbsolutePath());
+
+		TengUtils.deleteDir(B2Poutput1);
+		TengUtils.deleteDir(B2Ptmpdir);
+		
+	}
+	
+	public void prefixOnly(String inpath, String outpath) throws IOException, InterruptedException
+	{
+		this.inpath=inpath;
+		this.outpath=outpath;
+		this.tmpdir=System.getProperty("java.io.tmpdir");
+		fetchfiles(inpath);
+		genOutfiles();
+	}
+	
+	
 	//use fix tools fix input files
 	public void boundaryFix(String tmpdir1,String tmpdir2) throws IOException, InterruptedException
 	{
@@ -148,6 +184,7 @@ public class PAISBoundary2PAIS {
    
 	public void fetchfiles(String path)
 	{
+		System.out.println(path);
 		File filelist = new File(path);
 		if(filelist.isFile()&&filelist.getName().endsWith(".txt"))files[filenum++]=filelist;
 		else if(filelist.isDirectory())
@@ -176,6 +213,7 @@ public class PAISBoundary2PAIS {
 						writer.newLine();
 						writer.write(truncline);
                  }
+				 reader.close();
 				 writer.close();
 				 
 				} catch (FileNotFoundException e) {
@@ -194,7 +232,7 @@ public class PAISBoundary2PAIS {
 	public static void main(String[] args)
 	{
 	    try {
-			new PAISBoundary2PAIS("/home/db2inst1/Dropbox/project/LoadData/TOOLS/Data/output1","/home/db2inst1/Dropbox/project/LoadData/TOOLS/Data/output3");
+			new PAISBoundary2PAIS().prefixOnly("/home/db2inst1/Dropbox/project/LoadData/TOOLS/Data/output1","/home/db2inst1/Dropbox/project/LoadData/TOOLS/Data/output3");;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
