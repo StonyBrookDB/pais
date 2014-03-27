@@ -14,6 +14,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Properties;
 
 import javax.ws.rs.core.MediaType;
@@ -40,9 +42,11 @@ public class APIHelper {
 	
 	
 	//static String SVG_STYLE ="stroke:lime;stroke-width:1";
+	final static int MAXSEQ = 2;
 	static String SVG_STYLE ="fill:rgb(0,0,255); stroke:rgb(0,0,0);stroke-width:1";
 	static String SVG_STYLES[] = {"fill:rgba(0,0,255,0.4); stroke:rgb(0,0,0);stroke-width:1","fill:rgba(0,255,0,0.4); stroke:rgb(0,0,0);stroke-width:1"};
-	
+	static String SVG_START = "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">\n";
+    static String SVG_END = "</svg>\n";
 /*	public APIHelper() {
 		if (db == null ) 
 			db =  new PAISDBHelper(host, port, username, passwd, database);
@@ -226,22 +230,14 @@ public class APIHelper {
 	}	
 	
 	public  static String resultSet2svg(ResultSet rs, int x0, int y0, int samplingRate, String style[]){
-	     StringBuffer rstStrBuf = new StringBuffer();
-	     
-		try {
-			ResultSetMetaData rsmd = rs.getMetaData();
-		     int numberOfColumns = rsmd.getColumnCount();
-		     String[] colNames = new String [numberOfColumns];
+	     HashMap<Integer,StringBuffer> svgBuf = new HashMap<Integer,StringBuffer>();
+	     int i=0;
+		 try {		     
 		     
-		     for (int i = 0 ; i < numberOfColumns; i++){
-		    	 colNames [i] = rsmd.getColumnName(i+1);		    	 
-		     }
-		     
-		     rstStrBuf.append("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">\n");
              String paisuid = null;
              String polygonstr = null;
              int seqnum = 0;
-             int i = 0;
+             StringBuffer tmpsvg = new StringBuffer("");
 		     while (rs.next() ){
 			         paisuid = rs.getString(1);
 			         
@@ -252,19 +248,33 @@ public class APIHelper {
 			         {
 			        	 seqnum = 0;
 			         }
+			         seqnum = (++i)%2;
+			         tmpsvg = svgBuf.get(new Integer(seqnum));
+			         if(tmpsvg==null)
+			        	 tmpsvg = new StringBuffer("");
 			         
 			    	 polygonstr = DataHelper.normalizeCoords(rs.getString(2), x0, y0, samplingRate, "svg");
-			    	 rstStrBuf.append( DataHelper.str2svgpolygon(polygonstr, style[seqnum] ) ); 	
-			         
+			    	 tmpsvg.append(DataHelper.str2svgpolygon(polygonstr, style[seqnum] ) );
+			    	 
+			    	 svgBuf.put(new Integer(seqnum), tmpsvg);
 			 }
-		     rstStrBuf.append("</svg>\n");
+		     
 		     rs.close();
+		     
 			
 		} catch (SQLException e) {			
 			e.printStackTrace();
 			return null;
 		}
+		StringBuffer rstStrBuf = new StringBuffer();
 		
+		Collection<StringBuffer> list = (Collection<StringBuffer>) svgBuf.values();
+		rstStrBuf.append(SVG_START);
+		for(StringBuffer tmp: list)
+	    {
+			rstStrBuf.append(tmp);
+	    }
+		rstStrBuf.append(SVG_END);
 		return rstStrBuf.toString();
 		
 	}	

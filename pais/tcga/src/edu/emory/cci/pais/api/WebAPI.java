@@ -1507,8 +1507,8 @@ public class WebAPI {
 		int width = Integer.parseInt(w);
 		int height = Integer.parseInt(h);
 		String html = "<html><body> " + 
-		"<div style=\"background:url(../.." + imgpath  + "); width:"+ width +"px; height:"+ height +"px; position:absolute; left:0px; top:0px;\">" +
-		"<object height=\"100%\" width=\"100%\" type=\"image/svg+xml\" data=\"" + "../.." + svgpath +  "\" style=\"position:absolute; left:0px; top:0px;\" >" + 
+		"<div style=\"background:url(../.." + imgpath  + "); width:"+ width +"px; height:"+ height +"px; position:absolute; left:100px; top:0px;\">" +
+		"<object height=\"100%\" width=\"100%\" type=\"image/svg+xml\" data=\"" + "../.." + svgpath +  "\" style=\"position:absolute; left:100px; top:0px;\" >" + 
 		"</div> </body> </html>";
 /*		"<div style=\"background:url(../.." + imgpath  + "); width:"+ width +"px; height:"+ height +"px; position:absolute; left:0px; top:0px;\">" +
 		"<object type=\"image/svg+xml\" data=\"" + "../.." + svgpath +  "\" style=\"overflow=hidden;position:absolute; left:0px; top:0px; width:"+ width +"px; height:"+ height +"px;\" >" + 
