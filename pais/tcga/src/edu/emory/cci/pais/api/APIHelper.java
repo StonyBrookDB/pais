@@ -231,7 +231,7 @@ public class APIHelper {
 	
 	public  static String resultSet2svg(ResultSet rs, int x0, int y0, int samplingRate, String style[]){
 	     HashMap<Integer,StringBuffer> svgBuf = new HashMap<Integer,StringBuffer>();
-	     int i=0;
+	
 		 try {		     
 		     
              String paisuid = null;
@@ -248,7 +248,6 @@ public class APIHelper {
 			         {
 			        	 seqnum = 0;
 			         }
-			         seqnum = (++i)%2;
 			         tmpsvg = svgBuf.get(new Integer(seqnum));
 			         if(tmpsvg==null)
 			        	 tmpsvg = new StringBuffer("");

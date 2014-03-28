@@ -28,7 +28,7 @@ int getThumbnailWSI(int arg,char ** args) {
 	const char *filename1 = args[1];
     const char *filename2 = args[2];
     int length = atoi(args[3]);
-
+    printf("generate thumbnail for wsi\n");
     sprintf(tmpfile,"%s.ppm",filename2);
 	if (!openslide_can_open(filename1))
 	{
@@ -44,18 +44,18 @@ int getThumbnailWSI(int arg,char ** args) {
 	//layer_count = openslide_get_level_count(osr);
 	//openslide_get_level_dimensions(osr, 1, &width, &height);
 	
-	layer_count = openslide_get_layer_count(osr);
-	openslide_get_layer_dimensions(osr, 1, &width, &height);
+	layer_count = openslide_get_level_count(osr);
+	openslide_get_level_dimensions(osr, 1, &width, &height);
 	
 	for(i = layer_count-1;i>=0;i--)
     {
         validlayer = i;
 	    //openslide_get_level_dimensions(osr, validlayer, &width, &height);
-	    openslide_get_layer_dimensions(osr, validlayer, &width, &height);
+	     openslide_get_level_dimensions(osr, validlayer, &width, &height);
 	    temp = width<height?width:height;//make sure that even the smaller one is larger than length
         if(temp>=length)//this layer can be used for extracting thumbnail
             break;
-        printf("%d layer is not valide\n",i);
+        printf("%" PRId64 " layer is not valide\n",i);
     }
     if(temp<length)//if the length is too large, even larger than the width or height, which means we can not get this one, just make it smaller
       length=temp;
@@ -65,6 +65,10 @@ int getThumbnailWSI(int arg,char ** args) {
 
 	/* dest should be holding the ARGB data of the smallest layer */
 	openslide_read_region(osr, dest, 0, 0, validlayer, width, height);
+	if (openslide_get_error(osr)) {
+    printf("%s\n", openslide_get_error(osr));
+    return false;
+    }
 	openslide_close(osr);
 	if((f1 = fopen(tmpfile, "wb+"))==NULL) {
 		free(dest);
@@ -91,7 +95,7 @@ int getThumbnailWSI(int arg,char ** args) {
 	height /= temp;
         width32=width;
         height32=height;
-	printf("The generating thumbnail for %s is %dx%d pixels\n", filename1, width32, height32);
+	printf("The generating thumbnail for %s is %dx%d pixels %s\n", filename1, width32, height32,tmpfile);
 
 	sprintf(cmd, "convert %s -resize %dx%d %s", tmpfile, width32, height32,filename2);
 	system(cmd);
@@ -131,8 +135,8 @@ int getThumbnailTiled(int arg,char ** args) {
     //layer_count = openslide_get_level_count(osr);
     //openslide_get_level_dimensions(osr, 0, &bwidth, &bheight);
 	
-	layer_count = openslide_get_layer_count(osr);
-    openslide_get_layer_dimensions(osr, 0, &bwidth, &bheight);
+	layer_count = openslide_get_level_count(osr);
+     openslide_get_level_dimensions(osr, 0, &bwidth, &bheight);
     int validlayer = 0;
     int temph,tempw;
     for(i = layer_count-1;i>=0;i--)
@@ -141,7 +145,7 @@ int getThumbnailTiled(int arg,char ** args) {
         temph=h;
         validlayer = i;
 	    //openslide_get_level_dimensions(osr, validlayer, &width, &height);
-	    openslide_get_layer_dimensions(osr, validlayer, &width, &height);
+	     openslide_get_level_dimensions(osr, validlayer, &width, &height);
         int rate = bwidth/width;
 
         tempw/=rate;
@@ -149,7 +153,7 @@ int getThumbnailTiled(int arg,char ** args) {
 	    temp = tempw<temph?tempw:temph;//make sure that even the smaller one is larger than length
         if(temp>=length)//this layer can be used for extracting thumbnail
             break;
-        printf("%d layer is not valid\n",i);
+        printf("%" PRId64 " layer is not valid\n",i);
     }
     if(temp<length)//if the length is too large, even larger than the width or height, which means we can not get this one, just make it smaller
       length=temp;
@@ -181,14 +185,14 @@ int getThumbnailTiled(int arg,char ** args) {
 	fclose(f1);
 	free(dest);
 	
-	printf("%d,%d,%d,%d\n",w,h,length,temp);
+	printf("%" PRId64 ",%" PRId64 ",%d,%" PRId64 "\n",w,h,length,temp);
 
         temp = w>h?w:h;
 	temp /= length;
 	w /= temp;
 	h /= temp;
-	printf("The generating thumbnail for %s is %dx%d pixels\n", filename1, w, h);
-	sprintf(cmd, "convert %s -resize %dx%d %s", tmpfile,w, h,filename2); 
+	printf("The generating thumbnail for %s is %" PRId64 "x%" PRId64 " pixels\n", filename1, w, h);
+	sprintf(cmd, "convert %s -resize %" PRId64 "x%" PRId64 " %s", tmpfile,w, h,filename2); 
 	system(cmd);
 	remove(tmpfile);
 	return 1;
@@ -216,13 +220,13 @@ int getDimension(int arg, char ** args) {
 		exit(1);
 	}
 	//openslide_get_level_dimensions(osr,0,&width, &height);
-	openslide_get_layer_dimensions(osr,0,&width, &height);
+	 openslide_get_level_dimensions(osr,0,&width, &height);
 	openslide_close(osr);
 	if((f1 = fopen(filename2, "wb+"))==NULL) {
 		perror("open file failure");
 		exit(1);
 	}
-	fprintf(f1, "%d  %d", width, height);
+	fprintf(f1, "%" PRId64 "  %" PRId64 "", width, height);
 	fclose(f1);
 	return 1;
 }
@@ -289,7 +293,7 @@ int getRegionImage(int arg,char ** args)
 	char tmpDir[256];	// directory path
 	char tmpName[500];	// tilename + coordinate x + coordinate y + width + height
 									
-	sprintf(tmpName,"%s_%d_%d_%d_%d",tfname, SX, SY, width,height);
+	sprintf(tmpName,"%s_%" PRId64 "_%" PRId64 "_%" PRId64 "_%" PRId64 "",tfname, SX, SY, width,height);
 	
 	strcpy(tmpDir,"/tmp/");
 	
