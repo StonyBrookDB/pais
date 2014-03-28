@@ -381,10 +381,10 @@ void processBoundaryFixing2(stringstream &instream, stringstream &outstream)
 				for (t=0;t<ctr1;t++)
 				{
 					if (t != ctr1 - 1) {
-						outstream  << coord2[t].x << " " << coord2[t].y << ",";
+						outstream  << coord2[t].x << "," << coord2[t].y << " ";
 					} else {
 
-						outstream  << coord2[t].x << " " << coord2[t].y;
+						outstream  << coord2[t].x << "," << coord2[t].y;
 					}
 				}
 				outstream << endl;
