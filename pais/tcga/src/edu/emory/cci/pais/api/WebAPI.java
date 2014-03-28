@@ -413,7 +413,7 @@ public class WebAPI {
 		else return APIHelper.setResponseByFormat(format, rs);			
 	}	
 	/////////////////////////////////////////////////
-	// e.g.: /pais/markups/boundaries/image;paisuid=TCGA-27-1836-01Z-DX2_20x_20x_NS-MORPH;samplingrate=1;format=html
+	// e.g.: /pais/markups/boundaries/image;paisuid=TCGA-27-1836-01Z-DX2_20x_20x_NS-MORPH_0;samplingrate=1;format=html
 	@GET
 	@Path("/pais/markups/boundaries/image")
 	public Response getBoundariesFromImage(
@@ -1508,7 +1508,7 @@ public class WebAPI {
 		int height = Integer.parseInt(h);
 		String html = "<html><body> " + 
 		"<div style=\"background:url(../.." + imgpath  + "); width:"+ width +"px; height:"+ height +"px; position:absolute; left:100px; top:0px;\">" +
-		"<object height=\"100%\" width=\"100%\" type=\"image/svg+xml\" data=\"" + "../.." + svgpath +  "\" style=\"position:absolute; left:100px; top:0px;\" >" + 
+		"<object height=\"100%\" width=\"100%\" type=\"image/svg+xml\" data=\"" + "../.." + svgpath +  "\" style=\"position:absolute; left:0px; top:0px;\" >" + 
 		"</div> </body> </html>";
 /*		"<div style=\"background:url(../.." + imgpath  + "); width:"+ width +"px; height:"+ height +"px; position:absolute; left:0px; top:0px;\">" +
 		"<object type=\"image/svg+xml\" data=\"" + "../.." + svgpath +  "\" style=\"overflow=hidden;position:absolute; left:0px; top:0px; width:"+ width +"px; height:"+ height +"px;\" >" + 
@@ -1517,23 +1517,21 @@ public class WebAPI {
 		return html;	 
 	}	
 	////////////////////////////////////
-	// /images/overlay/image;imageid=TCGA-27-1836-01Z-DX2;algorithm=NS-MORPH;samplingrate=3;
+	// /images/overlay/image;imageid=TCGA-27-1836-01Z-DX2_20x_20x_NS-MORPH_0;samplingrate=3;
 		@GET
 		@Path("/images/overlay/image")
 		@Produces(MediaType.TEXT_HTML)
 		public String getOverlayImage(
-				@MatrixParam("imageid") String imageid,
-				@MatrixParam("userid")  String userid,
-				@MatrixParam("algorithm") String algorithm, 
+				@MatrixParam("paisuid") String paisuid,
 				@DefaultValue("1") @MatrixParam("samplingrate") int samplingRate, 
 				@DefaultValue("JPG") @MatrixParam("format") String format) {
 				
-			if (imageid==null||userid==null||algorithm==null)
+			if (paisuid==null)
 			{
-				String content = "<html><body>"+"<p>imageid, userid and algorithm parameters are mandatory" +"</p>" + "<p>Ex, /images/overlay/image;image=mask2;userid=user0002;algorithm=algorithm1;</p>" + "</body></html>";
+				String content = "<html><body>"+"<p>paisuid is mandatory" +"</p>" + "<p>Ex, /images/overlay/image;imageid=TCGA-27-1836-01Z-DX2_20x_20x_NS-MORPH_0;samplingrate=3;</p>" + "</body></html>";
 				return content;
 			}
-			String paisuid = imageid+"_20x_20x_"+userid+"-"+algorithm;
+			String imageid = paisuid.substring(paisuid.indexOf("_"), paisuid.length());
 			String imgpath = "/images/image/smallimage;imageid=" + imageid  + ";";  
             String svgpath = "/pais/markups/boundaries/image;paisuid=" + paisuid  + ";samplingrate=" + samplingRate  + ";format=svg"; 
 

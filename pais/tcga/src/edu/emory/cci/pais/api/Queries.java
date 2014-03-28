@@ -269,7 +269,7 @@ public class Queries {
 		query = 
 			"SELECT pais_uid, pais.plgn2str(m.polygon) AS boundary " +
 			"FROM   pais.markup_polygon m " +
-			"WHERE  m.pais_uid like ?";		
+			"WHERE  m.pais_uid  = ?";		
 		map.put(name, query);
 		
 		/**
