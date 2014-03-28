@@ -250,6 +250,7 @@ public class PAISDBHelper {
 		
 		
 		String markupSQL = queryGenerator.generatePreparedMarkupSQL();
+		System.out.println(markupSQL);
 		String regionSQL = queryGenerator.generatePreparedRegionSQL();
 		String ordinalObsSQL = queryGenerator.generatePareparedObservationSQL("Ordinal");
 		String nominalObsSQL = queryGenerator.generatePareparedObservationSQL("Nominal");
@@ -296,6 +297,7 @@ public class PAISDBHelper {
 			Iterator<String> it = keys.iterator();
 			while (it.hasNext()) {
 				String key =  it.next();
+				System.out.println(key);
 				pstmt = pstmtMap.get(key);
 				if (pstmt != null)
 					try {
@@ -552,6 +554,7 @@ public class PAISDBHelper {
             int nrBytesRead;
 
             //Get next zip entry and start reading data
+           
             if (zipIn.getNextEntry() != null) {
                 while ((nrBytesRead = zipIn.read(buffer)) > 0) {
                     outStream.write(buffer, 0, nrBytesRead);
@@ -566,6 +569,35 @@ public class PAISDBHelper {
 			}
             return tempFile.getAbsolutePath();
     }
+    
+    public String  getXmlDocFile(ZipInputStream zipIn,String tmpfolder) {
+        File tempFile;
+        String prefix = UUID.randomUUID().toString();
+		try {
+			if(tmpfolder==null)
+			 tempFile = File.createTempFile(prefix, ".xml");
+			else
+			 tempFile = new File(tmpfolder+File.separator+prefix+".xml");
+        OutputStream outStream = new FileOutputStream(tempFile);
+        byte[] buffer = new byte[2000000];
+        int nrBytesRead;
+
+        //Get next zip entry and start reading data
+       
+        if (zipIn.getNextEntry() != null) {
+            while ((nrBytesRead = zipIn.read(buffer)) > 0) {
+                outStream.write(buffer, 0, nrBytesRead);
+            }
+        }
+        //Finish off by closing the streams
+        outStream.close();
+        zipIn.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+        return tempFile.getAbsolutePath();
+}
 
     public PreparedStatement getPreparedStatement(String sql){
     	PreparedStatement pstmt = null;

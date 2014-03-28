@@ -66,7 +66,7 @@ public class Producer extends Thread{
 					data = new ArrayList<Object>();
 					
 					zipIn = new ZipInputStream ( rs.getBinaryStream("BLOB") );
-					xmlFilename = db.getXmlDocFile(zipIn);
+					xmlFilename = db.getXmlDocFile(zipIn,DataLoadingManager.cachePath);
 					
 					seqNum = rs.getInt("SEQUENCE_NUMBER");
 					fileName = rs.getString("FILE_NAME");
@@ -74,14 +74,28 @@ public class Producer extends Thread{
 					data.add((String)xmlFilename);
 					data.add((Integer)this.seqNum);
 				//	System.out.println("SeqNum in Queue: "+this.seqNum);
-					
-					DataLoadingManager.queue.add(data);
+					synchronized(DataLoadingManager.queue)
+					{
+					  DataLoadingManager.queue.add(data);
+					}
+					while(DataLoadingManager.queue.size()>DataLoadingManager.maxUnzipped)
+					{
+						try {
+							Thread.sleep(1000);
+							System.out.println("waiting for consumer!");
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
 
 				}
 				System.out.println("Master thread is shutting down......");
 				data = new ArrayList<Object>();				
 				data.add((String)SHUTDOWN_REQ);
-				DataLoadingManager.queue.add(data);
+				synchronized(DataLoadingManager.queue)
+				{
+				   DataLoadingManager.queue.add(data);
+				}
 
 				
 

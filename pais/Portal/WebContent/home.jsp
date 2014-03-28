@@ -22,6 +22,7 @@ $.get(url,function(data){
 });
 
 </script>
+<link rel="SHORTCUT ICON" href="img/favicon.ico"/>
 <title>Home</title>
 </head>
 <body>
@@ -35,7 +36,7 @@ There are <a class='count' id="algorithm"></a> analytical result documents, and 
 <br>
 You can browse, visualize, and download images and annotations (including markups and features) from the portal. <br>
 <br>
-From "Image"", you can browse images by thumbnails, download images, and visualize mean features of the images. You can also download tiled images and their markups and features. <br>
+From "Image", you can browse images by thumbnails, download images, and visualize mean features of the images. You can also download tiled images and their markups and features. <br>
 <br>
 From "Patient", you can browse patient information and browse images of a patient. <br>
 <br>

@@ -32,17 +32,15 @@ public class OpenSlideToolsBin{
 	
 	public static boolean runcmd(String cmd)
 	{
-		
+		System.out.println(cmd);
 		Process pro;
 		try {
 			pro = Runtime.getRuntime().exec(cmd);
 			pro.waitFor();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}

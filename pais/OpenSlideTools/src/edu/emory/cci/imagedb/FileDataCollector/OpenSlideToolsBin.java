@@ -1,5 +1,6 @@
 package edu.emory.cci.imagedb.FileDataCollector;
 
+import java.io.File;
 import java.io.IOException;
 
 public class OpenSlideToolsBin{
@@ -55,8 +56,8 @@ public class OpenSlideToolsBin{
 	public static void main(String[] args)
 	{
 		//System.out.println(System.getProperty("user.dir")+File.separator+"region ");
-		//OpenSlideToolsBin.getDimension("/home/db2inst1/image/TCGA-06-0644-01Z-00-DX1.svs","/home/db2inst1/Dropbox/dimention.txt");
-		OpenSlideToolsBin.getThumbnailTiled("/home/db2inst1/image/TCGA-06-0644-01Z-00-DX1.svs","/home/db2inst1/Dropbox/test400.jpg",100,0,0,4096,4096);		
+		OpenSlideToolsBin.getDimension(args[0],System.getProperty("java.io.tmpdir")+File.separator+args[1]);
+		//OpenSlideToolsBin.getThumbnailTiled("/home/db2inst1/image/TCGA-06-0644-01Z-00-DX1.svs","/home/db2inst1/Dropbox/test400.jpg",100,0,0,4096,4096);		
 		//OpenSlideToolsBin.getRegionImage("/home/db2inst1/image/TCGA-06-0644-01Z-00-DX1.svs","/home/db2inst1/Dropbox/test.jpg","jpeg",1111,1111,1111,1111);		
 	}
 	

@@ -14,6 +14,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Properties;
 
 import javax.ws.rs.core.MediaType;
@@ -39,8 +41,12 @@ public class APIHelper {
 	
 	
 	
-	static String SVG_STYLE ="stroke:lime;stroke-width:1";
-	
+	//static String SVG_STYLE ="stroke:lime;stroke-width:1";
+	final static int MAXSEQ = 2;
+	static String SVG_STYLE ="fill:rgb(0,0,255); stroke:rgb(0,0,0);stroke-width:1";
+	static String SVG_STYLES[] = {"fill:rgba(0,0,255,0.4); stroke:rgb(0,0,0);stroke-width:1","fill:rgba(0,255,0,0.4); stroke:rgb(0,0,0);stroke-width:1"};
+	static String SVG_START = "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">\n";
+    static String SVG_END = "</svg>\n";
 /*	public APIHelper() {
 		if (db == null ) 
 			db =  new PAISDBHelper(host, port, username, passwd, database);
@@ -141,6 +147,7 @@ public class APIHelper {
 		try {
 			rs.next();
 			blob = rs.getBlob(1);
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
@@ -175,7 +182,7 @@ public class APIHelper {
 			     rstStrBuf.append("</row>\n");
 		     }
 		     rstStrBuf.append("</result>\n");
-		     
+		     rs.close();
 		     
 			
 		} catch (SQLException e) {			
@@ -211,6 +218,7 @@ public class APIHelper {
 			     rstStrBuf.append(" />\n");
 		     }
 		     rstStrBuf.append("</result>\n");
+		     rs.close();
 		     
 			
 		} catch (SQLException e) {			
@@ -221,6 +229,56 @@ public class APIHelper {
 		
 	}	
 	
+	public  static String resultSet2svg(ResultSet rs, int x0, int y0, int samplingRate, String style[]){
+	     HashMap<Integer,StringBuffer> svgBuf = new HashMap<Integer,StringBuffer>();
+	     int i=0;
+		 try {		     
+		     
+             String paisuid = null;
+             String polygonstr = null;
+             int seqnum = 0;
+             StringBuffer tmpsvg = new StringBuffer("");
+		     while (rs.next() ){
+			         paisuid = rs.getString(1);
+			         
+			         try{
+			        	 seqnum = Integer.parseInt(paisuid.substring(paisuid.lastIndexOf("_")+1,paisuid.length()));	 
+			         }
+			         catch(Exception e)
+			         {
+			        	 seqnum = 0;
+			         }
+			         seqnum = (++i)%2;
+			         tmpsvg = svgBuf.get(new Integer(seqnum));
+			         if(tmpsvg==null)
+			        	 tmpsvg = new StringBuffer("");
+			         
+			    	 polygonstr = DataHelper.normalizeCoords(rs.getString(2), x0, y0, samplingRate, "svg");
+			    	 tmpsvg.append(DataHelper.str2svgpolygon(polygonstr, style[seqnum] ) );
+			    	 
+			    	 svgBuf.put(new Integer(seqnum), tmpsvg);
+			 }
+		     
+		     rs.close();
+		     
+			
+		} catch (SQLException e) {			
+			e.printStackTrace();
+			return null;
+		}
+		StringBuffer rstStrBuf = new StringBuffer();
+		
+		Collection<StringBuffer> list = (Collection<StringBuffer>) svgBuf.values();
+		rstStrBuf.append(SVG_START);
+		for(StringBuffer tmp: list)
+	    {
+			rstStrBuf.append(tmp);
+	    }
+		rstStrBuf.append(SVG_END);
+		return rstStrBuf.toString();
+		
+	}	
+	/*	
 	public  static String resultSet2svg(ResultSet rs, int x0, int y0, int samplingRate, String style){
 	     StringBuffer rstStrBuf = new StringBuffer();
 	     
@@ -242,7 +300,7 @@ public class APIHelper {
 			     }			    
 		     }
 		     rstStrBuf.append("</svg>\n");
-		     
+		     rs.close();
 			
 		} catch (SQLException e) {			
 			e.printStackTrace();
@@ -252,8 +310,7 @@ public class APIHelper {
 		return rstStrBuf.toString();
 		
 	}	
-		
-	
+	*/
 	public  static double [][] resultSet2matrix(ResultSet rs){
 		ArrayList<double[]> list = new ArrayList<double[]>();
 		int numberOfColumns = 0; 
@@ -269,6 +326,7 @@ public class APIHelper {
 				}	
 				list.add(row);
 			}
+			rs.close();
 		} catch (SQLException e) {			
 			e.printStackTrace();
 			return null;
@@ -287,7 +345,10 @@ public class APIHelper {
 	
 	public  static String resultSet2html(ResultSet rs){
 	     StringBuffer rstStrBuf = new StringBuffer();
-	     
+	     if (rs == null ) 
+	     {
+	    	 return "<html><body><tr><td>No result.</td></tr></body></html>";
+	     }
 		try {
 			ResultSetMetaData rsmd = rs.getMetaData();
 		     int numberOfColumns = rsmd.getColumnCount();
@@ -296,11 +357,9 @@ public class APIHelper {
 		     for (int i = 0 ; i < numberOfColumns; i++){
 		    	 colNames [i] = rsmd.getColumnName(i+1);		    	 
 		     }
-
+             
 		     rstStrBuf.append("<html><body><table border=\"1\" cellspacing=\"0\" cellpadding=\"5\">");
-		     if (rs == null ) 
-		    	 rstStrBuf.append("<html><body><tr><td>No result.</td></tr></body></html>");
-		     
+
 		     rstStrBuf.append("<tr style=\"background-color:#E2F5FE\"> ");
 		     for (int i = 0 ; i < numberOfColumns; i++){
 		    	 rstStrBuf.append("<th> " + colNames [i] + "</th>"); 		    	 
@@ -315,6 +374,7 @@ public class APIHelper {
 			     rstStrBuf.append("</tr>\n");
 		     }
 		     rstStrBuf.append("</table></body></html>");	
+		     rs.close();
 		} catch (SQLException e) {			
 			e.printStackTrace();
 			return null;
@@ -354,6 +414,7 @@ public class APIHelper {
 		    			 rstStrBuf.append( rs.getString(i+1) + ",");
 		    	 }			    
 		     }
+		     rs.close();
 
 		} catch (SQLException e) {			
 			e.printStackTrace();
@@ -430,7 +491,7 @@ public class APIHelper {
                  json.put(obj);
 
              }//end while
-
+             rs.close();
 
         } catch (SQLException e) {
             // TODO Auto-generated catch block
@@ -547,7 +608,7 @@ public class APIHelper {
 	}
 		
 	public static Response setSVGResponse(ResultSet rs, int x, int y, int samplingRate){
-		String content = resultSet2svg(rs, x, y, samplingRate, SVG_STYLE);
+		String content = resultSet2svg(rs, x, y, samplingRate, SVG_STYLES);
 		ResponseBuilder response = Response.ok(content);
 		response.header("Content-type", getContentType("svg") );
 		return response.build();
@@ -555,13 +616,13 @@ public class APIHelper {
 	
 	
 	
-	public static Response setHistogramResponse(ResultSet rs, String title, String subTitle, int width, int height, String format){
+	public static Response setHistogramResponse(ResultSet rs, String path,String title, String subTitle, int width, int height, String format){
 		double [][] histogramMatrix = resultSet2matrix(rs);
 		//System.out.println("Size: " + histogramMatrix.length );
-		
+		//System.out.println(path+"|"+title+"|"+subTitle+"|"+width+"|"+height+"+"+format);
 		if (format.equalsIgnoreCase("PNG") || format.equalsIgnoreCase("JPG") || format.equalsIgnoreCase("JPEG") || format.equalsIgnoreCase("SVG")
 				|| format.equalsIgnoreCase("EPS") || format.equalsIgnoreCase("PDF") ){
-			File file = FeatureBarChart.getFeatureBarChart(title, subTitle, width, height, histogramMatrix, format);
+			File file = FeatureBarChart.getFeatureBarChart(path, title, subTitle, width, height, histogramMatrix, format);
 			//System.out.println(file.getAbsolutePath());
 			FileInputStream in;
 			try {
@@ -701,11 +762,17 @@ public class APIHelper {
 		String content = null;
 		int width = 0, height = 0;
 		try {
-			if ( rs != null && rs.next() ){
+			if(rs!=null)
+			{
+				if( rs.next() ){
 					width = rs.getInt("width");
 					height = rs.getInt("height");
 					System.out.println("width = " + width);
+			    }
+				rs.close();
+				
 			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

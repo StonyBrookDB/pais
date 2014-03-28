@@ -1,6 +1,6 @@
 CC = g++
-CPPFLAGS = -I/opt/local/include 
-LDFLAGS = -L/opt/local/lib
+CPPFLAGS = -I/usr/local/include 
+LDFLAGS = -L/usr/local/lib
 
 OBJS = BoundaryFix.o clipper.o
 

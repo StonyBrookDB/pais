@@ -3,25 +3,20 @@ package edu.emory.cci.pais.api;
 
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.Writer;
 import java.text.DecimalFormat;
 
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.axis.NumberTickUnit;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer;
@@ -29,11 +24,7 @@ import org.jfree.chart.title.TextTitle;
 import org.jfree.chart.title.Title;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.statistics.HistogramDataset;
-import org.jfree.data.statistics.HistogramType;
 import org.sourceforge.jlibeps.epsgraphics.EpsGraphics2D;
-
-import com.sun.java.swing.Painter;
 
 
 /**
@@ -52,26 +43,21 @@ public class FeatureBarChart {
      * @param matrix 
      * @param format Export image format
      */
-    public static File getFeatureBarChart(String title, String subtitle, int width, int height, double [][] fm, String format) {
+    public static File getFeatureBarChart(String path, String title, String subtitle, int width, int height, double [][] fm, String format) {
 /*    	System.out.println("fm length: " + fm.length); 
 		for (int i = 0; i < fm.length; i ++ )
 			for (int j = 0; j < fm[i].length; j ++ )
 				System.out.println("i:j: " + fm[i][j]); */
-        
+        File temp=null;
         CategoryDataset dataset = createDataset(fm);
         JFreeChart chart = createChart(dataset, title);
-       Title secondTitle = new TextTitle(subtitle);
+        Title secondTitle = new TextTitle(subtitle);
         chart.addSubtitle(secondTitle); 
-        
-        File temp = null;
         //ChartPanel chartPanel = new ChartPanel(chart, false);
         //chartPanel.setPreferredSize(new Dimension(width, height));
         //setContentPane(chartPanel);
 		try {
-			temp = File.createTempFile("_" + System.currentTimeMillis(), "." +  format);
-
-		    // Delete temp file when program exits.
-		    temp.deleteOnExit();
+			temp = new File(path);
 	    	FileOutputStream out  = new FileOutputStream(temp);
 			if ("PNG".equalsIgnoreCase(format)){
 				ChartUtilities.writeChartAsPNG(out, chart, width, height);
@@ -274,7 +260,7 @@ public class FeatureBarChart {
     			{19,         990,        1100 }    			
     	};
     	
-    	
+    /*	
     	double [][] fm2 = { 
     			{148868, 0, 0.110}, 
     			{43579, 0.110, 0.220},
@@ -287,8 +273,8 @@ public class FeatureBarChart {
     			{136,        0.880,         0.990 },
     			{19,         0.990,       0.1100 }    			
     	};
-    	
-       File outFile = FeatureBarChart.getFeatureBarChart("Feature Histogram Demo", "Second title", 600, 400, fm, "png");
+    	*/
+       File outFile = FeatureBarChart.getFeatureBarChart("test.jpg","Feature Histogram Demo", "Second title", 600, 400, fm, "jpg");
        System.out.println(outFile.getAbsolutePath());
         
 /*        demo.pack();

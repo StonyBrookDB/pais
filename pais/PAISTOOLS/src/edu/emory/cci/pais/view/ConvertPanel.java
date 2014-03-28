@@ -143,6 +143,7 @@ public class ConvertPanel extends BasicPanel{
 	    	TengUtils.openDir(outputPathField.getText());
 		}catch(Exception e)
 		{
+			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, "convert failed!", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}

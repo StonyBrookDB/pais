@@ -109,8 +109,15 @@ public class ImageProducer implements Runnable, TileFolder {
 		}
 
 		Dimension dimension = imageFileData.getFileDimension(imageFile);
+		if(dimension!=null)
+		{
 		result.setWidth(dimension.width);
 		result.setHeight(dimension.height);	
+		}
+		else
+		{
+			System.out.println("dimension gaining failed!");
+		}
 		
 		imageDAO.persist(result);
 		List<File> tilesetFolders = getTileFolders(imageFile);
