@@ -96,6 +96,7 @@ public class WebAPI {
 	
 	// e.g.: /images/list
 	String query_getImageUids = queries.getQuery("getImageUids");
+	String query_getCompletePaisUids = queries.getQuery("getCompletePaisUids");
 	String query_getImageUidsByPatientId = queries.getQuery("getImageUidsByPatientId");
 	String query_getImageUidsByStudyName = queries.getQuery("getImageUidsByStudyName");
 	String query_getImageDetails = queries.getQuery("getImageDetails");

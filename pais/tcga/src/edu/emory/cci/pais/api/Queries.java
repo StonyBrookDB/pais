@@ -121,6 +121,12 @@ public class Queries {
 		" WHERE role = ? ";		
 		map.put(name,query);
 		
+		name = "getCompletePaisUids";
+		query = 
+		"SELECT PAIS_UID "
+		+ "FROM PAIS.COLLECTION "
+		+ " WHERE PAIS_UID LIKE ?";
+		
 		/**
 		 * Return All image reference UIDS 
 		 */
