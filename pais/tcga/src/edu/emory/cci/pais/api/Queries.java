@@ -271,10 +271,17 @@ public class Queries {
 			"       DB2GSE.ST_Contains(DB2GSE.ST_Polygon( CAST (? AS VARCHAR(400) ), 100), polygon ) =1";		
 		map.put(name, query);
 		
-		name ="getBoundariesFromImage";
+		name ="getHumanBoundariesFromImage";
 		query = 
 			"SELECT pais_uid, pais.plgn2str(m.polygon) AS boundary " +
-			"FROM   pais.markup_polygon m " +
+			"FROM   pais.markup_polygon_human m " +
+			"WHERE  m.pais_uid  = ?";		
+		map.put(name, query);
+		
+		name ="getAlgorithmBoundariesFromImage";
+		query = 
+			"SELECT pais_uid, pais.plgn2str(m.polygon) AS boundary " +
+			"FROM   pais.markup_polygon_algorithm m " +
 			"WHERE  m.pais_uid  = ?";		
 		map.put(name, query);
 		

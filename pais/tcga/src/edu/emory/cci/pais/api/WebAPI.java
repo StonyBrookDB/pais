@@ -60,7 +60,8 @@ public class WebAPI {
 	String query_getBoundariesFromTile = queries.getQuery("getBoundariesFromTile");
 	String query_getBoundariesFromRectangleFromTile = queries.getQuery("getBoundariesFromRectangleFromTile");
 	String query_getBoundariesFromPolygon = queries.getQuery("getBoundariesFromPolygon");
-	String query_getBoundariesFromImage = queries.getQuery("getBoundariesFromImage");
+	String query_getAlgorithmBoundariesFromImage = queries.getQuery("getAlgorithmBoundariesFromImage");
+	String query_getHumanBoundariesFromImage = queries.getQuery("getHumanBoundariesFromImage");
 	String query_getBoundariesOfPointFromTile = queries.getQuery("getBoundariesOfPointFromTile");
 	String query_getIntersectionRatio = queries.getQuery("getIntersectionRatio");
 	
@@ -419,6 +420,7 @@ public class WebAPI {
 	@Path("/pais/markups/boundaries/image")
 	public Response getBoundariesFromImage(
 			@MatrixParam("paisuid") String paisuid,
+			@DefaultValue("algorithm") @MatrixParam("type") String type,
 			@DefaultValue("1") @QueryParam("samplingrate") int samplingRate, 
 			@DefaultValue("html") @MatrixParam("format") String format){
 
@@ -427,11 +429,23 @@ public class WebAPI {
 			  String content = "paisuid without sequence number parameters are mandatory" +"\n" + "Ex, /pais/markups/boundaries/image;paisuid=TCGA-27-1836-01Z-DX2_20x_20x_NS-MORPH;";
 			  return Response.ok(content).type(MediaType.TEXT_PLAIN).build();
 		   }
-		   
+		    
 			Properties props = new Properties();
+			
 			props.put("1", paisuid);	
 			// System.out.println(pais_uid + ", " +  tilename);
-			PreparedStatement pstmt = manager.setPreparedStatementAndParams("getBoundariesFromPolygon", query_getBoundariesFromPolygon, props);			
+			PreparedStatement pstmt;	
+			
+			if(!type.equalsIgnoreCase("algorithm"))
+		    {
+				pstmt = manager.setPreparedStatementAndParams("getHumanBoundariesFromImage", query_getHumanBoundariesFromImage, props);	
+		    }
+			else
+			{
+				System.out.println(query_getAlgorithmBoundariesFromImage);
+				pstmt = manager.setPreparedStatementAndParams("getAlgorithmBoundariesFromImage", query_getAlgorithmBoundariesFromImage, props);	
+			};
+			
 			ResultSet rs = APIHelper.getResultSetFromPreparedStatement(pstmt);  
 				
 			
