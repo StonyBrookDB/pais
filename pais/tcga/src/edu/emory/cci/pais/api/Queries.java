@@ -705,11 +705,20 @@ public class Queries {
 		query = 
 		" SELECT CONCAT (L.FOLDER, I.NAME) " +
 	    " FROM PI.IMAGE I, PI.LOCATION L,PAIS.COLLECTION C" +
-	    " WHERE I.LOCATION_ID = L.ID AND C.COLLECTION_UID=substr(I.IMAGEREFERENCE_UID,1,23) AND " +
-	    " C.PAIS_UID = ? ";
+	    " WHERE C.PAIS_UID = ? AND  I.LOCATION_ID = L.ID AND C.COLLECTION_UID=substr(I.IMAGEREFERENCE_UID,1,23)";
 		map.put(name, query);
 		
+		name = "getImageReferenceUIDbyPAISUID";
+		query = 
+		" SELECT I.IMAGEREFERENCE_UID FROM PI.IMAGE I,PAIS.COLLECTION C"
+		+ " WHERE C.PAIS_UID = ? AND C.COLLECTION_UID=substr(I.IMAGEREFERENCE_UID,1,23)";
+		map.put(name, query);
 		
+		name = "insertRegionHistory";
+		query = 
+		" insert into pi.regionhistory(imagereference_uid,startx,starty,width,height,region,requesttime) "
+		+ " values(?,?,?,?,?,DB2GSE.ST_Polygon( CAST (? AS VARCHAR(400) ), 1),CURRENT_TIMESTAMP)";
+		map.put(name, query);
 		
 		name = "getThumbnailImageByTilename";
 		query = 
