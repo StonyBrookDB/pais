@@ -1,0 +1,39 @@
+
+UML Model Changes:
+============================================================
+Logical Model: MicroAIM -> PAIS
+Package name: edu.emory.cci.microaim -> edu.emory.cci.pais
+Class: MicroAIM -> PAIS
+PAIS/@uniqueIdentifier:  PAIS@uid
+PAIS/@MicroAIMVersion -> PAIS/@paisVersion
+
+Region class:  add @name attribute
+
+XML Schema:
+============================================================
+Element: MicroAIM -> PAIS
+Namespace: MicroAIM -> PAIS
+PAIS element: MicroAIMVersion -> paisVersion
+              uniqueIdentier -> uid
+
+Region: add name attribute
+
+=============================================================
+Tables:
+
+Table prefix: AVP -> PAIS
+MICROAIM_UNIQUEIDENTIFIER -> PAIS_UID
+MICROAIM -> PAIS
+
+
+
+
+ 
+
+
+
+
+
+
+
+

@@ -1,0 +1,1 @@
+C:\Develop\jaxb-ri-20101119\bin>xjc  -d Z:\Projects\MicroAIM\subversion\API\jaxb_pais\src -p edu.emory.cci.pais.model Z:\Projects\MicroAIM\subversion\Schema\pais.xsd

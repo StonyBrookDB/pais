@@ -1,0 +1,58 @@
+- Measurement unit
+  UCUM defines a set of standard units. However, for image analysis, lots of computations are based on pixels, which may
+  have units not in UCUM. We need to provide unit representation even without UCUM.
+
+- Name for Annotation and Markup
+  One markup may have different annotations. To differentiate that, users can provide a "name" attribute for annotations.
+  Similarly, for the same region of interest, users may have multiple markups (e.g., masks), and they can be differentiated 
+  by a "name" attribute as well. 
+
+- Coordinates for Mask
+  The default mask is aligned with the region, e.g., its (x0, y0) coordinate is the same as the region. In reality, the mask
+  may be placed at any location. Thus a mask location (top-left corner coordinate is needed.
+
+
+- Different formats for coordinate representation
+  We currently use SVG based representation for coordinates. To accurately represent small and precise objects the 
+  boundary steps (delta_x, delta_y) are limited to one pixel. A chain code provides an extremely compact representation 
+  for this sequence that can be used to reconstruct the original boundary with negligible cost. For example, the sequence 
+  (7562, 501), (7563, 500), (7563, 499) can instead be represented as (7562, 501), (1, -1), (0, -1). Only two bits are 
+  required to represent the possibilities {-1, 0, 1} and so two vertices can be accommodated per byte.
+  We need to differentiate  representation methods for representing coordinates, e.g., a "representation" attribute. 
+
+
+-DateTime
+  We need to explicitly model time for studies, since these are needed for comparing studies on different timepoints.
+  Image acquistion date time may not be proper.
+
+-Sub Regions/Tile information
+  A large document (e.g., annotations for the whole slide) may include title information for spatial partion purpose. 
+  Currently we have region (relative to the original image), and all the markups are based on the relative coordinates 
+  based on the region. To divide the region for a single annotation, we may need to provide another spatial partion 
+  object for such purpose.
+  Tile number in the region. 
+
+-Provenance: seperate and link back.
+ Provenance will be promoted to a direct associated class for MicroAIM class, so we only need to supply the provenance 
+ (algorithm/parameter info) once if it applies to all annotations or markups. 
+ scope: (individual, markup, calculation).  
+ 
+
+
+-A Collection class we be added.  
+ A collection is a group of items of the same type, gathered for display or study, e.g., an algorithm validation experiment. 
+For example, a collection can be a set of annotations from different algorithms or parameters based on the same image. 
+A role (e.g., ground truth; starting point) and sequence attribute is needed. 
+
+
+-Remove connection between Observation and Rating
+
+-MultiplePolygon
+
+- Observations:
+  Not: percent Tumor Nuclei
+  1. Zonal necrosis: Not present, present, abudant
+  2. Internal Structure: Soft Tissue Rating: 1.0
+  3. 
+  
+

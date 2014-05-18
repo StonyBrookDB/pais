@@ -1,0 +1,33 @@
+Updated: 2010.12.05
+Created: 2010.12.05
+
+UIDs needed for global objects (User, Provenance, Algorithm)
+
+Provenance:
+	provenance@UID needed
+	provenance may be changed to AnalyticalProvenance
+
+User: UID needed
+
+Markup: 
+	name needs coding
+Grouping attribute to group markup objects
+
+Study/Experiment needed
+
+Specimen needs more attributes
+
+Image compression information helpful
+
+
+HL7 Harmonization
+
+
+
+
+
+
+
+
+
+
