@@ -60,7 +60,8 @@ public class WebAPI {
 	String query_getBoundariesFromTile = queries.getQuery("getBoundariesFromTile");
 	String query_getBoundariesFromRectangleFromTile = queries.getQuery("getBoundariesFromRectangleFromTile");
 	String query_getBoundariesFromPolygon = queries.getQuery("getBoundariesFromPolygon");
-	String query_getBoundariesFromImage = queries.getQuery("getBoundariesFromImage");
+	String query_getAlgorithmBoundariesFromImage = queries.getQuery("getAlgorithmBoundariesFromImage");
+	String query_getHumanBoundariesFromImage = queries.getQuery("getHumanBoundariesFromImage");
 	String query_getBoundariesOfPointFromTile = queries.getQuery("getBoundariesOfPointFromTile");
 	String query_getIntersectionRatio = queries.getQuery("getIntersectionRatio");
 	
@@ -96,6 +97,7 @@ public class WebAPI {
 	
 	// e.g.: /images/list
 	String query_getImageUids = queries.getQuery("getImageUids");
+	String query_getCompletePaisUids = queries.getQuery("getCompletePaisUids");
 	String query_getImageUidsByPatientId = queries.getQuery("getImageUidsByPatientId");
 	String query_getImageUidsByStudyName = queries.getQuery("getImageUidsByStudyName");
 	String query_getImageDetails = queries.getQuery("getImageDetails");
@@ -109,6 +111,8 @@ public class WebAPI {
 	String query_getSubRegionImageFromPAISUID = queries.getQuery("getSubRegionImageFromPAISUID");
 	String query_getImageLocationPath = queries.getQuery("getImageLocationPath");
 	String query_getImageLocationPathBypaisuid = queries.getQuery("getImageLocationPathByPAISUID");
+	String query_getImageReferenceUIDbyPAISUID = queries.getQuery("getImageReferenceUIDbyPAISUID");
+	String query_insertRegionHistory = queries.getQuery("insertRegionHistory");
 	
 	// e.g.: /images/thumbnail
 	String query_getThumbnailImageByTilename = queries.getQuery("getThumbnailImageByTilename");
@@ -418,6 +422,7 @@ public class WebAPI {
 	@Path("/pais/markups/boundaries/image")
 	public Response getBoundariesFromImage(
 			@MatrixParam("paisuid") String paisuid,
+			@DefaultValue("algorithm") @MatrixParam("type") String type,
 			@DefaultValue("1") @QueryParam("samplingrate") int samplingRate, 
 			@DefaultValue("html") @MatrixParam("format") String format){
 
@@ -426,11 +431,23 @@ public class WebAPI {
 			  String content = "paisuid without sequence number parameters are mandatory" +"\n" + "Ex, /pais/markups/boundaries/image;paisuid=TCGA-27-1836-01Z-DX2_20x_20x_NS-MORPH;";
 			  return Response.ok(content).type(MediaType.TEXT_PLAIN).build();
 		   }
-		   
+		    
 			Properties props = new Properties();
+			
 			props.put("1", paisuid);	
 			// System.out.println(pais_uid + ", " +  tilename);
-			PreparedStatement pstmt = manager.setPreparedStatementAndParams("getBoundariesFromPolygon", query_getBoundariesFromPolygon, props);			
+			PreparedStatement pstmt;	
+			
+			if(!type.equalsIgnoreCase("algorithm"))
+		    {
+				pstmt = manager.setPreparedStatementAndParams("getHumanBoundariesFromImage", query_getHumanBoundariesFromImage, props);	
+		    }
+			else
+			{
+				System.out.println(query_getAlgorithmBoundariesFromImage);
+				pstmt = manager.setPreparedStatementAndParams("getAlgorithmBoundariesFromImage", query_getAlgorithmBoundariesFromImage, props);	
+			};
+			
 			ResultSet rs = APIHelper.getResultSetFromPreparedStatement(pstmt);  
 				
 			
@@ -1209,7 +1226,8 @@ public class WebAPI {
 			@MatrixParam("x") String x,@MatrixParam("y") String y,
 			@MatrixParam("w") String w,@MatrixParam("h") String h,
 			@DefaultValue("PNG") @MatrixParam("format") String format,
-			@DefaultValue("false") @MatrixParam("attachment") String attachment) {
+			@DefaultValue("false") @MatrixParam("attachment") String attachment
+			) {
 		
 		if(x == null || y==null || w==null ||h==null)
 		{
@@ -1225,24 +1243,36 @@ public class WebAPI {
 		Properties props = new Properties();
 		PreparedStatement pstmt=null;
 		//imageuid as parameter
-		String id = null;
-		if (uid != null ){
-			id = uid;
-		props.put("1", uid);		
-	    pstmt = manager.setPreparedStatementAndParams("getImageLocationPath", query_getImageLocationPath, props);	
+
+		if (uid == null ){
+			props.clear();
+			props.setProperty("1", puid);
+			pstmt = manager.setPreparedStatementAndParams("getImageReferenceUIDbyPAISUID", query_getImageReferenceUIDbyPAISUID, props);
+			try{
+				ResultSet rs = pstmt.executeQuery();
+				if(rs.next())
+					uid = rs.getString(1);
+				rs.close();
+				pstmt.close();
+			}catch(Exception e)
+			{
+			  return Response.ok("image path can not get correctlly found!").type(MediaType.TEXT_PLAIN).build();
+			}
+			if(uid == null)
+				return Response.ok("image path can not get correctlly found!").type(MediaType.TEXT_PLAIN).build();
 		}
-		else { // puid != null
-	    id = puid;
-		props.put("1", puid);
-	    pstmt = manager.setPreparedStatementAndParams("getImageLocationPathbypaisuid", query_getImageLocationPathBypaisuid, props);	
-	    }
 		
+		props.clear();
+		props.put("1", uid);		
+	    pstmt = manager.setPreparedStatementAndParams("insertRegionHistory", query_getImageLocationPath, props);
+	    
 		String filepath=null;
 		try{
 		ResultSet rs = pstmt.executeQuery();
 		if(rs.next())
 			filepath = rs.getString(1);
 		rs.close();
+		pstmt.close();
 		}catch(Exception e)
 		{
 			return Response.ok("image path can not get correctlly found!").type(MediaType.TEXT_PLAIN).build();
@@ -1250,7 +1280,7 @@ public class WebAPI {
 		if(filepath==null||new File(filepath).exists()==false)
 			return Response.ok("image "+filepath+" not found!").type(MediaType.TEXT_PLAIN).build();
 		
-		String tmpfilename = System.getProperty("java.io.tmpdir")+File.separator+id+"_"+x+"_"+y+"_"+w+"_"+h+"."+format;
+		String tmpfilename = System.getProperty("java.io.tmpdir")+File.separator+uid+"_"+x+"_"+y+"_"+w+"_"+h+"."+format;
 		int dx ;
 		int dy ;
 		int dw ;
@@ -1265,6 +1295,29 @@ public class WebAPI {
 		{
 			return getErrPath();
 		}
+		StringBuffer buf = new StringBuffer("polygon((");
+		buf.append(dx + " " + dy + ",");
+		buf.append((dx+dw) + " " + dy + ",");
+		buf.append((dx+dw) + " " + (dy+dh) + ",");
+		buf.append(dx + " " + (y+h) + ",");
+		buf.append(dx + " " + dy + "))");
+		
+		props.clear();
+		props.setProperty("1", uid);
+		props.setProperty("2", dx+"");
+		props.setProperty("3", dy+"");
+		props.setProperty("4", dw+"");
+		props.setProperty("5", dh+"");
+		props.setProperty("6", buf.toString());
+        pstmt = manager.setPreparedStatementAndParams("insertRegionHistory", query_insertRegionHistory, props);
+
+		try{
+		   pstmt.execute();
+		   pstmt.close();
+		}catch(Exception e)
+		{
+		}
+		
 		OpenSlideToolsBin.getRegionImage(filepath, tmpfilename, format, dx, dy, dw,dh);
 		//OpenSlideTools.getInstance().getRegionImage(filepath, tmpfilename, format, dx, dy, dw,dh);
 		Response rs;
@@ -1430,7 +1483,7 @@ public class WebAPI {
 					props.put("1", imageuid);	
 
 					
-					PreparedStatement pstmt = manager.setPreparedStatementAndParams("getImageLocationPathbypaisuid", query_getImageLocationPathBypaisuid, props);	
+					PreparedStatement pstmt = manager.setPreparedStatementAndParams("getImageLocationPathByPAISUID", query_getImageLocationPathBypaisuid, props);	
 					String filepath=null;
 					
 					try{

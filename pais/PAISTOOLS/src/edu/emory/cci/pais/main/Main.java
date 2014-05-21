@@ -50,7 +50,6 @@ public static void  main(String[] args){
    		{
    			System.out.println("the first argument must be the work type\n e.g. java -jar paistools.jar loadmanager/converter/uploader <otherargs>");
 			System.exit(0);
-   			
    		}
 
        }

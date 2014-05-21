@@ -1,0 +1,52 @@
+What's new:
+
+New classes:
+-------------------------------
+Collection
+
+MultiPolygon
+MultiLine
+
+Ranking -> Quantification
+Nominal
+Ordinal
+Interval
+Ratio
+
+AnnotationReferene: external annotations, such as pathology annotations, molecular annotations, etc.
+
+
+Added attributes: 
+-------------------------------
+WholeSlideImageReference: uri
+Project: uid
+Group:   uid
+Markup:  uid
+Annotation: uid
+Markup: uid
+
+
+Name for caculation
+Name for observation
+Name for charateristic
+
+MicroscopyImageReference: zaxisResolution, zaxisCoordinate
+
+Polyline, Polygon added format attribute, 
+
+
+Changed:
+--------------------------------
+ucumname -> unitOfMeasure
+GeometryShape assocation: 0...1 GeometricShapeCollection -> GeometricShape
+Equipment id: String to Integer
+Segmentation: instanceUID -> sopInstanceUID
+Study -> ImageStudy
+Series -> ImageSeries
+
+
+Removed:
+----------------------------------
+Rating, NominalRating, OrdinalRating classes removed
+Calculation: uid removed
+

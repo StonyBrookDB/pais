@@ -246,7 +246,7 @@ int getRegionImage(int arg,char ** args)
 	const char * fformat1 = args[3]; // jpeg, jpg, gif, png
         char fformat[10];
         strcpy(fformat,fformat1);
-	const char * fname = args[1];	// svs file name
+	const char * fname = args[1];	// wsi file name
 	char sfname[256];	// ppm file name
 	const char * tfname = args[2];	// output file name
 	// coordinate variables

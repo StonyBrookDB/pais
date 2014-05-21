@@ -511,6 +511,12 @@ function gettiledImage(type){
         else
         {
         var f = $('#format').val();
+        if(f=='tiff')
+        {
+          var url = "/tcga/images/image/window;imageuid="+uid+";x="+x+";y="+y+";w="+w+";h="+h+";format="+f;
+          window.open(url);
+          return true;
+        }
         if(type==1)
         {
         var url = "/tcga/images/image/window;imageuid="+uid+";x="+x+";y="+y+";w="+w+";h="+h+";format="+f;
@@ -575,7 +581,7 @@ function gettiledImage(type){
 				    	<label for="format">format:</label>
 				        <select id="format" name="format">
 				          <option value="jpg">jpg</option>
-				          <option value="jpeg">jpeg</option>
+				          <option value="tiff">tiff</option>
 				          <option value="png">png</option>
 				          <option value="gif">gif</option>
 				        </select>

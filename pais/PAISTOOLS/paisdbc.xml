@@ -1,6 +1,6 @@
 <dbconfig>
   <db>
-        <host>192.168.1.103</host>
+        <host>192.168.32.150</host>
         <port>50000</port>
         <database>pais</database>
         <username>db2inst1</username>

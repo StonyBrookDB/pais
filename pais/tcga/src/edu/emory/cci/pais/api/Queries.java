@@ -121,6 +121,12 @@ public class Queries {
 		" WHERE role = ? ";		
 		map.put(name,query);
 		
+		name = "getCompletePaisUids";
+		query = 
+		"SELECT PAIS_UID "
+		+ "FROM PAIS.COLLECTION "
+		+ " WHERE PAIS_UID LIKE ?";
+		
 		/**
 		 * Return All image reference UIDS 
 		 */
@@ -265,10 +271,17 @@ public class Queries {
 			"       DB2GSE.ST_Contains(DB2GSE.ST_Polygon( CAST (? AS VARCHAR(400) ), 100), polygon ) =1";		
 		map.put(name, query);
 		
-		name ="getBoundariesFromImage";
+		name ="getHumanBoundariesFromImage";
 		query = 
 			"SELECT pais_uid, pais.plgn2str(m.polygon) AS boundary " +
-			"FROM   pais.markup_polygon m " +
+			"FROM   pais.markup_polygon_human m " +
+			"WHERE  m.pais_uid  = ?";		
+		map.put(name, query);
+		
+		name ="getAlgorithmBoundariesFromImage";
+		query = 
+			"SELECT pais_uid, pais.plgn2str(m.polygon) AS boundary " +
+			"FROM   pais.markup_polygon_algorithm m " +
 			"WHERE  m.pais_uid  = ?";		
 		map.put(name, query);
 		
@@ -692,11 +705,20 @@ public class Queries {
 		query = 
 		" SELECT CONCAT (L.FOLDER, I.NAME) " +
 	    " FROM PI.IMAGE I, PI.LOCATION L,PAIS.COLLECTION C" +
-	    " WHERE I.LOCATION_ID = L.ID AND C.COLLECTION_UID=substr(I.IMAGEREFERENCE_UID,1,23) AND " +
-	    " C.PAIS_UID = ? ";
+	    " WHERE C.PAIS_UID = ? AND  I.LOCATION_ID = L.ID AND C.COLLECTION_UID=substr(I.IMAGEREFERENCE_UID,1,23)";
 		map.put(name, query);
 		
+		name = "getImageReferenceUIDbyPAISUID";
+		query = 
+		" SELECT I.IMAGEREFERENCE_UID FROM PI.IMAGE I,PAIS.COLLECTION C"
+		+ " WHERE C.PAIS_UID = ? AND C.COLLECTION_UID=substr(I.IMAGEREFERENCE_UID,1,23)";
+		map.put(name, query);
 		
+		name = "insertRegionHistory";
+		query = 
+		" insert into pi.regionhistory(imagereference_uid,startx,starty,width,height,region,requesttime) "
+		+ " values(?,?,?,?,?,DB2GSE.ST_Polygon( CAST (? AS VARCHAR(400) ), 1),CURRENT_TIMESTAMP)";
+		map.put(name, query);
 		
 		name = "getThumbnailImageByTilename";
 		query = 

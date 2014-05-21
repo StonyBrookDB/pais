@@ -1,0 +1,8 @@
+create table MICCAI.mask(
+ user VARCHAR(16) NOT NULL,
+ x INT NOT NULL,
+ y INT NOT NULL,
+ PRIMARY KEY (user, x, y)
+)
+COMPRESS YES
+IN SPATIALTBS32K;

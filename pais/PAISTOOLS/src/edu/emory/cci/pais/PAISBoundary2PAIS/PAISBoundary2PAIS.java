@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 
 import edu.emory.cci.pais.util.TengUtils;
 /**
@@ -18,10 +19,7 @@ import edu.emory.cci.pais.util.TengUtils;
  *
  */
 public class PAISBoundary2PAIS {
-	
-	private int maxfilenum = 1000;
-	private File[] files = new File[maxfilenum];
-	private int filenum = 0;
+
 	private String inpath;
 	private String outpath;
 	private String tmpdir;
@@ -123,9 +121,8 @@ public class PAISBoundary2PAIS {
 		//use fix tools BoundaryFix1 and BoundaryFix2 fix input file
 		boundaryFix(B2Poutput1.getAbsolutePath(),B2Poutput2.getAbsolutePath());
 		//get all the fixed files
-		fetchfiles(B2Poutput2.getAbsolutePath());
-		//add header for each file and out put them in the specific folder and then delete the temporary directories
-		genOutfiles();
+		ArrayList<File> filelist = fetchfiles(B2Poutput2.getAbsolutePath());
+		genOutfiles(filelist);
 		TengUtils.deleteDir(B2Poutput2);
 		TengUtils.deleteDir(B2Poutput1);
 		TengUtils.deleteDir(B2Ptmpdir);
@@ -158,8 +155,8 @@ public class PAISBoundary2PAIS {
 		this.inpath=inpath;
 		this.outpath=outpath;
 		this.tmpdir=System.getProperty("java.io.tmpdir");
-		fetchfiles(inpath);
-		genOutfiles();
+		ArrayList<File> filelist = fetchfiles(inpath);
+		genOutfiles(filelist);
 	}
 	
 	
@@ -182,28 +179,34 @@ public class PAISBoundary2PAIS {
 	}
 	
    
-	public void fetchfiles(String path)
+	public ArrayList<File> fetchfiles(String path)
 	{
 		System.out.println(path);
-		File filelist = new File(path);
-		if(filelist.isFile()&&filelist.getName().endsWith(".txt"))files[filenum++]=filelist;
-		else if(filelist.isDirectory())
+		ArrayList<File> filelist = new ArrayList<File>();
+		File file = new File(path);
+		if(file.isFile()&&file.getName().endsWith(".txt"))
 		{
-			for(File f:filelist.listFiles())
-			   fetchfiles(f.getAbsolutePath());
+			filelist.add(file);
 		}
+		else if(file.isDirectory())
+		{
+			for(File f:file.listFiles())
+			{
+				filelist.addAll(fetchfiles(f.getAbsolutePath()));
+			}
+		}
+		return filelist;
 	}
 	//add header to each file in the files array
-	public void genOutfiles()
+	public void genOutfiles(ArrayList<File> filelist)
 	{
-		int i = 0;
-		while(files[i]!=null)
+		for(File file:filelist)
 		{
 			
 			try {
-				BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(outpath+"/"+files[i].getName().substring(0,files[i].getName().lastIndexOf(".txt"))+".svs-0000000000-0000000000.ppm.grid4.mat.grid4.txt"))));
+				BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(outpath+"/"+file.getName().substring(0,file.getName().lastIndexOf(".txt"))+".svs-0000000000-0000000000.ppm.grid4.mat.grid4.txt"))));
 				writer.write(prefix);
-				BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(files[i].getAbsoluteFile())));
+				BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file.getAbsoluteFile())));
 				String line;
 				String truncline;
 					
@@ -218,14 +221,13 @@ public class PAISBoundary2PAIS {
 				 
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
-					System.out.println("read file "+files[i].getName()+" failed!");
+					System.out.println("read file "+file.getName()+" failed!");
 					e.printStackTrace();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}	
-			 System.out.println(files[i].getName()+" done");
-			 i++;
+			 System.out.println(file.getName()+" done");
     		}
 	}
 	

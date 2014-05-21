@@ -22,11 +22,12 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
-
-<div id="markupdiv" style="background:url('include/img/test.jpg'); width:1249px; height:7400px; position:absolute; left:100px; top:0px;">
-<object height="100%" width="100%" type="image/svg+xml" data="/tcga/pais/markups/boundaries/window;paisuid=TCGA-02-0001-01Z-00-DX1_20x_20x_NS-MORPH_1;x=16033;y=10187;w=1249;h=7400;samplingrate=1;format=svg" style="position:absolute; left:0px; top:0px;" > 
+<div style="background:url(img/test.jpg); width:4064px; height:3012px; position:absolute; left:0px; top:0px;">
+<object height="100%" width="100%" type="image/svg+xml" data="/tcga/pais/markups/boundaries/image;paisuid=mask_20x_20X_AVP_testuser-testalgo_0;type=algorithm;format=svg" style="position:absolute; left:0px; top:0px;">
 </object>
-</div> 
+<object height="100%" width="100%" type="image/svg+xml" data="/tcga/pais/markups/boundaries/image;paisuid=mask_20x_20X_AVP_testuser-testalgo_1;type=algorithm;format=svg" style="position:absolute; left:0px; top:0px;">
+</object>
+</div>
 </body>
 
 </html>

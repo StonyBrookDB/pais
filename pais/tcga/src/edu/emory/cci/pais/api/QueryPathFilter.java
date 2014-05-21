@@ -22,7 +22,7 @@ public class QueryPathFilter implements ContainerRequestFilter {
 				"images/list/imageuids", "images/list/tilenames", "images/list/patients", "images/list/tilenameofpoint", 
 				"images/image/tile", "images/image/window", "images/image/wsi", "images/thumbnail/tile", "images/thumbnail/wsi", "images/overlay/tile", "images/overlay/window", "images/similarity/feature", "images/similarity/cluster", "images/similarity/getImageFromFile",
 				"images/image/tiling/positions", "images/image/dimension","images/thumbnail/tiledimage","images/image/imagereferences","pais/list/summary","patient/features","pais/list/tile/regions",
-				"pais/markups/humanannotation/annotation/add","pais/markups/humanannotation/annotation/get"
+				"pais/markups/humanannotation/annotation/add","pais/markups/humanannotation/annotation/get","pais/markups/boundaries/image"
 		};
 		if (!requestPath.equals("")) {
 			StringTokenizer st = new StringTokenizer(requestPath,";");
