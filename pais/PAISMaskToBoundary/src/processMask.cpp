@@ -42,7 +42,12 @@ int main (int argc, char **argv){
 	}
 	
 	/* Read the input mask */
-	inputImg = imread(argv[1], CV_8UC1);
+	Mat rawImg = imread(argv[1]);
+	Mat img_gray;
+	cvtColor(rawImg,img_gray,CV_RGB2GRAY); /* Convert the image to grayscale */
+	inputImg = img_gray > 128; /* Convert the grayscale into binary image with 
+			fixed threshold to 128 */
+
 	if (inputImg.data > 0) {
 		Mat temp = Mat::zeros(inputImg.size() + Size(2,2), inputImg.type());
 		copyMakeBorder(inputImg, temp, 1, 1, 1, 1, BORDER_CONSTANT, 0);
