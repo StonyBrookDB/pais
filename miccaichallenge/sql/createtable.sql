@@ -1,8 +1,22 @@
-create table MICCAI.mask(
+DROP TABLE MICCAI.usermask;
+DROP TABLE MICCAI.humanmask;
+
+CREATE TABLE MICCAI.usermask(
  user VARCHAR(16) NOT NULL,
+ image VARCHAR(32) NOT NULL,
  x INT NOT NULL,
  y INT NOT NULL,
- PRIMARY KEY (user, x, y)
+ PRIMARY KEY (user, image, x, y)
+)
+COMPRESS YES
+IN SPATIALTBS32K;
+
+
+CREATE TABLE MICCAI.humanmask(
+ image VARCHAR(32) NOT NULL,
+ x INT NOT NULL,
+ y INT NOT NULL,
+ PRIMARY KEY (image, x, y)
 )
 COMPRESS YES
 IN SPATIALTBS32K;
