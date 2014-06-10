@@ -1,5 +1,7 @@
 DROP TABLE MICCAI.usermask;
 DROP TABLE MICCAI.humanmask;
+DROP TABLE MICCAI.classification;
+DROP TABLE MICCAI.submissiontimestamp;
 
 CREATE TABLE MICCAI.usermask(
  user VARCHAR(16) NOT NULL,
@@ -20,3 +22,21 @@ CREATE TABLE MICCAI.humanmask(
 )
 COMPRESS YES
 IN SPATIALTBS32K;
+
+
+CREATE TABLE MICCAI.classification (
+ user VARCHAR(16) NOT NULL,
+ image VARCHAR(32) NOT NULL,
+label VARCHAR(5)
+)
+IN SPATIALTBS32K;
+
+
+CREATE TABLE MICCAI.submissiontimestamp (
+user VARCHAR(16) NOT NULL,
+timestamp CHAR(14) NOT NULL
+)
+IN SPATIALTBS32K;
+
+
+

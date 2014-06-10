@@ -61,14 +61,14 @@ import java.io.*;
 import java.util.StringTokenizer;
 public class MaskParser {
 
-	public String getFilePrefix(String inputFile){
+	public static String getFilePrefix(String inputFile){
 		
 		int location = inputFile.lastIndexOf(File.separator);
 		int extLocation = inputFile.lastIndexOf(".");
 		return inputFile.substring(location+1, extLocation);
 	}
 	
-	public void parseMask (String user, String inputFile, String outputFile, boolean isHuman){
+	public static void parseMask (String user, String inputFile, String outputFile, boolean isHuman){
 		BufferedReader br;
 		int width;
 		int height;
@@ -102,6 +102,7 @@ public class MaskParser {
 				count++;
 			}
 			bw.close();
+			br.close();
 		} catch (Exception e){
 			e.printStackTrace();
 		}
