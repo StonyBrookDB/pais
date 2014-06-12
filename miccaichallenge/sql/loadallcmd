@@ -1,0 +1,10 @@
+-- change tcga to the right DB name
+db2 connect to tcga
+
+db2 -tf timestampload.sql
+
+db2 -tf humanclassificationload.sql
+db2 -tf humansegmentationload.sql
+
+db2 -tf userclassificationload.sql
+db2 -tf usersegmentationload.sql
