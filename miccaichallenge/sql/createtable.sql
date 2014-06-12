@@ -39,5 +39,25 @@ timestamp BIGINT NOT NULL
 )
 IN SPATIALTBS32K;
 
+CREATE TABLE MICCAI.maskintersection (
+user VARCHAR(16) NOT NULL,
+image VARCHAR(32) NOT NULL,
+intersection BIGINT NOT NULL,
+PRIMARY KEY (user, image)
+)
+IN SPATIALTBS32K;
+
+CREATE TABLE MICCAI.maskunion (
+user VARCHAR(16) NOT NULL,
+image VARCHAR(32) NOT NULL,
+union BIGINT NOT NULL,
+PRIMARY KEY (user, image)
+)
+IN SPATIALTBS32K;
+
+
+
+
+
 
 
