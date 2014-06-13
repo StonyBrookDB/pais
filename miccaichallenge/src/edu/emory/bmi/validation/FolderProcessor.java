@@ -74,9 +74,9 @@ public class FolderProcessor {
 		ParsingHelper parser = new ParsingHelper();
 		users = parser.getFolders(root);
 		boolean ok = new File(outputRoot).mkdir();
-/*		processClassification(root, outputRoot);
+		processClassification(root, outputRoot);
 		processSegmentation(root, outputRoot);
-		processTimestamp(outputRoot);*/
+		processTimestamp(outputRoot);
 		generateLoadSQL(outputRoot);
 	}
 	

@@ -11,7 +11,7 @@ WHERE  b.user ='user100' AND
 SELECT COUNT(*) FROM
 MICCAI.HUMANMASK a
 WHERE image = 'TCGA-02-0006-01Z-00-DX1';
--)
+
 
 
 -- Do basic count of masks for each image.
@@ -37,11 +37,10 @@ SELECT b.user, a.image, count(*) AS UNION FROM
 MICCAI.HUMANMASK a FULL JOIN MICCAI.USERMASK b ON   a.x = b.x AND a.y = b.y
 WHERE  
       a.image = b.image 
---    AND  b.user ='user100'
 GROUP BY b.user, a.image
 ;
 
--- Find the jacardicofficient
+:)
 
 
 -- Computer Jarcardcofficient
