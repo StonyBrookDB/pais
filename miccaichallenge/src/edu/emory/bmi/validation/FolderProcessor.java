@@ -1,3 +1,65 @@
+/**
+ * https://www.dropbox.com/sh/x0c3kzxlreaj1al/AABJ15yAxGWb51Ew1q-p4lN_a 
+ * For MICCAI, we need to do following things. We assume all data are collected and stored on the server.
+You can sudo to miccai user from "fusheng" user to access testing file folders: 
+sudo -u miccai -s
+cd human
+
+You will see a folder structure:
+
+human/userid/segmentation/timestamp/
+human/userid/classification/timestamp/
+algorithm/userid/classification/timestamp/
+(We either have the algorithm folder to differentiate algorithm from human, or we don't use algorithm folder but know which userid is the domain expert who makes ground truth annotations.
+
+1. What we need to do is that we will create tables (algorithms and human) for storing segmentation results and classification results. We have the tables for segmentation (see examples in github), but not for classification yet. 
+We might also need a submission timestamp table to track the timestamps for the last submission of each user.
+CREATE TABLE MICCAI.usermask...
+CREATE TABLE MICCAI.humanmask...
+CREATE TABLE MICCAI.classification (
+user,
+image,
+label...)...
+CREATE TABLE MICCAI.submissiontimestamp( user, timestamp)...
+
+Each classification folder will have only a single file, containing a label for each image. e.g.: 
+challenge_image1.svs LGG
+challenge_image2.svs GBM
+challenge_image3.svs GBM
+challenge_image4.svs LGG
+
+2. We will need to create a batch loading program to parse all files and have them loaded into tables. We only load results for latest submission (ignore old timestamp folders.)
+
+3. We will need to create WebAPIs to return results and evaluation:
+a. Given a user, return the comparison of the segmentation area from the algorithm with human result for each image. See example SQL in github.
+We can use SQL to pregeneate the results, and return a table, e.g..:
+ challenge_image_name     overlap_percentage  (intersected pixels/total pixels from human mask)   Jaccard_similarity (overlap/union)
+challenge_image1.svs  80%    70%
+We also need to return the result as a WebAPI, e.g.:
+getSegmentationComparison/user=userid;timestamp=
+
+b. WebAPI to sort the results based on overlap_percentage or Jaccard_similarity.
+
+c. Given a user, return the correctness for classification for each image.
+e.g.:  image_uid      label correctness
+challenge_image1.svs    LGG  true
+challenge_image2.svs   GBM  false
+A WebAPI like:
+getClassificationComparison/user=userid;timestamp=
+
+d. Sort above results based on best correctness.
+
+3. We need to create WebAPI to download original files for each timestamp and user.
+e.g.: getSubmissionData/user=userid;timestamp=...
+
+
+These are top priorities. They want to have this ready early June. I have two travels these days and may not have time on this. 
+Once this is working, we can look at mask conversion and have polygons loaded as well. That will be another story.
+
+
+ * 
+ */
+
 package edu.emory.bmi.validation;
 
 import java.io.BufferedWriter;
@@ -10,10 +72,10 @@ public class FolderProcessor {
 	ArrayList<String> users = new ArrayList<String>();
 	public FolderProcessor (String root, String outputRoot){
 		ParsingHelper parser = new ParsingHelper();
-		users = parser.getFolders(root);	
+		users = parser.getFolders(root);
+		boolean ok = new File(outputRoot).mkdir();
 		processClassification(root, outputRoot);
 		processSegmentation(root, outputRoot);
-		//SQLGenerator.userTimestampSQLLoader(outputRoot);
 		processTimestamp(outputRoot);
 	}
 	
@@ -62,16 +124,13 @@ public class FolderProcessor {
 	 */
 	public static void main(String[] args) {
 		
-		String root = "F:\\Projects\\Github\\pais\\miccaichallenge\\test\\human";
-		String outputRoot = "c:\\temp\\miccai";
+		String root = "F:\\Projects\\miccaichallengesampledata";
+		String outputRoot = "c:\\temp\\miccaichallengesampleresult";
 		if (args.length == 3) {
 			root = args[1];
 			outputRoot = args[2];
 		}
 		FolderProcessor processor = new FolderProcessor(root, outputRoot);
-
-		
-
 	}
 
 }

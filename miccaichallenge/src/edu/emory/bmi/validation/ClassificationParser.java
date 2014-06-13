@@ -85,7 +85,7 @@ public class ClassificationParser {
 			while ((strLine = br.readLine()) != null) {
 				st = new StringTokenizer(strLine, token);
 				String image = st.nextToken(token).trim();
-				image = ParsingHelper.generateImageName(image);
+				//image = ParsingHelper.generateImageName(image);
 				String label = st.nextToken(token).trim();				
 				//System.out.println(userId + "," + image + "," + label);
 				bw.write(userId + "," + image + "," + label + "\n");

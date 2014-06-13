@@ -60,11 +60,14 @@ public class SegmentationParser {
 
 				for (int i = 0; i < listOfFiles.length; i++) {
 					String fileName = listOfFiles[i].getName();
-					long timestamp = Long.parseLong(fileName);
-					if (timestamp >latestTimestamp ){
-						latestTimestamp = timestamp; 
+					//Folders are numeric. Skip string based folders, like images, masks for human annotations.
+					if (fileName.substring(0,1).matches("[0-9]") ) {
+						long timestamp = Long.parseLong(fileName);
+						if (timestamp >latestTimestamp ){
+							latestTimestamp = timestamp; 
+						}
+						bw.write(userId +"," + "segmentation," + latestTimestamp + "\n");
 					}
-					bw.write(userId +"," + "segmentation," + latestTimestamp + "\n");
 				}
 				bw.close();
 				fw.close();

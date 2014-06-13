@@ -55,7 +55,7 @@ public class SQLGenerator {
 		StringBuffer strBuf = new StringBuffer("LOAD FROM \"" + timestampFilePath + "\" OF DEL MODIFIED BY COLDEL, \n");
 		strBuf.append("METHOD P (1, 2, 3) MESSAGES ");
 		strBuf.append("\"" + System.getProperty("java.io.tmpdir") + localFileName + "\"\n");  
-		strBuf.append("INSERT INTO MICCAI.submissiontimestamp (user, timestamp) COPY NO INDEXING MODE AUTOSELECT;\n");
+		strBuf.append("INSERT INTO MICCAI.submissiontimestamp (user, type, timestamp) COPY NO INDEXING MODE AUTOSELECT;\n");
 		//System.out.println(strBuf.toString());
 		return strBuf.toString();		
 	}	
