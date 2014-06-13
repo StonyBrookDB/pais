@@ -1,5 +1,6 @@
--- change tcga to the right DB name
-db2 connect to tcga
+%#-- change tcga to the right DB name
+
+db2 connect to sample user db2admin
 
 db2 -tf timestampload.sql
 

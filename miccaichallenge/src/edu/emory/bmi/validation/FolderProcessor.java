@@ -74,9 +74,10 @@ public class FolderProcessor {
 		ParsingHelper parser = new ParsingHelper();
 		users = parser.getFolders(root);
 		boolean ok = new File(outputRoot).mkdir();
-		processClassification(root, outputRoot);
+/*		processClassification(root, outputRoot);
 		processSegmentation(root, outputRoot);
-		processTimestamp(outputRoot);
+		processTimestamp(outputRoot);*/
+		generateLoadSQL(outputRoot);
 	}
 	
 	public boolean processClassification(String root, String outputRoot){
@@ -107,6 +108,31 @@ public class FolderProcessor {
 			sqlBWriter = new BufferedWriter(sqlFWriter);
 			String sql = SQLGenerator.userTimestampSQLLoader(outputRoot);
 			sqlBWriter.append(sql);			
+			sqlBWriter.close();
+			sqlFWriter.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		return true;
+	}
+
+	//Load all commands
+	public boolean generateLoadSQL(String outputRoot){
+		File sqlFile =  new File(outputRoot + File.separator + "loadallcmd");	
+		FileWriter sqlFWriter  = null;
+		BufferedWriter sqlBWriter = null;
+		String script =
+			"# Change 'db2admin' to db2 login with loading permissions\n" + 	
+			"db2 connect to sample user db2admin\n" + 
+			"db2 -tf timestampload.sql\n" + 
+			"db2 -tf humanclassificationload.sql\n" + 
+			"db2 -tf humansegmentationload.sql\n" + 
+			"db2 -tf userclassificationload.sql\n" + 
+			"db2 -tf usersegmentationload.sql\n";
+		try {
+			sqlFWriter = new FileWriter(sqlFile, true);
+			sqlBWriter = new BufferedWriter(sqlFWriter);
+			sqlBWriter.append(script);			
 			sqlBWriter.close();
 			sqlFWriter.close();
 		} catch (IOException e1) {
