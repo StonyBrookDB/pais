@@ -97,7 +97,7 @@ To create tables, run:
 db2 connect to mydb db2user
 db2 -tf createtable.sql
 
-After that, run loadallcmd to load all files into the database. the file contains following 
+After that, run loadallcmd (in the output folder) to load all files into the database. the file contains following 
 commands. Replace database and login info. Change permission to file loadallcmd to executable. 
 ./loadallcmd 
 
