@@ -21,7 +21,7 @@ public class SQLGenerator {
 		String localFileName = "humansegmentationload.log";
 		StringBuffer strBuf = new StringBuffer("LOAD FROM \"" + maskFilePath + "\" OF DEL MODIFIED BY COLDEL, \n");
 		strBuf.append("METHOD P (1, 2, 3) MESSAGES ");
-		strBuf.append("\"" + System.getProperty("java.io.tmpdir") + File.pathSeparator + localFileName + "\"\n");  
+		strBuf.append("\"" + System.getProperty("java.io.tmpdir") + File.separator + localFileName + "\"\n");  
 		strBuf.append("INSERT INTO MICCAI.HUMANMASK (IMAGE, X, Y) COPY NO INDEXING MODE AUTOSELECT;\n");
 		//System.out.println(strBuf.toString());
 		return strBuf.toString();
@@ -31,7 +31,7 @@ public class SQLGenerator {
 		String localFileName = "humansegmentationload.log";
 		StringBuffer strBuf = new StringBuffer("LOAD FROM \"" + maskFilePath + "\" OF DEL MODIFIED BY COLDEL, \n");
 		strBuf.append("METHOD P (1, 2, 3, 4) MESSAGES ");
-		strBuf.append("\"" + System.getProperty("java.io.tmpdir") + File.pathSeparator +localFileName + "\"\n");  
+		strBuf.append("\"" + System.getProperty("java.io.tmpdir") + File.separator +localFileName + "\"\n");  
 		strBuf.append("INSERT INTO MICCAI.USERMASK (USER,IMAGE, X, Y) COPY NO INDEXING MODE AUTOSELECT;\n");
 		//System.out.println(strBuf.toString());
 		return strBuf.toString();
@@ -42,7 +42,7 @@ public class SQLGenerator {
 		String localFileName = "humanclassificationload.log";
 		StringBuffer strBuf = new StringBuffer("LOAD FROM \"" + classificationFilePath + "\" OF DEL MODIFIED BY COLDEL, \n");
 		strBuf.append("METHOD P (1, 2, 3) MESSAGES ");
-		strBuf.append("\"" + System.getProperty("java.io.tmpdir") + File.pathSeparator + localFileName + "\"\n");  
+		strBuf.append("\"" + System.getProperty("java.io.tmpdir") + File.separator + localFileName + "\"\n");  
 		strBuf.append("INSERT INTO MICCAI.CLASSIFICATION (user, image, label) COPY NO INDEXING MODE AUTOSELECT;\n");
 		//System.out.println(strBuf.toString());
 		return strBuf.toString();		
@@ -54,7 +54,7 @@ public class SQLGenerator {
 		String timestampFilePath = outRoot + File.separator +  "submissiontimestamp.txt";
 		StringBuffer strBuf = new StringBuffer("LOAD FROM \"" + timestampFilePath + "\" OF DEL MODIFIED BY COLDEL, \n");
 		strBuf.append("METHOD P (1, 2, 3) MESSAGES ");
-		strBuf.append("\"" + System.getProperty("java.io.tmpdir") + File.pathSeparator + localFileName + "\"\n");  
+		strBuf.append("\"" + System.getProperty("java.io.tmpdir") + File.separator + localFileName + "\"\n");  
 		strBuf.append("INSERT INTO MICCAI.submissiontimestamp (user, type, timestamp) COPY NO INDEXING MODE AUTOSELECT;\n");
 		//System.out.println(strBuf.toString());
 		return strBuf.toString();		
