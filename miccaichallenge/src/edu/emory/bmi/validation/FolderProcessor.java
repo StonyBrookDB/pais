@@ -152,10 +152,18 @@ public class FolderProcessor {
 		
 		String root = "F:\\Projects\\miccaichallengesampledata";
 		String outputRoot = "c:\\temp\\miccaichallengesampleresult";
-		if (args.length == 3) {
-			root = args[1];
-			outputRoot = args[2];
+		if (args.length >= 2) {
+			root = args[0];
+			outputRoot = args[1];
 		}
+		else {
+			System.out.println("Number of arguments: " + args.length  + " No input/output folders specified."); 
+/*			for (int i = 0; i < args.length; i++){
+				System.out.println(i + "," + args[i] );
+			}
+*/		
+		}
+		
 		FolderProcessor processor = new FolderProcessor(root, outputRoot);
 	}
 

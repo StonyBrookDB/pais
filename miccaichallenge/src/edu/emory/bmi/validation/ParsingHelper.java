@@ -39,19 +39,23 @@ public class ParsingHelper {
 	private  static ArrayList<String> getList(String inputFolder, boolean isFolder) {
 		
 		File folder = new File(inputFolder);
+		System.out.println("Input folder: " + folder.getAbsolutePath()  + "\n");
 		File[] listOfFiles = folder.listFiles();
 		ArrayList<String> list = new ArrayList<String>();
-
-		for (int i = 0; i < listOfFiles.length; i++) {
-			if (listOfFiles[i].isFile()) {
-				if (!isFolder){
-					String fileName = listOfFiles[i].getName();
-					list.add(fileName);
-				}
-			} else if (listOfFiles[i].isDirectory()) {
-				if (isFolder){
-					String folderName = listOfFiles[i].getName();
-					list.add(folderName);
+		System.out.println("Number of user folders to process: " + listOfFiles.length);
+		
+		if (folder.isDirectory()){
+			for (int i = 0; i < listOfFiles.length; i++) {
+				if (listOfFiles[i].isFile()) {
+					if (!isFolder){
+						String fileName = listOfFiles[i].getName();
+						list.add(fileName);
+					}
+				} else if (listOfFiles[i].isDirectory()) {
+					if (isFolder){
+						String folderName = listOfFiles[i].getName();
+						list.add(folderName);
+					}
 				}
 			}
 		}
@@ -171,7 +175,7 @@ public class ParsingHelper {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		ParsingHelper parser = new ParsingHelper();
-		ArrayList<String> list = parser.getFiles("c:/");
+		ArrayList<String> list = parser.getFiles("c:\\temp\\validation\\miccaichallenge");
 		//for (int i = 0; i < list.size(); i++ )
 		//	System.out.println(list.get(i) );
 		String root = "F:\\Projects\\Github\\pais\\miccaichallenge\\test\\human\\user100\\segmentation\\20140610160500\\zip1.zip";
