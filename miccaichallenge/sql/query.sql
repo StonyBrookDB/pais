@@ -44,14 +44,37 @@ GROUP BY b.user, a.image
 
 
 -- Computer Jarcardcofficient
-SELECT a.intersection/b.union AS ratio
+SELECT a.user, a.image, a.intersection/b.union AS ratio
 FROM MICCAI.maskintersection a, MICCAI.maskunion b
 WHERE a.user = b.user AND
       a.image = b.image
-ORDER BY ratio desc;
+ORDER BY a.user desc;
       
 
--- Find classification match
+-- Order by Jarcard cofficient for users based on total sum
+SELECT a.user, SUM(a.intersection/b.union) AS TotalRatio
+FROM MICCAI.maskintersection a, MICCAI.maskunion b
+WHERE a.user = b.user AND
+      a.image = b.image AND
+      a.user <> 'human'
+GROUP BY a.user 
+ORDER BY TotalRatio desc;
+
+
+-- Find classification label for a user
+SELECT a.user, a.label, b.label,
+CASE a.label
+	WHEN  b.label THEN 'TRUE'
+	ELSE 'FALSE'
+END CORRECTNESS
+FROM   MICCAI.classification a, MICCAI.classification b
+WHERE  a.image = b.image AND b.user = 'human' AND a.user <> 'human' AND       
+       a.user = '100';
+
+
+
+
+-- Find classification match order by correctness
 SELECT a.user, count(*) AS CORRECT_COUNT
 FROM   MICCAI.classification a, MICCAI.classification b 
 WHERE  a.image = b.image AND b.user = 'human' AND a.user <> 'human' AND

@@ -122,8 +122,8 @@ public class FolderProcessor {
 		FileWriter sqlFWriter  = null;
 		BufferedWriter sqlBWriter = null;
 		String script =
-			"# Change 'db2admin' to db2 login with loading permissions\n" + 	
-			"db2 connect to sample user db2admin\n" + 
+			"# Change  database name 'pais' to real database name; change 'db2inst1' to db2 login with loading permissions\n" + 	
+			"db2 connect to pais user db2inst1\n" + 
 			"db2 -tf timestampload.sql\n" + 
 			"db2 -tf humanclassificationload.sql\n" + 
 			"db2 -tf humansegmentationload.sql\n" + 

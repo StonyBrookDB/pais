@@ -1,6 +1,6 @@
-%#-- change tcga to the right DB name
+%#-- change 'pais' to the right DB name, and 'db2inst1' to the right db2 user name
 
-db2 connect to sample user db2admin
+db2 connect to pais user db2inst1
 
 db2 -tf timestampload.sql
 

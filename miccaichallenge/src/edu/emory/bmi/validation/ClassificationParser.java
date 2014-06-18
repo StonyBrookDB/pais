@@ -31,7 +31,7 @@ public class ClassificationParser {
 		if (isHuman)
 			sqlFile = new File(outputRoot + File.separator + "humanclassificationload.sql");
 		else 
-			sqlFile = new File(outputRoot + File.separator + "userclassificaitonload.sql");
+			sqlFile = new File(outputRoot + File.separator + "userclassificationload.sql");
 		
 		FileWriter sqlFWriter  = null;
 		BufferedWriter sqlBWriter = null;

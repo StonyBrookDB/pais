@@ -37,6 +37,14 @@ public class WebAPI {
     static String thumbnailDir = System.getProperty("java.io.tmpdir")+File.separator+"Thumbnails"+File.separator;
 	CachingManager manager = new CachingManager(db);
 	Queries queries = new Queries();
+	
+	MICCAIChallengeQueries mqueries = new MICCAIChallengeQueries();
+	String query_validationSegmentation = mqueries.getQuery("getValidationSegmentation");
+	String query_validationSegmentationAll = mqueries.getQuery("getValidationSegmentationAll");
+	String query_validationClassification = mqueries.getQuery("getValidationClassification");
+	String query_validationClassificationAll = mqueries.getQuery("getValidationClassifiationAll");
+	
+	
 	/*
 	 * PAIS Queries
 	 */
@@ -1751,9 +1759,9 @@ public class WebAPI {
 
 	
 
-	
+
 	//patient queries
-	
+
 		//list patient barcode: /patient/list
 		@GET
 		@Path("/patient/list")
@@ -1763,7 +1771,7 @@ public class WebAPI {
 			ResultSet rs = APIHelper.getResultSetFromPreparedStatement(pstmt);
 			return APIHelper.setResponseByFormat(format, rs);
 		}
-		
+
 		//get patient characteristic from barcode: /patient/char;patientid=TCGA-02-0011
 		@GET
 		@Path("/patient/char")
@@ -1774,7 +1782,7 @@ public class WebAPI {
 			ResultSet rs = APIHelper.getResultSetFromPreparedStatement(pstmt);
 			return APIHelper.setResponseByFormat(format, rs);
 		}
-		
+
 		//get patient barcode from paisuid: /patient/barcode;paisuid=TCGA-02-0011-01B-01-TS1_20x_20x_RG-HUMAN_1
 		@GET
 		@Path("/patient/barcode")
@@ -1785,36 +1793,93 @@ public class WebAPI {
 			ResultSet rs = APIHelper.getResultSetFromPreparedStatement(pstmt);
 			return APIHelper.setResponseByFormat(format, rs);
 		}
-		*/
-	       //get patient features from patient id, or all patients without patient id
-	       //   /patient/features;barcode=TCGA-02-0001
-			@GET
-			@Path("/patient/features")
-			public Response getPatientfeaturesfromPID(@DefaultValue("xml") @MatrixParam("format") String format,
-					@MatrixParam("patientid") String patientid,
-					@MatrixParam("barcode") String barcode
-					){
-				Properties props = new Properties();
-				PreparedStatement pstmt=null;
-				if(barcode==null)
-				{
-				pstmt = manager.setPreparedStatementAndParams("patientfeatures", query_patientfeatures, props);
-				}
-				else{
-				props.put("1", barcode);
-				pstmt = manager.setPreparedStatementAndParams("patientfeatureBybarcode", query_patientfeatureBybarcode, props);
-				}
+	 */
+	//get patient features from patient id, or all patients without patient id
+	//   /patient/features;barcode=TCGA-02-0001
+	@GET
+	@Path("/patient/features")
+	public Response getPatientfeaturesfromPID(@DefaultValue("xml") @MatrixParam("format") String format,
+			@MatrixParam("patientid") String patientid,
+			@MatrixParam("barcode") String barcode
+			){
+		Properties props = new Properties();
+		PreparedStatement pstmt=null;
+		if(barcode==null)
+		{
+			pstmt = manager.setPreparedStatementAndParams("patientfeatures", query_patientfeatures, props);
+		}
+		else{
+			props.put("1", barcode);
+			pstmt = manager.setPreparedStatementAndParams("patientfeatureBybarcode", query_patientfeatureBybarcode, props);
+		}
+		ResultSet rs = APIHelper.getResultSetFromPreparedStatement(pstmt);
+		return APIHelper.setResponseByFormat(format, rs);
+	}
+
+	@GET
+	@Path("/errpath")
+	public Response getErrPath(){	
+		String content = "The URL couldn't be linked to any exisiting resources." +"\n" + "Please check your query path.";
+		return Response.ok(content).type(MediaType.TEXT_PLAIN).build();
+	}
+		
+
+		/**
+			Given a user ID, return the current user's segmentation result, compared to human annotation.
+			If user = all, results will be sorted. 
+			e.g.: http://localhost:8080/WebAPI/validation/classification;user=all
+				  http://localhost:8080/WebAPI/validation/classification;user=100
+		 */
+		@GET
+		@Path("/validation/segmentation")
+		public Response getValidationSegmentationResult(@DefaultValue("html") @MatrixParam("format") String format,
+				@MatrixParam("user") String user,
+				@MatrixParam("timestamp") String timestamp
+				){
+			Properties props = new Properties();
+			PreparedStatement pstmt = null;
+
+			if ("all".equals(user) ){
+				ResultSet rs = APIHelper.getResultSet(db, query_validationSegmentationAll);
+				return APIHelper.setResponseByFormat(format, rs);
+			}
+			
+			else{ 
+				props.put("1", user);
+				pstmt = manager.setPreparedStatementAndParams("validationsegmentation", query_validationSegmentation, props);
 				ResultSet rs = APIHelper.getResultSetFromPreparedStatement(pstmt);
 				return APIHelper.setResponseByFormat(format, rs);
 			}
-
-		@GET
-		@Path("/errpath")
-    	public Response getErrPath(){	
-			String content = "The URL couldn't be linked to any exisiting resources." +"\n" + "Please check your query path.";
-			return Response.ok(content).type(MediaType.TEXT_PLAIN).build();
-			
 		}
+		
+
+		/**
+			Given a user ID, return the current user's classification result, compared to human annotation. 
+			If user = all, results will be sorted. 
+		 */
+		@GET
+		@Path("/validation/classification")
+		public Response getValidationClassificationResult(@DefaultValue("html") @MatrixParam("format") String format,
+				@MatrixParam("user") String user,
+				@MatrixParam("timestamp") String timestamp
+				){
+			Properties props = new Properties();
+			PreparedStatement pstmt = null;
+
+			if ("all".equals(user) ){
+				ResultSet rs = APIHelper.getResultSet(db, query_validationClassificationAll);
+				return APIHelper.setResponseByFormat(format, rs);
+			}
+			
+			else{ 
+				props.put("1", user);
+				pstmt = manager.setPreparedStatementAndParams("validationclassification", query_validationClassification, props);
+				ResultSet rs = APIHelper.getResultSetFromPreparedStatement(pstmt);
+				
+				return APIHelper.setResponseByFormat(format, rs);
+			}
+		}
+		
 	
 }
 
