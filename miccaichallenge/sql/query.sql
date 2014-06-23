@@ -61,6 +61,31 @@ GROUP BY a.user
 ORDER BY TotalRatio desc;
 
 
+
+
+--  Find the image and mask overlap ratio for each user, with timestamp
+SELECT a.user, a.image, a.intersection/b.union AS ratio 
+FROM MICCAI.maskintersection a, MICCAI.maskunion b,  
+WHERE a.user = b.user AND 
+	 a.image = b.image AND 
+	 a.user = '100'
+ORDER BY a.user;	    
+
+
+
+--  Find the image and mask overlap ratio for each user with timestamp
+SELECT a.user, a.image, a.intersection/b.union AS ratio 
+FROM MICCAI.maskintersection a, MICCAI.maskunion b 
+WHERE a.user = b.user AND 
+	 a.image = b.image AND 
+	 a.user = '100' AND     
+     20140614011112 = (
+       SELECT max(timestamp) FROM miccai.submissiontimestamp t
+       WHERE t.user='100' AND t.type = 'segmentation'
+);
+
+
+
 -- Find classification label for a user
 SELECT a.user, a.label, b.label,
 CASE a.label
@@ -71,7 +96,21 @@ FROM   MICCAI.classification a, MICCAI.classification b
 WHERE  a.image = b.image AND b.user = 'human' AND a.user <> 'human' AND       
        a.user = '100';
 
+-- Find classification label for a user with timestamp
+SELECT a.user, a.label, b.label,
+CASE a.label
+	WHEN  b.label THEN 'TRUE'
+	ELSE 'FALSE'
+END CORRECTNESS
+FROM   MICCAI.classification a, MICCAI.classification b
+WHERE  a.image = b.image AND b.user = 'human' AND a.user <> 'human' AND       
+       a.user = '100' AND
+       20140613120000 = (
+		SELECT max(timestamp) FROM miccai.submissiontimestamp t
+        WHERE t.user='100' AND t.type = 'classification')
+;
 
+       
 
 
 -- Find classification match order by correctness

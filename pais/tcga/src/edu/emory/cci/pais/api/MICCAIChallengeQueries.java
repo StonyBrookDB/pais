@@ -117,6 +117,20 @@ public class MICCAIChallengeQueries {
 				" order by a.user";		
 		map.put(name, query);
 
+		
+		name = "getValidationSegmentationWithTimestamp";
+		//query = "SELECT * FROM MICCAI.maskintersection where user=? ORDER BY image";
+		query = "SELECT a.user, a.image, a.intersection/b.union AS ratio " + 
+				"FROM MICCAI.maskintersection a, MICCAI.maskunion b  " +
+				"WHERE a.user = b.user AND " +
+				"	 a.image = b.image AND " +
+				"	 a.user = ?  AND " +
+				"     ? = ( " +
+				"       SELECT max(timestamp) FROM miccai.submissiontimestamp t " +
+				"       WHERE t.user= ?  AND t.type = 'segmentation' " +
+				")";
+		map.put(name, query);
+		
 	
 	name = "getValidationSegmentationAll";
 	query = "SELECT a.user, SUM(a.intersection/b.union) AS TotalRatio " +
@@ -129,17 +143,21 @@ public class MICCAIChallengeQueries {
 	map.put(name, query);
 
 	
-	name = "getValidationClassification";
+	name = "getValidationClassificationWithTimestamp";
 	//query = "SELECT * FROM MICCAI.maskintersection where user=? ORDER BY image";
 	query = 
-			"SELECT a.user, a.label, b.label, " +
+			"SELECT a.user, a.image, a.label, b.label, " +
 			"CASE a.label " +
 			"	WHEN  b.label THEN 'TRUE' " +
 			"	ELSE 'FALSE' " +
 			"END CORRECTNESS " +
 			"FROM   MICCAI.classification a, MICCAI.classification b " +
 			"WHERE  a.image = b.image AND b.user = 'human' AND a.user <> 'human' AND " +       
-			"       a.user = ?  ";					
+			"       a.user = ?  " +
+			"AND " +
+		    "   ?  = ( " +
+			"	SELECT max(timestamp) FROM miccai.submissiontimestamp t " +
+		    "    WHERE t.user = ?  AND t.type = 'classification')";					
 	map.put(name, query);
 	
 	

@@ -1,8 +1,12 @@
 package edu.emory.cci.pais.api;
 
+import edu.emory.bmi.validation.*;
+
+import java.awt.Dimension;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -1826,9 +1830,9 @@ public class WebAPI {
 
 		/**
 			Given a user ID, return the current user's segmentation result, compared to human annotation.
-			If user = all, results will be sorted. 
-			e.g.: http://localhost:8080/WebAPI/validation/classification;user=all
-				  http://localhost:8080/WebAPI/validation/classification;user=100
+			If user = alL_userS, results will be sorted. 
+			e.g.: http://localhost:8080/WebAPI/validation/segmentation;user=alL_userS
+				  http://localhost:8080/WebAPI/validation/segmentation;user=100;timestamp=20140614011112  
 		 */
 		@GET
 		@Path("/validation/segmentation")
@@ -1839,23 +1843,50 @@ public class WebAPI {
 			Properties props = new Properties();
 			PreparedStatement pstmt = null;
 
-			if ("all".equals(user) ){
+			if ("alL_userS".equals(user) ){
 				ResultSet rs = APIHelper.getResultSet(db, query_validationSegmentationAll);
 				return APIHelper.setResponseByFormat(format, rs);
-			}
-			
+			}			
 			else{ 
 				props.put("1", user);
-				pstmt = manager.setPreparedStatementAndParams("validationsegmentation", query_validationSegmentation, props);
+				props.put("2", timestamp);
+				props.put("3", user);
+					pstmt = manager.setPreparedStatementAndParams("validationsegmentationTimestamp", 
+							mqueries.getQuery("getValidationSegmentationWithTimestamp"), props);
 				ResultSet rs = APIHelper.getResultSetFromPreparedStatement(pstmt);
 				return APIHelper.setResponseByFormat(format, rs);
 			}
 		}
+/*		@GET
+		@Path("/validation/segmentation")
+		public Response getValidationSegmentationResult(@DefaultValue("html") @MatrixParam("format") String format,
+				@MatrixParam("user") String user,
+				@MatrixParam("timestamp") String timestamp
+				){
+			Properties props = new Properties();
+			PreparedStatement pstmt = null;
+
+			if ("alL_userS".equals(user) ){
+				ResultSet rs = APIHelper.getResultSet(db, query_validationSegmentationAll);
+				return APIHelper.setResponseByFormat(format, rs);
+			}			
+			else{ 
+				props.put("1", user);
+					pstmt = manager.setPreparedStatementAndParams("validationsegmentation", query_validationSegmentation, props);
+				ResultSet rs = APIHelper.getResultSetFromPreparedStatement(pstmt);
+				return APIHelper.setResponseByFormat(format, rs);
+			}
+		}*/
+
+		
+		
+		
 		
 
 		/**
 			Given a user ID, return the current user's classification result, compared to human annotation. 
-			If user = all, results will be sorted. 
+			If user = alL_userS, results will be sorted. 
+			http://localhost:8080/WebAPI/validation/classification;user=100;timestamp=20140613120000 
 		 */
 		@GET
 		@Path("/validation/classification")
@@ -1866,7 +1897,30 @@ public class WebAPI {
 			Properties props = new Properties();
 			PreparedStatement pstmt = null;
 
-			if ("all".equals(user) ){
+			if ("alL_userS".equals(user) ){
+				ResultSet rs = APIHelper.getResultSet(db, query_validationClassificationAll);
+				return APIHelper.setResponseByFormat(format, rs);
+			}
+			
+			else{ 
+				props.put("1", user);
+				props.put("2", timestamp);
+				props.put("3", user);
+				pstmt = manager.setPreparedStatementAndParams("validationclassificationTimestamp", 
+						mqueries.getQuery("getValidationClassificationWithTimestamp"), props);
+				ResultSet rs = APIHelper.getResultSetFromPreparedStatement(pstmt);
+				
+				return APIHelper.setResponseByFormat(format, rs);
+			}
+		}
+/*		public Response getValidationClassificationResult(@DefaultValue("html") @MatrixParam("format") String format,
+				@MatrixParam("user") String user,
+				@MatrixParam("timestamp") String timestamp
+				){
+			Properties props = new Properties();
+			PreparedStatement pstmt = null;
+
+			if ("alL_userS".equals(user) ){
 				ResultSet rs = APIHelper.getResultSet(db, query_validationClassificationAll);
 				return APIHelper.setResponseByFormat(format, rs);
 			}
@@ -1879,6 +1933,58 @@ public class WebAPI {
 				return APIHelper.setResponseByFormat(format, rs);
 			}
 		}
+*/				
+		
+		
+		// http://localhost:8080/WebAPI/validation/overlay;imageuid=TCGA-02-0006-01Z-00-DX1	
+		@GET
+		@Path("/validation/overlay")
+		@Produces(MediaType.TEXT_HTML)
+		public String getValidationMaskOverlay(
+				@MatrixParam("imageuid") String imageid) {					
+			String imgpath = "/validation/image;imageuid=" + imageid  + ";";  
+            String svgpath = "/validation/mask;imageuid=" + imageid;
+            String jpegPath = MaskXMLParser.getAnnotationPath("validation.properties") + File.separator + 
+            		"images" + File.separator + imageid + ".jpg";
+            Dimension dim = null;;
+			try {
+				dim = JPEGDim.getJPEGDimension(new File(jpegPath) );
+			} catch (IOException e) {		
+				System.out.println("Can't read JPEG file path.");
+				e.printStackTrace();
+			}
+			int width = dim.width;
+			int height = dim.height;
+			String html = "<html><body> " + 
+			"<div style=\"background:url(.." + imgpath  + "); width:"+ width +"px; height:"+ height +"px; position:absolute; left:100px; top:0px;\">" +
+			"<object height=\"100%\" width=\"100%\" type=\"image/svg+xml\" data=\"" + ".." + svgpath +  "\" style=\"position:absolute; left:0px; top:0px;\" >" + 
+			"</div> </body> </html>";
+			return html;	 
+		}	
+
+		//http://localhost:8080/WebAPI/validation/image;imageuid=TCGA-02-0006-01Z-00-DX1
+		@GET
+		@Path("/validation/image")
+		public Response getValidationImage(  
+				@MatrixParam("imageuid") String imageuid)  {	
+            String jpegPath = MaskXMLParser.getAnnotationPath("validation.properties") + File.separator + 
+            		"images" + File.separator + imageuid + ".jpg";
+            System.out.println("JPGE path: " + jpegPath);
+			return APIHelper.getImageFileResponse(jpegPath, "jpg");		
+		}		
+	
+		//http://localhost:8080/WebAPI/validation/mask;imageuid=TCGA-02-0006-01Z-00-DX1
+		@GET
+		@Path("/validation/mask")
+		public Response getValidationMask(  
+				@MatrixParam("imageuid") String imageuid)  {	
+            String maskPath = MaskXMLParser.getAnnotationPath("validation.properties") + File.separator + 
+            		"xml" + File.separator + imageuid + "_data.xml";
+			String svg =  MaskXMLParser.xml2svg(maskPath);
+			ResponseBuilder response = Response.ok(svg);
+			response.header("Content-type", "image/svg+xml" );
+			return response.build();            		
+		}			
 		
 	
 }

@@ -97,7 +97,7 @@ To create tables, run:
 db2 connect to mydb db2user
 db2 -tf createtable.sql
 
-After that, run loadallcmd (in the output folder) to load all files into the database. the file contains following 
+After that, run loadallcmd (in the output folder!) to load all files into the database. the file contains following 
 commands. Replace database and login info. Change permission to file loadallcmd to executable. 
 ./loadallcmd 
 
@@ -286,5 +286,48 @@ Appendix: A complete example folder including all input files.
  |---------TCGA-19-5955-01Z-00-DX1_data.xml
  |-------20140516120000
  |---------segmentation.zip
+
+
+=======================================================================================
+WebAPIs
+=======================================================================================
+1. To deploy WebAPIs, copy MICCAIChallenge.war into Tomcat webapps folder. 
+Tomcat will automatically deploy it.
+Under WEB-INF\classes, there is a file validation.properties.
+Change the path to the folder that contains annotations. e.g.: 
+annotation.path = /mnt/encore/disk1/home/fusheng/miccai/miccaichallengesampledata/human/segmentation
+
+2. The following WebAPIs are created.
+Note that (2) and (4) are for admin users only. 
+
+1) Given a user ID, return the current user's classification result, compared to human annotation.
+A user's ID and the last timestamp are needed. 
+http://localhost:8080/WebAPI/validation/classification;user=100;timestamp=20140613120000
+An option parameter format can be specified to return results in different formats 
+for all APIs (html, xml or json).
+e.g.: 
+http://localhost:8080/WebAPI/validation/classification;user=100;timestamp=20140613120000;format=html
+
+2) Return all users' classification results, sorted based on correctness count.
+http://localhost:8080/WebAPI/validation/classification;user=alL_userS
+
+
+3) Given a user ID, return the current user's segmentation result, compared to human annotation.
+http://localhost:8080/WebAPI/validation/segmentation;user=100;timestamp=20140614011112
+
+4)  Return all users' segmentation results, sorted based on aggregated jarccard's coefficients
+for all images.
+http://localhost:8080/WebAPI/validation/segmentation;user=alL_userS
+
+5) Given an image UID, return the mask created by domain expert overlayed on top of the image.
+http://localhost:8080/WebAPI/validation/overlay;imageuid=TCGA-02-0006-01Z-00-DX1	
+
+
+ 
+
+
+
+
+
 
 
