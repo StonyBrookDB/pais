@@ -1,0 +1,4 @@
+challenge_image1.svs LGG
+challenge_image2.svs GBM
+challenge_image3.svs GBM
+challenge_image4.svs LGG

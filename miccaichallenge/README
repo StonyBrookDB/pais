@@ -1,0 +1,333 @@
+There are three steps for the program.
+1. Prepare the data in right folders/files with naming conventions and format.
+
+2. Run java program to processing the data into database format and create data loading scripts.
+	java -jar Validation.jar inputfolder outputfolder
+
+3. Create database tables and load the data.	
+	db2 -tf createtable.sql
+	./loadallcmd 
+
+4. Run the comparsion and rank the results.
+	db2 -tf computeresult.sql
+	db2 -tf query.sql
+
+
+=======================================================================================
+Preparing input data files
+=======================================================================================
+
+Example input folder structure (root: miccaichallengesampledata)
+(find ./ -type d | sed -e 's/[^-][^\/]*\//--/g;s/--/ |-/')
+
+Under the root, there will be a list of folders for users. Each user name will be the 
+folder name. A special folder name "human" will hold all human annotated data, including
+classification and segmentation. "segmentation" folder will contain images (in JPEG and 
+original TIFF images). 
+
+Each user folder will contain two folders: classification, and segmentation. Under them,
+there will be timestamp folders ("YYYYMMDDHHMMSS") containing the submissions at certain
+timestamps. 
+
+For each classification submission at a timestamp, there will be a single file 
+"classification.txt", containing classification in following format:
+TCGA-02-0006-01Z-00-DX1 GBM
+TCGA-02-0034-01Z-00-DX1 LGG
+TCGA-02-0037-01Z-00-DX1 GBM
+...
+Note that only image prefixes are used, no extension will be used. 
+Only results in latest timestamp will be recorded into the database.
+
+For each segmentation submission at a timestamp, zipped segmentation files are included. 
+Text based segmentation results can be compressed into multiple zip files. Unzipping all
+zip files will extract all segmentation results.
+Original text files for segmentations will be in the format of 
+TCGA-02-0006-01Z-00-DX1_mask.txt
+TCGA-02-0034-01Z-00-DX1_mask.txt
+..
+Note that each image name is appended with "_mask.txt".
+The mask file will be in following format:
+ 	Tile_xdim Tile_ydim // N M
+ 	Pixel_region_id     // pixel (0,0)
+ 	Pixel_region_id     // pixel (0,1)
+ 	Pixel_region_id	 // pixel (0,2)
+e.g.: 
+1702 2184
+0
+0
+0
+0
+0
+0
+...
+
+=======================================================================================
+Processing results
+=======================================================================================
+To process the results, run: (JDK 1.7 needed)
+
+java -jar Validation.jar inputfolder outputfolder
+
+The input folder contains all the results (humans and algorithms), and the outputfolder 
+contains all processed result data to be loaded into the database. e.g., an example 
+output folder will be:
+human
+100
+200
+computerresult.sql
+humanclassificationload.s
+humansegmentationload.sql
+loadallcmd
+submissiontimestamp.txt
+timestampload.sql
+userclassificaitonload.sq
+usersegmentationload.sql
+
+"human" is the folder for human annotations; "100" and "200" are folders for algorithm results.
+There are also multiple database loading scripts generated. In each user folder, segmentation
+and classification results are pre-processed into database format to be loaded into the database.
+
+=======================================================================================
+Loading data into databases
+=======================================================================================
+createtable.sql file contains SQL script to generate schemas.
+
+To create tables, run:
+(Replace "mydb" with real database name, and "db2user" with real DB2 user with permissions)
+db2 connect to mydb db2user
+db2 -tf createtable.sql
+
+After that, run loadallcmd (in the output folder!) to load all files into the database. the file contains following 
+commands. Replace database and login info. Change permission to file loadallcmd to executable. 
+./loadallcmd 
+
+db2 connect to mydb db2user
+db2 -tf timestampload.sql
+db2 -tf humanclassificationload.sql
+db2 -tf humansegmentationload.sql
+db2 -tf userclassificationload.sql
+db2 -tf usersegmentationload.sql
+
+=======================================================================================
+Comparing Results
+=======================================================================================
+To compare results, run:
+
+db2 -tf computeresult.sql
+
+This will compute the intersection and union for algorithms results and human results for each
+image and user. 
+
+To rank final results, run queries (the last two queries in query.sql for segmentation and 
+classification):
+
+db2 -tf query.sql
+
+This will compute jarccard's coefficient
+
+
+
+
+Appendix: A complete example folder including all input files. 
+ |-
+ |-miccaichallengesampledata
+ |---100
+ |-----classification
+ |-------20140612120000
+ |---------classification.txt
+ |-------20140613120000
+ |---------classification.txt
+ |-----segmentation
+ |-------20140601130000
+ |-------20140614011112
+ |---------masksall.zip
+ |-------20140411081111
+ |---200
+ |-----classification
+ |-------20140612120000
+ |---------classification.txt
+ |-------20140613120000
+ |---------classification.txt
+ |-----segmentation
+ |-------20140514111100
+ |-------20140613120000
+ |---------masks1.zip
+ |---------masks2.zip
+ |---human
+ |-----classification
+ |-------20140516120000
+ |---------classification.txt
+ |-----segmentation
+ |-------images
+ |---------TCGA-06-0143-01Z-00-DX1.jpg
+ |---------TCGA-14-1823-01Z-00-DX4.jpg
+ |---------TCGA-06-0881-01Z-00-DX2.jpg
+ |---------TCGA-19-5959-01Z-00-DX1.jpg
+ |---------TCGA-06-0148-01Z-00-DX3.jpg
+ |---------TCGA-06-0147-01Z-00-DX1.jpg
+ |---------TCGA-06-0141-01Z-00-DX4.jpg
+ |---------TCGA-06-0148-01Z-00-DX4.jpg
+ |---------TCGA-06-0127-01Z-00-DX3.jpg
+ |---------TCGA-06-0145-01Z-00-DX5.jpg
+ |---------TCGA-06-0143-01Z-00-DX3.jpg
+ |---------TCGA-06-0141-01Z-00-DX5.jpg
+ |---------TCGA-06-0138-01Z-00-DX1.jpg
+ |---------TCGA-02-0034-01Z-00-DX1.jpg
+ |---------TCGA-19-2619-01Z-00-DX1.jpg
+ |---------TCGA-14-1825-01Z-00-DX1.jpg
+ |---------TCGA-06-0137-01Z-00-DX4.jpg
+ |---------TCGA-14-1825-01Z-00-DX3.jpg
+ |---------TCGA-14-1825-01Z-00-DX2.jpg
+ |---------TCGA-06-0122-01Z-00-DX1.jpg
+ |---------TCGA-02-0085-01Z-00-DX1.jpg
+ |---------TCGA-14-1825-01Z-00-DX4.jpg
+ |---------TCGA-06-0145-01Z-00-DX4.jpg
+ |---------TCGA-02-0006-01Z-00-DX1.jpg
+ |---------TCGA-19-5954-01Z-00-DX1.jpg
+ |---------TCGA-06-0122-01Z-00-DX2.jpg
+ |---------TCGA-06-0133-01Z-00-DX1.jpg
+ |---------TCGA-06-0133-01Z-00-DX2.jpg
+ |---------TCGA-02-0037-01Z-00-DX1.jpg
+ |---------TCGA-06-0139-01Z-00-DX1.jpg
+ |---------original
+ |-----------TCGA-06-0145-01Z-00-DX4.tif
+ |-----------TCGA-06-0141-01Z-00-DX5.tif
+ |-----------TCGA-14-1825-01Z-00-DX3.tif
+ |-----------TCGA-06-0147-01Z-00-DX1.tif
+ |-----------TCGA-06-0141-01Z-00-DX4.tif
+ |-----------TCGA-19-5954-01Z-00-DX1.tif
+ |-----------TCGA-06-0133-01Z-00-DX1.tif
+ |-----------TCGA-06-0881-01Z-00-DX2.tif
+ |-----------TCGA-02-0034-01Z-00-DX1.tif
+ |-----------TCGA-02-0085-01Z-00-DX1.tif
+ |-----------TCGA-06-0122-01Z-00-DX2.tif
+ |-----------TCGA-06-0143-01Z-00-DX1.tif
+ |-----------TCGA-19-5955-01Z-00-DX1.tif
+ |-----------TCGA-19-5959-01Z-00-DX1.tif
+ |-----------TCGA-06-0138-01Z-00-DX1.tif
+ |-----------TCGA-19-2619-01Z-00-DX1.tif
+ |-----------TCGA-06-0137-01Z-00-DX4.tif
+ |-----------TCGA-06-0148-01Z-00-DX3.tif
+ |-----------TCGA-14-1825-01Z-00-DX4.tif
+ |-----------TCGA-14-1823-01Z-00-DX4.tif
+ |-----------TCGA-06-0143-01Z-00-DX3.tif
+ |-----------TCGA-06-0122-01Z-00-DX1.tif
+ |-----------TCGA-02-0037-01Z-00-DX1.tif
+ |-----------TCGA-14-1825-01Z-00-DX1.tif
+ |-----------TCGA-06-0145-01Z-00-DX5.tif
+ |-----------TCGA-14-1825-01Z-00-DX2.tif
+ |-----------TCGA-06-0127-01Z-00-DX3.tif
+ |-----------TCGA-06-0139-01Z-00-DX1.tif
+ |-----------TCGA-06-0148-01Z-00-DX4.tif
+ |-----------TCGA-06-0133-01Z-00-DX2.tif
+ |-----------TCGA-02-0006-01Z-00-DX1.tif
+ |---------TCGA-19-5955-01Z-00-DX1.jpg
+ |-------masks
+ |---------TCGA-06-0143-01Z-00-DX1.jpg
+ |---------TCGA-14-1823-01Z-00-DX4.jpg
+ |---------TCGA-06-0881-01Z-00-DX2.jpg
+ |---------TCGA-19-5959-01Z-00-DX1.jpg
+ |---------TCGA-06-0148-01Z-00-DX3.jpg
+ |---------TCGA-06-0147-01Z-00-DX1.jpg
+ |---------TCGA-06-0141-01Z-00-DX4.jpg
+ |---------TCGA-06-0148-01Z-00-DX4.jpg
+ |---------TCGA-06-0127-01Z-00-DX3.jpg
+ |---------TCGA-06-0145-01Z-00-DX5.jpg
+ |---------TCGA-06-0143-01Z-00-DX3.jpg
+ |---------TCGA-06-0141-01Z-00-DX5.jpg
+ |---------TCGA-06-0138-01Z-00-DX1.jpg
+ |---------TCGA-02-0034-01Z-00-DX1.jpg
+ |---------TCGA-19-2619-01Z-00-DX1.jpg
+ |---------TCGA-14-1825-01Z-00-DX1.jpg
+ |---------TCGA-06-0137-01Z-00-DX4.jpg
+ |---------TCGA-14-1825-01Z-00-DX3.jpg
+ |---------TCGA-14-1825-01Z-00-DX2.jpg
+ |---------TCGA-06-0122-01Z-00-DX1.jpg
+ |---------TCGA-02-0085-01Z-00-DX1.jpg
+ |---------TCGA-14-1825-01Z-00-DX4.jpg
+ |---------TCGA-06-0145-01Z-00-DX4.jpg
+ |---------TCGA-02-0006-01Z-00-DX1.jpg
+ |---------TCGA-19-5954-01Z-00-DX1.jpg
+ |---------TCGA-06-0122-01Z-00-DX2.jpg
+ |---------TCGA-06-0133-01Z-00-DX1.jpg
+ |---------TCGA-06-0133-01Z-00-DX2.jpg
+ |---------TCGA-02-0037-01Z-00-DX1.jpg
+ |---------TCGA-06-0139-01Z-00-DX1.jpg
+ |---------TCGA-19-5955-01Z-00-DX1.jpg
+ |-------xml
+ |---------TCGA-06-0122-01Z-00-DX1_data.xml
+ |---------TCGA-06-0141-01Z-00-DX5_data.xml
+ |---------TCGA-02-0037-01Z-00-DX1_data.xml
+ |---------TCGA-06-0127-01Z-00-DX3_data.xml
+ |---------TCGA-14-1825-01Z-00-DX1_data.xml
+ |---------TCGA-14-1825-01Z-00-DX3_data.xml
+ |---------TCGA-06-0881-01Z-00-DX2_data.xml
+ |---------TCGA-06-0141-01Z-00-DX4_data.xml
+ |---------TCGA-06-0139-01Z-00-DX1_data.xml
+ |---------TCGA-06-0122-01Z-00-DX2_data.xml
+ |---------TCGA-02-0085-01Z-00-DX1_data.xml
+ |---------TCGA-19-2619-01Z-00-DX1_data.xml
+ |---------TCGA-06-0148-01Z-00-DX4_data.xml
+ |---------TCGA-02-0034-01Z-00-DX1_data.xml
+ |---------TCGA-06-0145-01Z-00-DX4_data.xml
+ |---------TCGA-06-0145-01Z-00-DX5_data.xml
+ |---------TCGA-14-1825-01Z-00-DX2_data.xml
+ |---------TCGA-02-0006-01Z-00-DX1_data.xml
+ |---------TCGA-14-1825-01Z-00-DX4_data.xml
+ |---------TCGA-06-0147-01Z-00-DX1_data.xml
+ |---------TCGA-06-0148-01Z-00-DX3_data.xml
+ |---------TCGA-06-0143-01Z-00-DX1_data.xml
+ |---------TCGA-19-5959-01Z-00-DX1_data.xml
+ |---------TCGA-06-0138-01Z-00-DX1_data.xml
+ |---------TCGA-14-1823-01Z-00-DX4_data.xml
+ |---------TCGA-06-0137-01Z-00-DX4_data.xml
+ |---------TCGA-06-0143-01Z-00-DX3_data.xml
+ |---------TCGA-19-5954-01Z-00-DX1_data.xml
+ |---------TCGA-19-5955-01Z-00-DX1_data.xml
+ |-------20140516120000
+ |---------segmentation.zip
+
+
+=======================================================================================
+WebAPIs
+=======================================================================================
+1. To deploy WebAPIs, copy MICCAIChallenge.war into Tomcat webapps folder. 
+Tomcat will automatically deploy it.
+Under WEB-INF\classes, there is a file validation.properties.
+Change the path to the folder that contains annotations. e.g.: 
+annotation.path = /mnt/encore/disk1/home/fusheng/miccai/miccaichallengesampledata/human/segmentation
+
+2. The following WebAPIs are created.
+Note that (2) and (4) are for admin users only. 
+
+1) Given a user ID, return the current user's classification result, compared to human annotation.
+A user's ID and the last timestamp are needed. 
+http://localhost:8080/WebAPI/validation/classification;user=100;timestamp=20140613120000
+An option parameter format can be specified to return results in different formats 
+for all APIs (html, xml or json).
+e.g.: 
+http://localhost:8080/WebAPI/validation/classification;user=100;timestamp=20140613120000;format=html
+
+2) Return all users' classification results, sorted based on correctness count.
+http://localhost:8080/WebAPI/validation/classification;user=alL_userS
+
+
+3) Given a user ID, return the current user's segmentation result, compared to human annotation.
+http://localhost:8080/WebAPI/validation/segmentation;user=100;timestamp=20140614011112
+
+4)  Return all users' segmentation results, sorted based on aggregated jarccard's coefficients
+for all images.
+http://localhost:8080/WebAPI/validation/segmentation;user=alL_userS
+
+5) Given an image UID, return the mask created by domain expert overlayed on top of the image.
+http://localhost:8080/WebAPI/validation/overlay;imageuid=TCGA-02-0006-01Z-00-DX1	
+
+
+ 
+
+
+
+
+
+
+
