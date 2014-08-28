@@ -3,6 +3,10 @@ There are three steps for the program.
 
 2. Run java program to processing the data into database format and create data loading scripts.
 	java -jar Validation.jar inputfolder outputfolder
+	e.g., on Windows: 
+	java -jar Validation.jar "C:\\Projects\\miccaichallenge\\miccaichallengesampledata" "C:\\Projects\\miccaichallenge\\output"
+	on Linux:
+	java -jar Validation.jar /mnt/encore/disk1/home/fusheng/miccai/miccaichallengesampledata /mnt/encore/disk1/home/fusheng/miccai/output
 
 3. Create database tables and load the data.	
 	db2 -tf createtable.sql

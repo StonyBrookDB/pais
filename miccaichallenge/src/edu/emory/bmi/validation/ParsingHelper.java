@@ -163,8 +163,9 @@ public class ParsingHelper {
 	}
 
 	public static String generateImageName(String fileName){
-		//TCGA-02-0006-01Z-00-DX1_mask
-		int location = fileName.lastIndexOf('_');
+		//path-image-129.mask -> path-image-129
+		int location = fileName.lastIndexOf(".mask");
+		//System.out.println(fileName);
 		return fileName.substring(0, location);
 	}
 	

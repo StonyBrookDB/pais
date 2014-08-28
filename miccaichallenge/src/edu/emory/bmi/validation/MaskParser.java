@@ -12,26 +12,40 @@
  * The *_mask.txt files are the masks for each image tile. These are text files. Each file has the following format: 
  *	Tile_xdim Tile_ydim // N M
  *	Pixel_region_id     // pixel (0,0)
- *	Pixel_region_id     // pixel (0,1)
- *	Pixel_region_id	 // pixel (0,2)
+ *	Pixel_region_id     // pixel (1,0)
+ *	Pixel_region_id	 // pixel (2,0)
  *	бн
  *	Pixel_region_id    // pixel (N-1,M-1)
- * e.g.: 
  *
- * 2726 2020
- * 2
- * 2
- * 2
- * 2
- * 2
- * 2
- * 2
- * 2
- * 2
- * 2
- * 2
- * 2
- * ...
+For example, assume a tile of 5x4 pixels with the following segmentation of necrosis regions (labeled 1 in the mask array):
+
+00000
+01100
+11100
+01100
+
+The mask file would have the following content:
+5 4
+0
+0
+0
+0
+0
+0
+1
+1
+0
+0
+1
+1
+1
+0
+0
+0
+1
+1
+0
+0
 
  * Example tables:
  *  CREATE TABLE MICCAI.usermask(
@@ -83,11 +97,12 @@ public class MaskParser {
 			while ((strLine = br.readLine()) != null) {
 				classification = Integer.parseInt(strLine);
 				//System.out.println( Integer.parseInt(strLine) );
-				long x = count/height; 
-				long y = count%height;
+				long x = count/width; 
+				long y = count%width;
 				//System.out.println( x + ", " + y + ": " +  classification );
-				if (classification == 2){
-					String imageName = ParsingHelper.generateImageName( ParsingHelper.getFilePrefix(inputFile) );
+				if (classification == 1){ //necrosis will be 1; background will be 0.
+					//System.out.println("prefix: " + ParsingHelper.getFilePrefix(inputFile) );
+					String imageName = ParsingHelper.getFilePrefix(inputFile) ;
 					if (!isHuman)
 						bw.write(user + "," +  imageName + "," +  x + "," + y + "\n");
 					else //human annotations will not include userid
@@ -119,12 +134,13 @@ public class MaskParser {
 		}
 		//System.out.println(inputFile + " " + outputFile);
 		MaskParser parser = new MaskParser();
-		inputFile ="C:\\Users\\fwang\\Downloads\\TCGA-02-0006-01Z-00-DX1_mask.ppm";
+		inputFile ="C:\\temp\\masks\\test\\path-image-129.mask";
+		outputFile ="C:\\temp\\masks\\test\\path-image-129.out";
 		//outputFile ="C:\\Users\\fwang\\Downloads\\TCGA-02-0006-01Z-00-DX1_mask.map";
 		//user ="human";
-		//parser.parseMask(user, inputFile, outputFile, isHuman);
+		parser.parseMask(user, inputFile, outputFile, isHuman);
 		//System.out.println(parser.getFilePrefix(inputFile) );
-		System.out.println(ParsingHelper.generateImageName(inputFile) );
+		//System.out.println(ParsingHelper.generateImageName(inputFile) );
 		
 	}
 
