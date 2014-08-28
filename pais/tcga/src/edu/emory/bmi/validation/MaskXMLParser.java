@@ -43,6 +43,18 @@ public class MaskXMLParser {
 	}
 
 
+	public static String getMaskPath (String annotationPath) {        
+        Properties properties = new Properties();
+        try {
+                properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(annotationPath));
+        } catch (IOException e1) {
+          System.out.println("Load stream Error");
+          e1.printStackTrace();
+        }
+        String path = properties.getProperty("mask.path");
+        return path;
+}
+	
 	public static String getAnnotationPath (String annotationPath) {        
         Properties properties = new Properties();
         try {
