@@ -23,7 +23,7 @@ public class QueryPathFilter implements ContainerRequestFilter {
 				"images/image/tile", "images/image/window", "images/image/wsi", "images/thumbnail/tile", "images/thumbnail/wsi", "images/overlay/tile", "images/overlay/window", "images/similarity/feature", "images/similarity/cluster", "images/similarity/getImageFromFile",
 				"images/image/tiling/positions", "images/image/dimension","images/thumbnail/tiledimage","images/image/imagereferences","pais/list/summary","patient/features","pais/list/tile/regions",
 				"pais/markups/humanannotation/annotation/add","pais/markups/humanannotation/annotation/get","pais/markups/boundaries/image",
-				"validation/segmentation", "validation/classification", "validation/image", "validation/usermaskimage", "validation/mask", "validation/overlay"
+				"validation/segmentation", "validation/classification", "validation/image", "validation/maskimage", "validation/usermaskimage", "validation/mask", "validation/overlay"
 		};
 		
 		if (!requestPath.equals("")) {
