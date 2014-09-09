@@ -1857,6 +1857,32 @@ public class WebAPI {
 				return APIHelper.setResponseByFormat(format, rs);
 			}
 		}
+		
+		
+		/**
+		Given a user ID, return the current user's segmentation result, compared to human annotation.
+		If user = alL_userS, results will be sorted. 
+		e.g.: http://localhost:8080/WebAPI/validation/segmentation;user=alL_userS
+			  http://localhost:8080/WebAPI/validation/segmentation;user=100;timestamp=20140614011112  
+	 */
+	@GET
+	@Path("/validation/segmentationbyimage")
+	public Response getValidationSegmentationResultByImageidAndUser(@DefaultValue("html") @MatrixParam("format") String format,
+			@MatrixParam("user") String user,
+			@MatrixParam("imageid") String imageid
+			){
+			Properties props = new Properties();
+			PreparedStatement pstmt = null;
+
+		
+			props.put("1", user);
+			props.put("2", imageid);
+			pstmt = manager.setPreparedStatementAndParams("getValidationSegmentationbyuserandimageid", 
+					mqueries.getQuery("getValidationSegmentationbyuserandimageid"), props);
+			ResultSet rs = APIHelper.getResultSetFromPreparedStatement(pstmt);
+			return APIHelper.setResponseByFormat(format, rs);
+		}
+	
 /*		@GET
 		@Path("/validation/segmentation")
 		public Response getValidationSegmentationResult(@DefaultValue("html") @MatrixParam("format") String format,
@@ -1891,8 +1917,7 @@ public class WebAPI {
 		@GET
 		@Path("/validation/classification")
 		public Response getValidationClassificationResult(@DefaultValue("html") @MatrixParam("format") String format,
-				@MatrixParam("user") String user,
-				@MatrixParam("timestamp") String timestamp
+				@MatrixParam("user") String user
 				){
 			Properties props = new Properties();
 			PreparedStatement pstmt = null;
@@ -1904,10 +1929,8 @@ public class WebAPI {
 			
 			else{ 
 				props.put("1", user);
-				props.put("2", timestamp);
-				props.put("3", user);
 				pstmt = manager.setPreparedStatementAndParams("validationclassificationTimestamp", 
-						mqueries.getQuery("getValidationClassificationWithTimestamp"), props);
+						mqueries.getQuery("getValidationClassification"), props);
 				ResultSet rs = APIHelper.getResultSetFromPreparedStatement(pstmt);
 				
 				return APIHelper.setResponseByFormat(format, rs);
