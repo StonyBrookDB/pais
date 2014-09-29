@@ -9,41 +9,35 @@
 <style type="text/css">
 .msgtxt{
 font-size:20px;
-color:#6600CC
+color:#6600CC;
+text-align:center;
+}
+#errormessage
+{
+	margin: 0 auto;
+	height: 800px;
 }
 </style>
-<title>MICCAI Challenge - Error page</title>
+<title>MICCAI Challenge - front page</title>
 </head>
 <body>
-<%
-   	String name = request.getParameter( "user" );
-   	String token = request.getParameter( "token" );
-    
-   	if((name!=null) && (token!=null)) {
-   		
-   		InputStream inStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("validation.properties"); 
-   	    Properties props = new Properties();
-   	    props.load(inStream);
-   	 
-   	   	String user_token=props.getProperty(name);	
-     	if(user_token!=null && user_token.equals(token)) {
-     		//session.setAttribute( "username", name );
-            response.sendRedirect( "showinfo.jsp?user="+name );
-     	}
-   	}
-%>
+
 <div id="framecontainer">
 	<div id="header">
-		<!-- a href="http://cci.emory.edu/cms/index.html"><img src="include/img/logo.png" alt="Logo" /></a -->
-		<p class='headText'>    MICCAI 2014 Digital Pathology Challenge</p>
+		<a href="http://miccai2014.org/"><img src="include/img/logo_miccai.jpg" alt="miccai 2014" /></a>
+		<p class='headText'>MICCAI 2014 Digital Pathology Challenge</p>
 	</div>
-    <h2>&nbsp&nbspERROR </h2>	
+    <h2>&nbsp;&nbsp;&nbsp;&nbsp;Segmentation challenge result</h2>
     <div id="errormessage"><br>
     <p class='msgtxt'>
-       &nbsp&nbspPlease input the right token of name <%= name %>.
+       Please select one dataset
     </p>
+    <div class='msgtxt'><a href="showinfo.jsp?user=dataset1">dataset1</a></div>
+    <div class='msgtxt'><a href="showinfo.jsp?user=dataset2">dataset2</a></div>
+    <div class='msgtxt'><a href="showinfo.jsp?user=dataset3">dataset3</a></div>
+    
     </div>
-	<div id="footer">
+ 	<div id="footer">
 		Copyright &copy 2014-2015 Emory University - All Rights Reserved
 	</div>
 </div>
