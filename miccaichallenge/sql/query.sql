@@ -42,6 +42,13 @@ GROUP BY b.user, a.image
 
 :)
 
+-- Computer Jarcardcofficient for one imageid
+SELECT a.user, a.image, a.intersection/b.union AS ratio
+FROM MICCAI.maskintersection a, MICCAI.maskunion b
+WHERE a.user = b.user AND
+      a.image = b.image AND
+	  a.image = '100';
+
 
 -- Computer Jaccardcofficient
 SELECT a.user, a.image, a.intersection/b.union AS ratio
