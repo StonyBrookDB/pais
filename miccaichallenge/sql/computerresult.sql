@@ -10,7 +10,17 @@ WHERE
 --    AND  b.user ='user100'
 GROUP BY b.user, a.image
 ;
-      
+
+
+INSERT INTO MICCAI.maskunion(user, image, union)
+SELECT u.user, u.image, u.count + h.count - i.intersection
+FROM miccai.usermaskcount u,  miccai.humanmaskcount h,
+   miccai.maskintersection i
+WHERE u.image = h.image and i.image = u.image and i.user=u.user;
+
+
+
+(:      
 -- Find the union of masks for each user and image;
 INSERT INTO MICCAI.maskunion(user, image, union)
 SELECT b.user, a.image, count(*) AS UNION FROM
@@ -20,3 +30,4 @@ WHERE
 --    AND  b.user ='user100'
 GROUP BY b.user, a.image
 ;
+:)

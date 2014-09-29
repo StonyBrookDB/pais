@@ -166,184 +166,28 @@ db2 -tf humansegmentationload.sql
 db2 -tf userclassificationload.sql
 db2 -tf usersegmentationload.sql
 
+
+
+
+
 =======================================================================================
 4. Comparing Results
 =======================================================================================
 To compare results, run:
+
+db2 -tf computemaskcount.sql
 
 db2 -tf computeresult.sql
 
 This will compute the intersection and union for algorithms results and human results for each
 image and user. 
 
-To rank final results, run queries (the last two queries in query.sql for segmentation and 
-classification):
+To rank final results, run queries in query.sql and queryevaluation.sql.
+Copy the query into a seperate file, e.g., query1.sql, and run:
 
-db2 -tf query.sql
-
-This will compute jarccard's coefficient
+db2 -tf query1.sql
 
 
-
-
-Appendix: A complete example folder including all input files. 
- |-
- |-miccaichallengesampledata
- |---100
- |-----classification
- |-------20140612120000
- |---------classification.txt
- |-------20140613120000
- |---------classification.txt
- |-----segmentation
- |-------20140601130000
- |-------20140614011112
- |---------masksall.zip
- |-------20140411081111
- |---200
- |-----classification
- |-------20140612120000
- |---------classification.txt
- |-------20140613120000
- |---------classification.txt
- |-----segmentation
- |-------20140514111100
- |-------20140613120000
- |---------masks1.zip
- |---------masks2.zip
- |---human
- |-----classification
- |-------20140516120000
- |---------classification.txt
- |-----segmentation
- |-------images
- |---------TCGA-06-0143-01Z-00-DX1.jpg
- |---------TCGA-14-1823-01Z-00-DX4.jpg
- |---------TCGA-06-0881-01Z-00-DX2.jpg
- |---------TCGA-19-5959-01Z-00-DX1.jpg
- |---------TCGA-06-0148-01Z-00-DX3.jpg
- |---------TCGA-06-0147-01Z-00-DX1.jpg
- |---------TCGA-06-0141-01Z-00-DX4.jpg
- |---------TCGA-06-0148-01Z-00-DX4.jpg
- |---------TCGA-06-0127-01Z-00-DX3.jpg
- |---------TCGA-06-0145-01Z-00-DX5.jpg
- |---------TCGA-06-0143-01Z-00-DX3.jpg
- |---------TCGA-06-0141-01Z-00-DX5.jpg
- |---------TCGA-06-0138-01Z-00-DX1.jpg
- |---------TCGA-02-0034-01Z-00-DX1.jpg
- |---------TCGA-19-2619-01Z-00-DX1.jpg
- |---------TCGA-14-1825-01Z-00-DX1.jpg
- |---------TCGA-06-0137-01Z-00-DX4.jpg
- |---------TCGA-14-1825-01Z-00-DX3.jpg
- |---------TCGA-14-1825-01Z-00-DX2.jpg
- |---------TCGA-06-0122-01Z-00-DX1.jpg
- |---------TCGA-02-0085-01Z-00-DX1.jpg
- |---------TCGA-14-1825-01Z-00-DX4.jpg
- |---------TCGA-06-0145-01Z-00-DX4.jpg
- |---------TCGA-02-0006-01Z-00-DX1.jpg
- |---------TCGA-19-5954-01Z-00-DX1.jpg
- |---------TCGA-06-0122-01Z-00-DX2.jpg
- |---------TCGA-06-0133-01Z-00-DX1.jpg
- |---------TCGA-06-0133-01Z-00-DX2.jpg
- |---------TCGA-02-0037-01Z-00-DX1.jpg
- |---------TCGA-06-0139-01Z-00-DX1.jpg
- |---------original
- |-----------TCGA-06-0145-01Z-00-DX4.tif
- |-----------TCGA-06-0141-01Z-00-DX5.tif
- |-----------TCGA-14-1825-01Z-00-DX3.tif
- |-----------TCGA-06-0147-01Z-00-DX1.tif
- |-----------TCGA-06-0141-01Z-00-DX4.tif
- |-----------TCGA-19-5954-01Z-00-DX1.tif
- |-----------TCGA-06-0133-01Z-00-DX1.tif
- |-----------TCGA-06-0881-01Z-00-DX2.tif
- |-----------TCGA-02-0034-01Z-00-DX1.tif
- |-----------TCGA-02-0085-01Z-00-DX1.tif
- |-----------TCGA-06-0122-01Z-00-DX2.tif
- |-----------TCGA-06-0143-01Z-00-DX1.tif
- |-----------TCGA-19-5955-01Z-00-DX1.tif
- |-----------TCGA-19-5959-01Z-00-DX1.tif
- |-----------TCGA-06-0138-01Z-00-DX1.tif
- |-----------TCGA-19-2619-01Z-00-DX1.tif
- |-----------TCGA-06-0137-01Z-00-DX4.tif
- |-----------TCGA-06-0148-01Z-00-DX3.tif
- |-----------TCGA-14-1825-01Z-00-DX4.tif
- |-----------TCGA-14-1823-01Z-00-DX4.tif
- |-----------TCGA-06-0143-01Z-00-DX3.tif
- |-----------TCGA-06-0122-01Z-00-DX1.tif
- |-----------TCGA-02-0037-01Z-00-DX1.tif
- |-----------TCGA-14-1825-01Z-00-DX1.tif
- |-----------TCGA-06-0145-01Z-00-DX5.tif
- |-----------TCGA-14-1825-01Z-00-DX2.tif
- |-----------TCGA-06-0127-01Z-00-DX3.tif
- |-----------TCGA-06-0139-01Z-00-DX1.tif
- |-----------TCGA-06-0148-01Z-00-DX4.tif
- |-----------TCGA-06-0133-01Z-00-DX2.tif
- |-----------TCGA-02-0006-01Z-00-DX1.tif
- |---------TCGA-19-5955-01Z-00-DX1.jpg
- |-------masks
- |---------TCGA-06-0143-01Z-00-DX1.jpg
- |---------TCGA-14-1823-01Z-00-DX4.jpg
- |---------TCGA-06-0881-01Z-00-DX2.jpg
- |---------TCGA-19-5959-01Z-00-DX1.jpg
- |---------TCGA-06-0148-01Z-00-DX3.jpg
- |---------TCGA-06-0147-01Z-00-DX1.jpg
- |---------TCGA-06-0141-01Z-00-DX4.jpg
- |---------TCGA-06-0148-01Z-00-DX4.jpg
- |---------TCGA-06-0127-01Z-00-DX3.jpg
- |---------TCGA-06-0145-01Z-00-DX5.jpg
- |---------TCGA-06-0143-01Z-00-DX3.jpg
- |---------TCGA-06-0141-01Z-00-DX5.jpg
- |---------TCGA-06-0138-01Z-00-DX1.jpg
- |---------TCGA-02-0034-01Z-00-DX1.jpg
- |---------TCGA-19-2619-01Z-00-DX1.jpg
- |---------TCGA-14-1825-01Z-00-DX1.jpg
- |---------TCGA-06-0137-01Z-00-DX4.jpg
- |---------TCGA-14-1825-01Z-00-DX3.jpg
- |---------TCGA-14-1825-01Z-00-DX2.jpg
- |---------TCGA-06-0122-01Z-00-DX1.jpg
- |---------TCGA-02-0085-01Z-00-DX1.jpg
- |---------TCGA-14-1825-01Z-00-DX4.jpg
- |---------TCGA-06-0145-01Z-00-DX4.jpg
- |---------TCGA-02-0006-01Z-00-DX1.jpg
- |---------TCGA-19-5954-01Z-00-DX1.jpg
- |---------TCGA-06-0122-01Z-00-DX2.jpg
- |---------TCGA-06-0133-01Z-00-DX1.jpg
- |---------TCGA-06-0133-01Z-00-DX2.jpg
- |---------TCGA-02-0037-01Z-00-DX1.jpg
- |---------TCGA-06-0139-01Z-00-DX1.jpg
- |---------TCGA-19-5955-01Z-00-DX1.jpg
- |-------xml
- |---------TCGA-06-0122-01Z-00-DX1_data.xml
- |---------TCGA-06-0141-01Z-00-DX5_data.xml
- |---------TCGA-02-0037-01Z-00-DX1_data.xml
- |---------TCGA-06-0127-01Z-00-DX3_data.xml
- |---------TCGA-14-1825-01Z-00-DX1_data.xml
- |---------TCGA-14-1825-01Z-00-DX3_data.xml
- |---------TCGA-06-0881-01Z-00-DX2_data.xml
- |---------TCGA-06-0141-01Z-00-DX4_data.xml
- |---------TCGA-06-0139-01Z-00-DX1_data.xml
- |---------TCGA-06-0122-01Z-00-DX2_data.xml
- |---------TCGA-02-0085-01Z-00-DX1_data.xml
- |---------TCGA-19-2619-01Z-00-DX1_data.xml
- |---------TCGA-06-0148-01Z-00-DX4_data.xml
- |---------TCGA-02-0034-01Z-00-DX1_data.xml
- |---------TCGA-06-0145-01Z-00-DX4_data.xml
- |---------TCGA-06-0145-01Z-00-DX5_data.xml
- |---------TCGA-14-1825-01Z-00-DX2_data.xml
- |---------TCGA-02-0006-01Z-00-DX1_data.xml
- |---------TCGA-14-1825-01Z-00-DX4_data.xml
- |---------TCGA-06-0147-01Z-00-DX1_data.xml
- |---------TCGA-06-0148-01Z-00-DX3_data.xml
- |---------TCGA-06-0143-01Z-00-DX1_data.xml
- |---------TCGA-19-5959-01Z-00-DX1_data.xml
- |---------TCGA-06-0138-01Z-00-DX1_data.xml
- |---------TCGA-14-1823-01Z-00-DX4_data.xml
- |---------TCGA-06-0137-01Z-00-DX4_data.xml
- |---------TCGA-06-0143-01Z-00-DX3_data.xml
- |---------TCGA-19-5954-01Z-00-DX1_data.xml
- |---------TCGA-19-5955-01Z-00-DX1_data.xml
- |-------20140516120000
- |---------segmentation.zip
 
 
 =======================================================================================
@@ -360,25 +204,26 @@ Note that (2) and (4) are for admin users only.
 
 1) Given a user ID, return the current user's classification result, compared to human annotation.
 A user's ID and the last timestamp are needed. 
-http://localhost:8080/WebAPI/validation/classification;user=100;timestamp=20140613120000
+http://localhost:8080/WebAPI/validation/classification;user=100
 An option parameter format can be specified to return results in different formats 
 for all APIs (html, xml or json).
 e.g.: 
-http://localhost:8080/WebAPI/validation/classification;user=100;timestamp=20140613120000;format=html
+http://localhost:8080/WebAPI/validation/classification;user=100
+
 
 2) Return all users' classification results, sorted based on correctness count.
 http://localhost:8080/WebAPI/validation/classification;user=alL_userS
 
 
 3) Given a user ID, return the current user's segmentation result, compared to human annotation.
-http://localhost:8080/WebAPI/validation/segmentation;user=100;timestamp=20140614011112
+http://localhost:8080/WebAPI/validation/segmentation;user=100
 
 4)  Return all users' segmentation results, sorted based on aggregated jarccard's coefficients
 for all images.
 http://localhost:8080/WebAPI/validation/segmentation;user=alL_userS
 
 5) Given an image UID, return the mask created by domain expert overlayed on top of the image.
-http://localhost:8080/WebAPI/validation/overlay;imageuid=TCGA-02-0006-01Z-00-DX1	
+http://localhost:8080/WebAPI/validation/overlay;imageuid=path-image100	
 
 
  

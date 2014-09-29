@@ -1,3 +1,4 @@
+-- Those are discarded due to no results returned for non-necrosis cases.
 
 CASE a.label
 	WHEN  b.label THEN 'TRUE'
