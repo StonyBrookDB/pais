@@ -1,5 +1,4 @@
 /**
- * https://www.dropbox.com/sh/x0c3kzxlreaj1al/AABJ15yAxGWb51Ew1q-p4lN_a 
  * For MICCAI, we need to do following things. We assume all data are collected and stored on the server.
 You can sudo to miccai user from "fusheng" user to access testing file folders: 
 sudo -u miccai -s
@@ -74,7 +73,7 @@ public class FolderProcessor {
 		ParsingHelper parser = new ParsingHelper();
 		users = parser.getFolders(root);
 		boolean ok = new File(outputRoot).mkdir();
-		processClassification(root, outputRoot);
+		//processClassification(root, outputRoot);
 		processSegmentation(root, outputRoot);
 		processTimestamp(outputRoot);
 		generateLoadSQL(outputRoot);
@@ -149,9 +148,8 @@ public class FolderProcessor {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
-		String root = "F:\\Projects\\miccaichallengesampledata";
-		String outputRoot = "c:\\temp\\miccaichallengesampleresult";
+		String root = "C:\\Projects\\miccaichallenge\\miccaichallengesampledata";
+		String outputRoot = "C:\\Projects\\miccaichallenge\\output";
 		if (args.length >= 2) {
 			root = args[0];
 			outputRoot = args[1];

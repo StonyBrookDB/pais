@@ -42,8 +42,15 @@ GROUP BY b.user, a.image
 
 :)
 
+-- Computer Jarcardcofficient for one imageid
+SELECT a.user, a.image, a.intersection/b.union AS ratio
+FROM MICCAI.maskintersection a, MICCAI.maskunion b
+WHERE a.user = b.user AND
+      a.image = b.image AND
+	  a.image = '100';
 
--- Computer Jarcardcofficient
+
+-- Computer Jaccardcofficient
 SELECT a.user, a.image, a.intersection/b.union AS ratio
 FROM MICCAI.maskintersection a, MICCAI.maskunion b
 WHERE a.user = b.user AND
@@ -51,39 +58,13 @@ WHERE a.user = b.user AND
 ORDER BY a.user desc;
       
 
--- Order by Jarcard cofficient for users based on total sum
+-- Order by Jaccard cofficient for users based on total sum
 SELECT a.user, SUM(a.intersection/b.union) AS TotalRatio
 FROM MICCAI.maskintersection a, MICCAI.maskunion b
 WHERE a.user = b.user AND
       a.image = b.image AND
-      a.user <> 'human'
 GROUP BY a.user 
 ORDER BY TotalRatio desc;
-
-
-
-
---  Find the image and mask overlap ratio for each user, with timestamp
-SELECT a.user, a.image, a.intersection/b.union AS ratio 
-FROM MICCAI.maskintersection a, MICCAI.maskunion b,  
-WHERE a.user = b.user AND 
-	 a.image = b.image AND 
-	 a.user = '100'
-ORDER BY a.user;	    
-
-
-
---  Find the image and mask overlap ratio for each user with timestamp
-SELECT a.user, a.image, a.intersection/b.union AS ratio 
-FROM MICCAI.maskintersection a, MICCAI.maskunion b 
-WHERE a.user = b.user AND 
-	 a.image = b.image AND 
-	 a.user = '100' AND     
-     20140614011112 = (
-       SELECT max(timestamp) FROM miccai.submissiontimestamp t
-       WHERE t.user='100' AND t.type = 'segmentation'
-);
-
 
 
 -- Find classification label for a user
@@ -96,21 +77,7 @@ FROM   MICCAI.classification a, MICCAI.classification b
 WHERE  a.image = b.image AND b.user = 'human' AND a.user <> 'human' AND       
        a.user = '100';
 
--- Find classification label for a user with timestamp
-SELECT a.user, a.label, b.label,
-CASE a.label
-	WHEN  b.label THEN 'TRUE'
-	ELSE 'FALSE'
-END CORRECTNESS
-FROM   MICCAI.classification a, MICCAI.classification b
-WHERE  a.image = b.image AND b.user = 'human' AND a.user <> 'human' AND       
-       a.user = '100' AND
-       20140613120000 = (
-		SELECT max(timestamp) FROM miccai.submissiontimestamp t
-        WHERE t.user='100' AND t.type = 'classification')
-;
 
-       
 
 
 -- Find classification match order by correctness
@@ -121,13 +88,49 @@ WHERE  a.image = b.image AND b.user = 'human' AND a.user <> 'human' AND
 GROUP BY a.user
 ORDER BY CORRECT_COUNT DESC;
        
-      
+   
+--Rank by image and JC:
+SELECT a.image, a.user, CAST( 1.0*a.intersection/b.union AS DECIMAL(5,3)  ) AS 
+Jaccard_Cofficient
+FROM MICCAI.maskintersection a, MICCAI.maskunion b
+WHERE a.user = b.user AND
+      a.image = b.image 
+ORDER BY a.image, Jaccard_Cofficient desc;
+
+--Rank ALL by JC:
+SELECT CAST( 1.0*a.intersection/b.union AS DECIMAL(5,3)  ) AS 
+Jaccard_Cofficient, a.image, a.user
+FROM MICCAI.maskintersection a, MICCAI.maskunion b
+WHERE a.user = b.user AND
+      a.image = b.image 
+ORDER BY Jaccard_Cofficient desc;
+
+--Jaccard rank final:
+SELECT a.user, CAST( AVG(1.0*a.intersection/b.union) AS DECIMAL(5,3) ) AS 
+AVG_JC
+FROM MICCAI.maskintersection a, MICCAI.maskunion b
+WHERE a.user = b.user AND
+      a.image = b.image 
+GROUP BY a.user 
+ORDER BY AVG_JC desc;
 
 
 
+--Return jaccard cofficient for one user and one image:
+SELECT CAST( 1.0*a.intersection/b.union AS DECIMAL(5,3)  ) AS 
+Jaccard_Cofficient
+FROM MICCAI.maskintersection a, MICCAI.maskunion b
+WHERE a.user = b.user AND
+      a.image = b.image AND
+      a.image = 'path-image-213' AND
+      a.user = 'dataset1';
 
 
-
-
-
-
+-- Rank of images sorted by user:
+SELECT a.user, CAST( SUM(1.0*a.intersection/b.union) AS DECIMAL(5,3) ) AS 
+TotalRatio
+FROM MICCAI.maskintersection a, MICCAI.maskunion b
+WHERE a.user = b.user AND
+      a.image = b.image 
+GROUP BY a.user 
+ORDER BY TotalRatio desc;

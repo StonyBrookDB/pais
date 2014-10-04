@@ -16,7 +16,7 @@ public class SegmentationParser {
 		
 		//public static String outputRoot = ""
 		public static String cachePath = System.getProperty("java.io.tmpdir");
-		public static String classificationFileName = "classification.txt";
+		//public static String classificationFileName = "classification.txt";
 		public static String token = " ";
 
 		//Human markups are in the same root folder, but comes with a user name "human". 
@@ -42,7 +42,7 @@ public class SegmentationParser {
 			}
 			
 			
-			ParsingHelper parser = new ParsingHelper();
+			//ParsingHelper parser = new ParsingHelper();
 			File folder = new File(root + File.separator + userId + File.separator + "segmentation");
 			File[] listOfFiles = folder.listFiles();		
 			//  .../userid/classification/timestamp/; for human markups: /human/classification/timestamp/

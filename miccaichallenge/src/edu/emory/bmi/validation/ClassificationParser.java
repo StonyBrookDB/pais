@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.StringTokenizer;
 
 public class ClassificationParser {
-	static String classificationFileName = "classification.txt";
+	static String classificationFileName = "classification_test.txt";
 	static String token = " ";
 
 	
